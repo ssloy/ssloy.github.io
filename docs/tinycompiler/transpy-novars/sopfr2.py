@@ -2,13 +2,13 @@ def main():
 	def sopfr():
 		def sopfr_aux():
 			global display,stack,eax
-			stack.append( None )      # allocate memory for local variable recursion
+			stack.append( None )      # allocate memory for local variable rec
 			stack.append(display[2])  # save old frame pointer
 			display[2] = len(stack)-3 # frame pointer for sopfr_aux()
-			stack[display[2]+1] = 0   # recursion = 0
+			stack[display[2]+1] = 0   # rec = 0
 
 			if stack[display[2]+0] % stack[display[1]+1] == 0:  # if n % div == 0
-				stack[display[2]+1] = stack[display[1]+1]       # recursion = div
+				stack[display[2]+1] = stack[display[1]+1]       # rec = div
 				if  stack[display[2]+0] != stack[display[1]+1]: # if n != div
 					stack.append(stack[display[2]+0]//stack[display[1]+1]) # push n/div ┐
 					sopfr_aux()                                            #            > sopfr_aux(n/div) call
@@ -23,7 +23,7 @@ def main():
 
 			eax = stack[display[2]+1]
 			display[2] = stack.pop()  # restore frame pointer
-			del stack[-1:]            # remove recursion from stack
+			del stack[-1:]            # remove rec from stack
 
 		global display,stack,eax
 		stack.append( None )      # allocate memory for local variable div
