@@ -2,81 +2,12 @@
 $$\vec{v} * a $$
 
 
-```cpp
-{%
-   include-markdown "https://raw.githubusercontent.com/ultimaille/ultimaille-examples/master/examples/create_fill_attributes.cpp"
-   start="// --- FACET ATTR ---"
-   end="// --- SAVE FACET ---"
-   dedent=true
-   comments=false
-%}
-```
 
 
-```cpp
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#define WIDTH 80
-#define HEIGHT 25
-#define FPS 30
-
-const char* palette[256] = {
-#define ANSIRGB(R,G,B) "\033[48;2;" #R ";"  #G ";" #B "m "
-    ANSIRGB(  0,  0,   0), ANSIRGB(  0,   4,  4), ANSIRGB(  0,  16, 20), ANSIRGB(  0,  28,  36),
-    ANSIRGB(  0,  32, 44), ANSIRGB(  0,  36, 48), ANSIRGB( 60,  24, 32), ANSIRGB(100,  16,  16),
-    ANSIRGB(132,  12, 12), ANSIRGB(160,   8,  8), ANSIRGB(192,   8,  8), ANSIRGB(220,   4,   4),
-    ANSIRGB(252,   0,  0), ANSIRGB(252,   0,  0), ANSIRGB(252,  12,  0), ANSIRGB(252,  28,   0),
-    ANSIRGB(252,  40,  0), ANSIRGB(252,  52,  0), ANSIRGB(252,  64,  0), ANSIRGB(252,  80,   0),
-    ANSIRGB(252,  92,  0), ANSIRGB(252, 104,  0), ANSIRGB(252, 116,  0), ANSIRGB(252, 132,   0),
-    ANSIRGB(252, 144,  0), ANSIRGB(252, 156,  0), ANSIRGB(252, 156,  0), ANSIRGB(252, 160,   0),
-    ANSIRGB(252, 160,  0), ANSIRGB(252, 164,  0), ANSIRGB(252, 168,  0), ANSIRGB(252, 168,   0),
-    ANSIRGB(252, 172,  0), ANSIRGB(252, 176,  0), ANSIRGB(252, 176,  0), ANSIRGB(252, 180,   0),
-    ANSIRGB(252, 180,  0), ANSIRGB(252, 184,  0), ANSIRGB(252, 188,  0), ANSIRGB(252, 188,   0),
-    ANSIRGB(252, 192,  0), ANSIRGB(252, 196,  0), ANSIRGB(252, 196,  0), ANSIRGB(252, 200,   0),
-    ANSIRGB(252, 204,  0), ANSIRGB(252, 204,  0), ANSIRGB(252, 208,  0), ANSIRGB(252, 212,   0),
-    ANSIRGB(252, 212,  0), ANSIRGB(252, 216,  0), ANSIRGB(252, 220,  0), ANSIRGB(252, 220,   0),
-    ANSIRGB(252, 224,  0), ANSIRGB(252, 228,  0), ANSIRGB(252, 228,  0), ANSIRGB(252, 232,   0),
-    ANSIRGB(252, 232,  0), ANSIRGB(252, 236,  0), ANSIRGB(252, 240,  0), ANSIRGB(252, 240,   0),
-    ANSIRGB(252, 244,  0), ANSIRGB(252, 248,  0), ANSIRGB(252, 248,  0), ANSIRGB(252, 252,   0),
-#define W ANSIRGB(252,252,252)
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
-    W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W
-#undef W
-#undef ANSIRGB
-};
-
-static uint8_t fire[WIDTH * HEIGHT];
-
-int main() {
-    printf("\033[2J"); // clear screen
-    for (;;) {
-        printf("\033[H"); // home
-
-        // rendering body
-        {
-            fire[rand()%(WIDTH*HEIGHT)] = 255;
-        }
-
-        for (int j = 0; j<HEIGHT; j++) {      // show the buffer
-            for (int i = 0; i<WIDTH; i++)
-                printf(palette[fire[i+j*WIDTH]]);
-            printf("\033[49m\n");
-        }
-        usleep(1000000/FPS);
-    }
-    return 0;
-}
-
-```
+??? example
+    ```cpp
+    --8<-- "cursed-fire/fire0.c"
+    ```
 
                     <ul class="content-list-0"><li><a href="#ID9899E6CBBB">The most mundane fire, non-cursed yet</a></li><li><a href="#IDD47A470958">Deus ex machina</a></li><li><a href="#ID495C41FB37">How preprocessor works, or why macro command differs from function</a></li><li><a href="#IDF581D5F286">These are dark times, or it's time for black magic</a></li><li><a href="#ID6182913EA7">Decrement</a></li><li><a href="#ID8D9DFE38D3">Conditional branching</a></li><li><a href="#ID9596B0CBCB">Check for null</a></li><li><a href="#ID12FA464A36">Recursion</a></li><li><a href="#ID508D730597">Is the C preprocessor Turing-complete?</a></li><li><a href="#IDBE357E4259">Bonus level</a></li></ul>
 
@@ -87,9 +18,19 @@ int main() {
     <h2 id="ID9899E6CBBB">The most mundane fire, non-cursed yet</h2>
 
 
-So, I promised to write a simple yet quite complete compiler for the <em>wend</em> language that I just invented over the weekend. Although it's easy to write, it's harder to <em>describe</em>. A good description needs vibrant examples. I'm allergic to code examples like calculating Fibonacci numbers. For crying out loud! Since <em>wend</em> is pretty primitive, I need examples that are simple yet still impressive. Suddenly, remembered the old demoscene! Let's say, I want a bonfire rendering.</p>
-<video autoplay="" loop="" muted="" controls="" poster="https://import.viva64.com/docx/blog/1143_cursed_fire/image3.png"><source src="https://import.viva64.com/docx/blog/1143_cursed_fire/image2.mp4"></source>
-  </video>
+So, I promised to write a simple yet quite complete compiler for the *wend* language that I just invented over the weekend. Although it's easy to write, it's harder to *describe*.
+A good description needs vibrant examples.
+I'm allergic to code examples like calculating Fibonacci numbers.
+For crying out loud! Since *wend* is pretty primitive, I need examples that are simple yet still impressive.
+Suddenly, remembered the old demoscene! Let's say, I want a bonfire rendering.
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire0.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire1.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire2.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire3.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire4.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire5.mp4" type="video/mp4"></source></video>
+<video width="320" autoplay="" loop="" muted="" controls=""><source src="fire6.mp4" type="video/mp4"></source></video>
+
     <p>It's not that difficult: I can't run graphics mode, but my console supports the <em>\033[</em> escape sequence, so a single <em>print</em> instruction is enough to draw the fire! By the way, I've heard that the Windows console supports the ANSI escape sequences, but I haven't checked it myself.</p>
     <p>The technology being sorted out, all that's left to do is write the code. Since I am only half-crazy, I'll write it first in C, and then translate it (manually) into the <em>wend</em> language. Indeed, my compiler is good, but C offers a greater variety of tools. Plus, my compiler isn't bug-free, and I'm too lazy to ferret out these issues. I've come across the GCC bugs before, of course, but they're rare and almost extinct.</p>
     <p>Let's see how to create such a fire, and then we'll get back to the preprocessor and black magic. This is what the necessary wrapper looks like:</p>
