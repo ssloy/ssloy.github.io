@@ -46,3 +46,11 @@ plugins: []
 
 #plugins:
 #  - include-markdown
+
+nav:
+    - 'index.md'
+    - 'tinycompiler':
+        - 'compiler/index.md'
+    - 'Deranged programmer':
+        - 'deranged/cursed-fire.md'
+
