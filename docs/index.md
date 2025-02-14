@@ -1,12 +1,29 @@
-# Home
+---
+hide:
+  - toc
+---
 
-## graphics
+<p  style="float: right">
+<a href="https://github.com/ssloy">
+<img src="haqreu200px.png" /><br/>
+https://github.com/ssloy</a>
+<br/>&nbsp<br/>
+<b>Dmitry V. Sokolov</b>,
+<br/>
+LORIA, Université de Lorraine, <br/> Campus Scientifique, BP 239, <br/>54506 Vandoeuvre-les-Nancy Cedex, <br/>France
+<br/>&nbsp<br/>
+dmitry.sokolov@univ-lorraine.fr<br/>
++33 3.83.59.20.77
+<br/>
+</p>
 
-## compilers
- - [Writing a compiler in a week-end](compiler/)
 
-## unsorted fun
+# Assorted writings
 
-### [Cursed fire or `#define` black magic](deranged/cursed-fire.md)
-![](deranged/cursed-fire/define-320.png)
+
+## strange things
+
+![](strange/cursed-fire/define-320.png)
+
+[Cursed fire or `#define` black magic](strange/cursed-fire.md)
 
