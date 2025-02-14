@@ -216,7 +216,7 @@ Is it possible to do this, and if so, how? Of course, I started googling the que
 And I accidentally stumbled upon a [curious thread](https://cplusplus.com/forum/general/9036/) on cplusplus.com, I've even screenshoted it.
 
 ??? quote "Screenshot proof"
-    ![](forum.png)
+    ![](cursed-fire/forum.png)
 
 My colleague asked the same question I did. In response, he was told three times that the <em>define</em> recursion was impossible. Mwahaha!
 Keep in mind that I'm not the smartest person in the room.
