@@ -54,3 +54,7 @@ nav:
     - 'Deranged programmer':
         - 'deranged/cursed-fire.md'
 
+analytics:
+    provider: google
+    property: G-7F81P6F3D0
+
