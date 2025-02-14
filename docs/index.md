@@ -7,5 +7,6 @@
 
 ## unsorted fun
 
- - [Cursed fire](deranged/cursed-fire.md)
+### [Cursed fire or `#define` black magic](deranged/cursed-fire.md)
+![](deranged/cursed-fire/define-320.png)
 
