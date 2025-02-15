@@ -582,14 +582,29 @@ int main() {
 ' && ./a.out
 3 2 1 0 ssloy@home:~$
 ```
-You can find the cursed fire sources [here](https://github.com/ssloy/tinycompiler/tree/main/test-programs/gfx).
-As I promised, the entire frame buffer is stored in separate variables; there are no arrays!
+## Cursed fire
 
-## Is the C preprocessor Turing-complete?
-The term "Turing-complete" colloquially means that any real general-purpose computer or computer language can approximately simulate the computational aspects of any other real general-purpose computer or computer language.
-No real system can have infinite memory, but if we neglect the memory limitation, most programming languages are otherwise Turing-complete.
+Here is the complete source file for the cursed fire.
+
+??? example "Cursed fire"
+    ```cpp hl_lines="80-88" linenums="1"
+    --8<-- "cursed-fire/fire_cursed.c"
+    ```
+As I promised, the entire frame buffer is stored in separate variables; there are no arrays!
+If you look at the lines 80-88, for example (highlighted in the code), those generate the variables.
+By running `gcc -E` on the source file, this portion generates the 2048 variables just as expected:
+
+??? example "Preprocessed variables"
+    ```cpp linenums="1"
+    --8<-- "cursed-fire/fire_cursed_variables.c"
+    ```
+
+
+## Is the C preprocessor Turing complete?
+The term "Turing complete" most often means that any real general-purpose computer or computer language can approximately simulate the computational aspects of any other real general-purpose computer or computer language.
+No real system can have infinite memory, but if we neglect the memory limitation, most programming languages are otherwise Turing complete.
 Not only the preprocessor memory is limited, but also the number of token rescanning levels (which we set with `EVAL`).
-However, it's just a form of memory limitation, so the preprocessor is quite Turing-complete.
+However, it's just a form of memory limitation, so the preprocessor is quite Turing complete.
 
 After I wrote this article, I have found another link to a [project](https://github.com/Hirrolot/metalang99),
 where devs have created a full-blown programming metalanguage on `#define` macros.
