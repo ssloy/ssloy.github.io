@@ -220,7 +220,7 @@ And I accidentally stumbled upon a [curious thread](https://cplusplus.com/forum/
 ??? quote "Screenshot"
     ![](cursed-fire/forum.png)
 
-My colleague asked the same question I did. In response, he was told three times that the <em>define</em> recursion was impossible. Mwahaha!
+Someone asked the same question I did. In response, he was told three times that the `#define` recursion was impossible. Mwahaha!
 Keep in mind that I'm not the smartest person in the room.
 I just found the [right URL](https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms) on Stack Overflow and only tried to sum up what I have learned.
 
