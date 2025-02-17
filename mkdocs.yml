@@ -21,7 +21,7 @@ markdown_extensions:
         check_paths: true
         base_path:
             - docs/strange/
-            - docs/compiler/
+            - docs/tinycompiler/
     - pymdownx.superfences
     - admonition
     - pymdownx.details
@@ -49,7 +49,7 @@ plugins: []
 
 nav:
     - 'tinycompiler':
-        - 'compiler/index.md'
+        - 'tinycompiler/parser.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 
