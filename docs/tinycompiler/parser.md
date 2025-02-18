@@ -301,3 +301,5 @@ Here is an example of an unambiguous grammar that correctly implements the prior
                ['atom',         ['INTEGER']                        ],
                ['atom',         ['LPAREN', 'expression', 'RPAREN'] ]]
     ```
+
+--8<-- "comments.html"

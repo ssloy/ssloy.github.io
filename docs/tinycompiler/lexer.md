@@ -89,3 +89,5 @@
     ```py linenums="1" hl_lines="10-11 27-31 71-72"
     --8<-- "lexer/lexer3.py"
     ```
+
+--8<-- "comments.html"
