@@ -1,43 +1,45 @@
-# Синтаксический анализатор Уорли
+# Earley parser
 
-Изначально, когда я решил написать компилятор за выходные, я решил, что нет смысла заморачиваться, и использовал сторонний лексический / синтаксический анализатор.
-Мой выбор пал на [SLY](https://github.com/dabeaz/sly), довольно известную библиотеку.
-И действительно, пара часов работы, и мой компилятор прекрасно строил синтаксические деревья из исходного кода на *wend*.
-Я пытался было заглянуть под капот, утонул в море технических терминов (LL(1), LR, LALR(1) и тому подобное), и решил, что парсинг своими руками - это не для меня, теория формальных языков меня слабо интересует.
-Однако же в итоге выяснилось, что базовый синтаксический анализатор - это не так сложно, и я закатал рукава.
+Initially, when I decided to write a compiler in a weekend, I decided there was no point in fiddling around and used a third-party lexical / syntax analyzer.
+My choice fell on [SLY](https://github.com/dabeaz/sly), a rather well-known library.
+And indeed, a couple of hours of work and my compiler perfectly built syntax trees from source code on *wend*.
+I tried to look under the hood, struggled with lots of technical terms (LL(1), LR, LALR(1) and so on), and decided that parsing is not for me, I have little interest in the theory of formal languages.
+However, in the end it turned out that a basic parser is not so difficult and I rolled up my sleeves.
 
-В основном меня на это мотивировало две вещи:
+I was mainly motivated by two things:
 
-* Отсутствие сторонних зависимостей - это здорово!
-* Неприятный синтаксис *wend*.
+* The lack of third-party dependencies is great!
+* Unpleasant *wend* syntax.
 
-Причём второй пункт меня удручал больше всего. Я хотел язык с C-подобным синтаксисом, но так и не смог придумать под него грамматики, которую смог бы разобрать SLY.
-Вот иллюстрация:
+And the second point irritated me the most.
+I wanted a language with a C-like syntax, but I couldn't come up with a grammar for it that SLY could parse.
+Here's an illustration:
 
 ![](parser/wend-syntax-change.png)
 
-Слева тот синтаксис, который я был вынужден использовать, справа тот, который я хотел.
-Насколько я понимаю, SLY использует алгоритм для разбора LALR(1) грамматик, а это означает, что парсер должен понимать, какую грамматическую конструкцию разбирает,
-подглядывая всего лишь на одну лексему вперёд.
-Это создаёт массу проблем. Представьте, что приходит поток лексем `TYPE(int) ID(sqrt) ...` - это объявление переменной или объявление функции?
-Чтобы решить, нам нужна минимум третья лексема.
-SLY на меня ругался, я раздражался и чесал затылок. Наверное, можно выкрутиться, но мне это было не очень интересно, и я плюнул.
+On the left is the syntax I was forced to use, on the right is the syntax I wanted.
+As I understand it, SLY uses an algorithm to parse LALR(1) grammars, which means that the parser has to decide the grammar rule to use,
+by looking just one token ahead.
 
-И однажды наткнулся на описание синтаксического анализатора Уорли. И выяснилось, что это очень любопытная штука, крайне примитивная в реализации, если не гнаться за производительностью.
-А ещё парсер Уорли может разбирать **любые контекстно-независимые грамматики, включая неоднозначные**.
+This creates a lot of problems. Imagine a stream of tokens comes in `TYPE(int) ID(sqrt) ...` - is it a variable declaration or a function declaration?
+To decide, we need at least a third token.
+SLY was giving me errors, I was getting annoyed. Probably, it is possible to get out of it, but I was not very interested in it, so I quit.
 
-Ну что, поехали? При синтаксическом анализе нашей задачей является:
+Then one day I came across a description of the Earley parser. And it turned out that it is a very curious thing, extremely primitive in implementation if you don't chase performance.
+And Earley parser can parse **any context-independent grammars, including ambiguous ones**.
 
-1. распознать, является ли некая последовательность лексем синтаксически корректной, то есть, соответствующей грамматике нашего языка.
-2. при отсутствии синтаксических ошибок построить соответствующее абстрактное синтаксическое дерево.
+So let's go, shall we? In parsing, our task is to:
 
-На втором пункте мы остановимся попозже, для начала сконцентрируемся на первом.
+1. to recognize whether a sequence of tokens is syntactically correct, i.e., conforms to the grammar of our language.
+2. if there are no syntax errors, to build an appropriate abstract syntactic tree.
 
-## Парсим 1+1 вручную
+We will return to the second point later, let's focus on the first one first.
 
-Пока что абстрагируемся от лексера, и просто вручную поработаем с потоками символов и грамматическими правилами.
-Допустим, что у нас есть всего два терминальных символа 1 и +.
-Рассмотрим для начала простейшую грамматику, например, такую:
+## Parsing 1+1 by hand
+
+For now, let's forget the lexer, and work with character streams and grammar rules by hand.
+Let's assume that we have only two terminal characters 1 and +.
+Let's start with the simplest grammar, such as this one:
 
 $$
 \begin{align}
@@ -47,136 +49,142 @@ $$
 \end{align}
 $$
 
-Тут у меня два нетерминальных символа: s, начальный символ грамматики, и e, нетерминал, обозначающий арифметическое выражение.
-Эта грамматика может порождать последовательности символов вида 1, 1+1, 1+1+1 и т.д.
-Обратите внимание, что она неоднозначна: 1+1+1 можно распарсить как (1+1)+1, а можно как 1+(1+1).
-Обычно неодназначных грамматик пытаются избегать, но я специально выбрал этот пример, чтобы показать, что парсеру Уорли это не помеха.
+Here I have two nonterminal symbols: `s`, the initial symbol of the grammar, and `e`, a nonterminal denoting an arithmetic expression.
+This grammar can generate sequences of symbols of the form 1, 1+1, 1+1+1+1, etc.
+Note that it is ambiguous: 1+1+1+1 can be parsed as (1+1)+1, or as 1+(1+1).
+Usually ambiguous grammars are avoided, but I chose this example to show that Earley parser can handle it.
 
-А теперь представьте себе, что та последовательность, синтаксическую корректность которой нам нужно проверить,
-прибывает по почте, причём **по одному символу в день**.
-Это вполне реалистичная ситуация, когда лексер выдает не сразу массив лексем, а отправляет их по одной.
+Now imagine that the sequence whose syntactic correctness we need to check, arrives in the mail at **one character per day**.
+This is a realistic assumption, lexers do not produce an array of tokens all at once, but rather send them one at a time.
+This means that until we run out of incoming mail, we will have a list of simple tasks for each day.
+**In each task we will process only one character of a grammar rule**.
+Having processed one symbol, we close the task (but we can open another one).
 
-Это означает, что пока не кончатся входящие письма, у нас на каждый день будет формироваться какой-то список простеньких задач.
-**В каждой задаче мы будем обрабатывать только один символ грамматического правила.**
-Обработав один символ, мы задачу закрываем (но, правда, можем при этом открыть другую).
+In our case, while no letter has arrived yet, we can queue a task that allows us to get a nonterminal `s`.
+I will write this task as `#0(s->.e, mon)`.
+The task number is preceded by the hash sign, then comes the grammar rule to be processed with a marker indicating which symbol of the rule we will process today.
+Finally, at the end there is a timestamp indicating the date when we started processing this rule.
 
-В нашем случае, пока ещё не прибыло ни одного письма, мы можем поставить в очередь задачу, позволяющую получить нетерминал `s`.
-Я запишу эту задачу как `#0(s->.e, mon)`. За решёткой у меня стоит номер задачи, потом идёт обрабатываемое грамматическое правило с маркером, показывающим, какой символ правила мы будем сегодня обрабатывать.
-Ну и в конце идёт метка даты, показывающей, когда мы начали обрабатывать это правило.
+When processing each task, we have only three cases:
 
-При обработке каждой задачи у нас есть только три варианта:
+1. expected symbol (the one after the dot) is a terminal.
+2. the expected symbol is a non-terminal
+3. There is no expected symbol, the marker is at the end of the grammar rule.
 
-1. Ожидаемый символ - терминал.
-2. Ожидаемый символ - нетерминал
-3. Ожидаемого символа нет, маркер стоит в конце грамматического правила.
+Let's figure out as the play goes on what to do in each of the three cases.
 
-Давайте придумаем по ходу пьесы, что делать в каждом из трёх случаев.
+### Monday, symbol 1 arrives.
+Worklist at the beginning of the day: `#0(s->.e, mon)`.
 
-### Понедельник, прибывает символ 1
+1. Take the only task `#0` to recognize the rule `(s->.e, mon)`.
+In this task, the character to be processed is the nonterminal `e`.
+Let us try to predict how we might obtain it.
+We can iterate through the grammar rules, and find those which produce the nonterminal `e`.
+Then we can create two new tasks to the worklist:
+`#1(e->.1, mon)` and `#2(e->.e + e, mon)`. Close the current task.
 
-Список задач на начало дня: `#0(s->.e, mon)`
 
-1. Берём пока что единственную задачу `#0` распознать правило `(s->.e, mon)`.
-В этой задаче обрабатываемый символ - это нетерминал `e`.
-Давайте попробуем предсказать, каким образом мы его можем получить.
-Смотрим в грамматику, и добавляем в список задач правила, позволяющие получить `e`: 
-`#1(e->.1, mon)` и `#2(e->.e + e, mon)`. Закрываем текущую задачу.
+2. Go to the next task at hand,`#1(e->.1, mon)`.
+Here, the expected symbol (the one right after the marker) is the terminal that matches the one we got in the mail, yay!
+The next symbol won't arrive until Tuesday, so we put `#3(e->1., Mon)` in the worklist for Tuesday, notice that we just advance the marker position.
 
-2. Переходим к следующей задаче `#1(e->.1, mon)`. В ней ожидаемый символ (тот, что стоит сразу за маркером) - это терминал, который совпадает с тем, что нам прислали по почте, ура!
-Следующий символ придёт только во вторник, поэтому ставим в список задач на вторник `#3(e->1., пн)`, обратите внимание, что мы просто передвинули маркер.
+3. Take the task `#2(e->.e + e, mon)`. In this task the expected symbol is the nonterminal `e`, but we have already inserted its production rules
+in today's worklist.  Therefore, we skip the task to avoid getting into an infinite loop.
 
-3. Берём задачу `#2(e->.e + e, mon)`. В ней ожидаемый символ - это нетерминал `e`, но правила, позволяющие его получить, мы уже сегодня в таски закидывали.
-Посему задачу пропускаем, чтобы не попасть в бесконечный цикл.
-Задачи на день закончились, идём пить чай.
+No more job for today, let's go to drink tea.
 
-Список обработанных за день задач: `#0(s->.e, mon)`, `#1(e->.1, mon)`, `#2(e->.e + e, mon)`.
+List of tasks processed for the day: `#0(s->.e, mon)`, `#1(e->.1, mon)`, `#2(e->.e + e, mon)`.
 
-### Вторник, прибывает символ +
+### Tuesday, the + symbol arrives.
+Worklist at the beginning of the day: `#3(e->1., mon)`.
 
-Список задач на начало дня: `#3(e->1., mon)`
+1. Let's take the only task so far, `#3(e->1., mon)`, it has a marker at the end, which means we've reached the end of the grammatical rule of the non-terminal `e`.
+The timestamp of the task is Monday, so let's run through the Monday worklist and look for those tasks in which `e` comes right after the marker, and these are the tasks
+`#0(e->.e, mon)` and `#2(e->.e + e, mon)`.
+We queue `#4(s->e., mon)` and `#5(e->e.+e, mon)` to worklist for today. Close `#3`.
 
-1. Берём пока что единственную задачу `#3(e->1., mon)`, в ней маркер стоит в конце задачи, а это значит, что мы дошли до конца грамматического правила нетерминала `e`.
-Временная метка задачи - понедельник, поэтому пробегаем по списку задач понедельника, и ищем те задачи, в которых `e` идёт сразу за маркером, а это задачи 
-`#0(e->.e, mon)` и `#2(e->.e + e, mon)`. Добавляем в список задач на сегодня `#4(s->e., mon)` и `#5(e->e.+e, mon)`. Закрываем `#3`.
+2. Go to `#4(s->e., mon)`. Here, the marker is again at the end of the rule, which means that we have reached the end of the grammatical rule of the nonterminal `s`.
+On Monday we had no tasks where `s` was the expected symbol, we close `#4`.
 
-2. Переходим к `#4(s->e., mon)`. В ней снова маркер стоит в конце задачи, а это значит, что мы дошли до конца грамматического правила нетерминала `s`.
-В понедельник у нас не было задач, где `s` был ожидаемым символом, закрываем `#4`.
+3. Take `#5(e->e.+e, mon)`. In it, the expected symbol is the terminal `+`, which matches the symbol we got in the mail, yay!
+The next symbol won't come until Wednesday, so we put `#6(e->e+.e., mon)` on the worklist for Wednesday. Tasks for the day are done, let's go for a cuppa.
 
-3. Берём `#5(e->e.+e, mon)`. В ней ожидаемый символ - это терминал `+`, который совпадаем с тем символом, что нам прислали по почте, ура!
-Следующий символ придёт только среду, поэтому ставим в список задач на среду `#6(e->e+.e., пн)`. Задачи на день закончились, идём пить чай.
+List of tasks processed for the day: `#3(e->1., mon)`, `#4(e->e., mon)`, `#5(e->e.+ e, mon)`.
 
-Список обработанных за день задач: `#3(e->1., mon)`, `#4(e->e., mon)`, `#5(e->e.+ e, mon)`.
+### Wednesday, character 1 arrives
+Worklist at the beginning of the day: `#6(e->e+.e, mon)`.
 
-### Среда, прибывает символ 1
+1. Take the only task `#6(e->e+.e, mon)`. The expected symbol is the non-terminal `e`, append to the worklist `#7(e->.1, wed)` and `#8(e->.e + e, wed)`.
+Note that the timestamp here is Wednesday, not Monday as before.
+Recall that this timestamp marks the moment when we started processing a particular grammar rule.
 
-Список задач на начало дня: `#6(e->e+.e, mon)`
+2. Moving on to `#7(e->.1, wed)`. The expected symbol is terminal `1`, which matches the one that arrived in the mail, yay! Queue `#9(e->1., wed)` for Thursday.
 
-1. Берём единственную задачу `#6(e->e+.e, mon)`. Ожидаемый символ - нетерминал `e`, закидываем в список задач `#7(e->.1, wed)` и `#8(e->.e + e, wed)`.
-Обратите внимание, что метка времени - среда, а не понедельник как раньше. Напоминаю, что эта метка не вообще время, когда мы начали работать, а время, когда мы начали обрабатывать конкретное грамматическое правило.
+3. Moving on to `#8(e->.e + e, wed)`. The expected symbol is the non-terminal `e`, and we have already added matching tasks today when we were processing the task `#6`.
+Therefore, we skip `#8` to avoid getting into an infinite loop.  The tasks for the day are over, let's go drink tea.
 
-2. Переходим к `#7(e->.1, wed)`. Ожидаемый символ - терминал `1`, который совпадает с тем, что прибыл по почте, ура! Закидываем в список задач на четверг `#9(e->1., wed)`.
+The list of tasks processed during the day: `#6(e->e +.e, mon)`, `#7(e->.1, wed)`, `#8(e->.e +.e, wed)`.
 
-3. Переходим к `#8(e->.e + e, wed)`. Ожидаемый символ - нетерминал `e`, и соответствующие таски мы сегодня уже добавляли при обработке задачи `#6`. 
-Посему `#8` пропускаем, чтобы не попасть в бесконечный цикл.  Задачи на день закончились, идём пить чай.
+### Thursday, nothing arrives.
+Worklist to start the day: `#9(e->1., wed)`.
 
-Список обработанных за день задач: `#6(e->e +.e, mon)`, `#7(e->.1, wed)`, `#8(e->.e + e, wed)`.
+The post office says there will be no more incoming mail.
 
-### Четверг, не прибывает ничего
+1. Take the only task `#9(e->1., wed)`. No characters are expected in it, because the marker is at the very end of the grammar rule for the nonterminal `e`.
+Let us iterate through Wednesday worklist, looking for tasks with `e` as the expected symbol.
+The tasks `#6(e->e +.e, mon)` and `#8(e->.e + e, wed)` fit the description.
+We schedule `#10(e->e+e., mon)` and `#11(e->e.+e, wed)`, and close `#9`.
 
-Список задач на начало дня: `#9(e->1., wed)`.
+2. Moving on to `#10(e->e->e+e., mon)`, this is again a completed grammar rule for the non-terminal `e`.
+We run through Monday's worklist, looking for tasks where `e` was expected.
+These are `#0(s->.e, mon)` and `#2(e->.e + e, mon)`, so let us queue `#12(s->e., mon)` and `#13(e->e. + e, mon)`, and close `#10`.
 
-Почта говорит, что больше писем не будет.
+3. Take `#11(e->e.+ e, wed)`. Here, the expected character is the terminal `+`, and the post office told us there would be no new characters. We close `#11`.
 
-1. Берём единственную задачу `#9(e->1., wed)`. В ней символов не ожидается, поскольку маркер стоит в самом конце грамматического правила нетерминала `e`.
-Пробегаем по списку задач среды, и ищем те задачи, в которых ожидаемым символом является `e`, это были таски `#6(e->e +.e, mon)` и `#8(e->.e + e, wed)`.
-Добавляем в список задач  `#10(e->e+e., mon)` и `#11(e->e.+e, wed)`, закрываем `#9`.
+4. Taking `#12(s->e., mon)`, we see the completed grammar rule for `s`. There was no tasks on Monday where `s` was expected, we close `#12`.
 
-2. Берём `#10(e->e+e., mon)`, это опять оконченное грамматическое правило нетерминала `e`. Пробегаем по таскам понедельника, ищем задачи, где ожидался `e`.
-Это `#0(s->.e, mon)` и `#2(e->.e + e, mon)`.
-Ставми в очередь `#12(s->e., mon)` и `#13(e->e. + e, mon)`, закрываем `#10`.
+5. We take the last task `#13(e->e. + e, mon)`, it expects a terminal symbol, but we have no more incoming mail, close `#13`.
 
-3. Берём `#11(e->e.+e, wed)`. В неё ожидаемый символ - это терминал `+`, а почта нам сказала, что новых символов не будет. Закрываем `#11`.
+List of tasks processed during the day: `#9(e->1., wed)`, `#10(e->e. + e., mon)`, `#11(e->e.+ e, wed)`, `#12(s->e., mon)`, `#13(e->e.+ e, mon)`.
 
-4. Берём `#12(s->e., mon)`, оконченное грамматическое правило для `s`. В понедельник не было не одной задачи, где бы ожидался `s`, закрываем `#12`.
+### Friday, nothing's coming in
+Worklist for the day: it's Friday, what worklist?!
 
-5. Берём последнюю задачу `#13(e->e. + e, mon)`, в ней опять ожидается терминал, которых больше не будет. закрываем `#13`.
+Let's make sure that in the Thursday's worklist we have a completed rule corresponding to the initial nonterminal `s`, which started on Monday.
+Yay, there is such a rule, it is `#12(s->e., mon)`! Let's report success and go have a beer.
 
-Список обработанных за день задач: `#9(e->1., wed)`, `#10(e->e + e., mon)`, `#11(e->e.+ e, wed)`, `#12(s->e., mon)`, `#13(e->e.+ e, mon)`.
+Let me summarize all the above in the workflow chart:
 
-### Пятница, не прибывает ничего
-
-Список задач на начало дня: сегодня ж пятница, какие ещё задачи?!
-
-Убеждаемся, что в списке обработанных за четверг задач у нас есть оконченное правило, соответствующее начальному нетерминалу `s`,
-обработка которого началась в понедельник. Такое есть, это `#12(s->e., mon)`. Рапортуем об удаче, идём пить пиво.
-
-Давайте я нарисую график задач:
 [![](parser/earley.png)](parser/earley.png)
 
-В нём стрелочками указано, из какой задачи какая получилась.
-Розовые пунктирные стрелки - это задачи, которые мы **не** добавили, чтобы избежать бесконечных циклов.
+It has arrows indicating which task spawned which one.
+The pink dotted arrows show the tasks that we **didn't** create to avoid infinite loops.
 
-Как я уже говорил, при обработке каждой задачи у нас есть только три варианта:
+As I said before, we only have three options when processing each task:
 
-1. **Ожидаемый символ - терминал.** Проверяем ожидаемый символ с тем, что пришёл, если совпадают, добавляем **на завтра** новую задачу, рисуем зелёную стрелочку.
-2. **Ожидаемый символ - нетерминал.** Пытаемся предсказать, как этот нетерминал может получиться. Добавляем столько же задач, сколько есть соответствующих грамматических правил, рисуем чёрные стрелочки.
-3. **Ожидаемого символа нет,** маркер стоит в конце грамматического правила.
-То есть, мы закончили обработку этого правила, и входная последовательность символов соответствует какому-то нетерминалу.
-Проверяем историю задач, и открываем новые таски для тех задач, где наш нетерминал был ожидаемым символом.
-Рисуем голубые стрелочки, они всегда приходят парами: сплошная идёт из текущей обрабатываемой задачи, а пунктирная показывает, в каком правиле мы передвинули маркер.
+1. **The expected symbol is a terminal.** Compare the expected symbol with the one that came in in the mail. If they match, queue a new task for **tomorrow**, draw a green arrow.
 
-Обратите внимание, что во всей вышеописанной процедуре сами стрелочки мы нигде не хранили, обходились только списком задач на день без связей между ними.
-Даже номер задачи мне нигде не нужен, мне хватает только индекса грамматического правила, индекса маркера и временно́й метки.
+2. **The expected symbol is a non-temrinal.** Try to predict how this non-terminal might be produced. Add as many tasks as there are corresponding grammar rules, draw black arrows.
 
-## Формализуем подход и пишем код
+3. **There is no expected symbol,** the marker is at the end of the grammatical rule.
+That is, we have finished processing this rule, and the input sequence of characters corresponds to some non-terminal.
+We check the worklist history, looking for the tasks  where the non-terminal was the expected symbol.
+Then we open new tasks by advancing the marker past the non-terminal.
+Here we draw blue arrows, they always come in pairs: the solid one comes from the task currently being processed, and the dotted one 
+indicates the one old task where we advance the marker.
 
-Синтаксический анализатор Уорли обрабатывает по одному входному символу за раз.
-Для каждой входной позиции $j \in [0\dots n]$ он строит набор пар $J_j$.
-Каждая пара имеет вид $(\alpha \rightarrow \beta.\gamma, k)$. Первая часть элемента - это грамматическое правило $\alpha\rightarrow\beta\gamma$.
-Правило имеет маркер (точку), расположенный в правой части.
-Эта точка показывает, какая часть этого производящего правила была уже обработана.
-Вторая часть пары это индекс $k$, количество лексем, прочитанных до начала разбора нетерминала $\alpha$.
-В коде пару можно представить как класс `Task`, хранящий три целочисленных индекса.
+Note that in the above procedure we didn't store the arrows themselves anywhere, we just used the worklists without any links between them.
+We don't even need the task number, the only thing we need is the index of the grammar rule, the marker position and the timestamp.
+
+## Formalization and implementation
+The Earley parser processes one input character at a time.
+For each input position $j \in [0\dots n]$, it builds a set of $J_j$ pairs, called Earley items.
+Each Earley item is of the form $(\alpha \rightarrow \beta.\gamma,k)$. The first part of the item is a grammar rule $\alpha\rightarrow\beta\gamma$.
+The rule has a marker (the dot) located somewhere in the right side.
+The dot indicates which part of this producing rule has already been processed.
+The second part of the pair is the index $k$, the number of tokens encountered before we started processing of the nonterminal $\alpha$.
+
+In code, the pair can be represented as a `Task` class storing three integer indices.
 
 ```py
 class Task:
@@ -186,34 +194,41 @@ class Task:
         self.start = start # we saw this many tokens when we started the rule
 ```
 
-Алгоритм начинает работу с множества $J_0$, состоящего из одной пары $(s'\rightarrow .s, 0)$, где $s$ - начальный символ грамматики, а $s'$ - новый искусственный символ, введенный для упрощения алгоритма (просто чтобы входное грамматическое правило содержало лишь один нетерминал).
-В коде это можно представить подобным образом:
+The algorithm starts with a set $J_0$ consisting of a single pair $(s'\rightarrow .s, 0)$, where $s$ is the initial symbol of the grammar,
+and $s'$ is a new artificial symbol introduced to simplify the presentation (just so that the producing rule contains only one non-terminal).
+In code, the sets can be represented this way:
+
 ```py
     worklists = [ [ Task(0,0,0) ] ]
 ```
-Тут список `worklists` будет содержать все наборы $\{J_j\}_{j=0}^n$. Алгоритм успешно разбирает последовательность из $n$ входных лексем $t_0t_1\dots t_{n-1}$, если пара $(s'\rightarrow s., 0)$ находится в множестве $J_n$, иначе же рапортует об ошибке.
 
-Сам алгоритм выглядит следующим образом: поочерёдно, для каждого индекса $j \in [0\dots n]$, мы применяем следующие три правила, изменяющие множество $J_j$, до тех пор, пока ни одно из правил не будет иметь эффекта:
+Here the `worklists` will contain all sets $\{J_j\}_{j=0}^n$.
+The algorithm successfully parses a sequence of $n$ input tokens $t_0t_1\dots t_{n-1}$ if the pair $(s'\rightarrow s., 0)$ is in set $J_n$, otherwise it reports an error.
 
-* **СРАВНЕНИЕ.** Если множество $J_j$ содержит пару $(\alpha\rightarrow\beta . t \gamma, k)$, где $t$ совпадает с текущим входным символом $t_j$, то пара $(\alpha\rightarrow\beta t . \gamma, k)$ добавляется в $J_{j+1}$.
-Обратите внимание, что это правило не изменяет сам набор $J_j$, и это единственное правило, изменяющее $J_{j+1}$.
+The algorithm works as follows: one by one, for each index $j \in [0\dots n]$, we apply the following three rules modifying the worklists, until none of the rules has an effect:
 
-* **ПРЕДСКАЗАНИЕ.** Если множество $J_j$ содержит пару $(\alpha\rightarrow \beta . c \gamma, k)$, где $c$ - это нетерминальный символ,
-то для всех правил грамматики вида $c\rightarrow \delta$ в $J_j$ добавляется пара $(c\rightarrow .\delta, j)$.
-Обратите внимание на смену временно́й метки. Заодно заметим, что шаги предсказания могут вызывать другие шаги предсказания, если $\delta$ начинается с нетерминала.
+* **SCAN:** If the set $J_j$ contains a pair $(\alpha\rightarrow\beta . t \gamma, k)$, where $t$ matches the current input symbol $t_j$,
+then the pair $(\alpha\rightarrow\beta t . \gamma, k)$ is added to $J_{j+1}$.
+Note that this rule does not modify the set $J_j$ itself, and it is the only rule that modifies $J_{j+1}$.
 
-* **ЗАВЕРШЕНИЕ.** Если множество $J_j$ содержит пару с завершенным правилом $(c\rightarrow\alpha., k)$, то для каждой пары вида $(\beta\rightarrow\gamma . c\delta, l)$ в множестве $J_k$, в $J_j$ добавляется пара $(\beta\rightarrow\gamma c .\delta, l)$.
+* **PREDICT:** If the set $J_j$ contains a pair $(\alpha\rightarrow \beta . c \gamma, k)$, where $c$ is a nonterminal symbol,
+then for all grammar rules of the form $c\rightarrow \delta$ the pair $(c\rightarrow .\delta, j)$ is added to $J_j$.
+Note the change in the timestamp. Also note that prediction steps can trigger other prediction steps if $\delta$ starts with a non-terminal.
 
-Сила парсера Уорли заключается в том, что он параллельно обрабатывает несколько предсказаний и даже завершений.
-Предсказания, которые не оправдались, фактически отмирают, потому что в какой-то момент они приводят к элементам, несовместимым со встреченными входными лексемами.
+* **COMPLETE:** If the set $J_j$ contains a pair with a completed rule $(c\rightarrow\alpha., k)$,
+then for every pair of the form $(\beta\rightarrow\gamma . c\delta, l)$ in set $J_k$, a pair $(\beta\rightarrow\gamma c .\delta, l)$ is added to $J_j$.
+
+The strength of the Earley parser is that it processes several predictions and even completions in parallel.
+Erroneous predictions actually die out, because at some point they result in terminals incompatible with the input tokens encountered.
 
 ??? example "Earley recognizer"
     ```py linenums="1"
     --8<-- "parser/parser.py"
     ```
 
-При запуске этого кода мы увидим рапорт об успешном распознавании последовательности 1+1, а заодно вот такой список обработанных за неделю задач.
-Сравните его с нарисованным выше графиком, они должны совпадать.
+This code reports a successful recognition of the 1+1 sequence and prints the worklists for the week.
+Compare it with the graph drawn above, they should match.
+
 ```
 [[(s->.e, mon), (e->.1, mon), (e->.e + e, mon)],
  [(e->1., mon), (s->e., mon), (e->e.+ e, mon)],
@@ -221,25 +236,28 @@ class Task:
  [(e->1., wed), (e->e + e., mon), (e->e.+ e, wed), (s->e., mon), (e->e.+ e, mon)]]
 ```
 
-Вышеприведённый код даёт лишь бинарный ответ, соответствует ли входная последовательность лексем заданной грамматике.
-Как же построить синтаксическое дерево?
-У нас при разборе получился граф (на моём рисунке он соответствует стрелкам, нарисованным сплошными линиями).
-Достаточно лишь проследить путь от начального узла до конечного, причём нас интересуют только сплошные голубые стрелки.
-В данном примере их три, поэтому синтаксическое дерево будет состоять из трёх узлов, корня + и двух ветвей 1 и 1.
+The above code only gives a binary answer whether the input sequence of tokens corresponds to a given grammar.
+So how do we actually build a syntax tree?
+Well, we have a graph (in my drawing it corresponds to the arrows drawn with solid lines).
+It suffices to trace the path from the initial node to the final one.
+Solid blue lines corresponding to the COMPLETE action, match to the nodes of a syntax tree to create.
+In this example, there are three of them, so the syntax tree will consist of three nodes, a root + and two leaf nodes 1 and 1.
 
-В моём парсере я не стал заморачиваться поиском пути через граф (хотя это вполне возможно),
-а просто добавил в каждый узел ссылку на узел-предок, получая связный список от конечного узла до начального.
-Код можно посмотреть [в репозитории](https://github.com/ssloy/tinycompiler/blob/main/parser.py).
+In my parser, I didn't bother with finding a path through the graph (although it is quite possible),
+I just stored a link to the predecessor node, thus obtaining a linked list from the end node to the start node.
 
-## Послесловие
+You can see the code [in the repository](https://github.com/ssloy/tinycompiler/blob/main/parser.py).
 
-При тщательной реализации синтаксический анализатор Уорли работают за наихудшее время $O(n^3)$, для однозначных грамматик он может работать за $O(n^2)$.
-На LL и LR-грамматиках парсер Уорли вовсе может работать за линейное время.
-Джон Айкок и Найджел Хорспул в своей статье [Practical Earley Parsing] пишут, что умудрились добиться от техник Уорли производительности всего на 50% худшей, нежели у
-LALR парсера Bison, что крайне впечатляет, учитывая, как расширяются возможности.
-В моём компиляторе я заметил ухудшение производительности при уходе со SLY на мой собственный парсер, но время компиляции всё равно остаётся приемлемым.
+## Afterword
+With careful implementation, Earley parser runs in $O(n^3)$ worst-case time, for unambiguous grammars it can run in $O(n^2)$.
+On LL and LR grammars, the Earley parser can even run in linear.
+John Aycock and Nigel Horspool in their paper ``Practical Earley Parsing'' report that they managed to roughly match
+the performance of the Bison LALR parser (their Earley Parser is 50% slower).
+This is pretty impressive considering the features Earley parsers have to offer.
+In my compiler, I've noticed a performance degradation when moving away from SLY to my own parser, but compile times are still acceptable.
 
-Последнее, что стоит упомянуть при смене парсера, так это приоритет операций. Когда я использовал SLY, то в грамматике в одну кучу закинул всю арифметику, и просто сказал библиотеке самой разобраться с приоритетом:
+One last thing worth mentioning: operator precedence.
+When I used SLY, I mixed all the arithmetic operations into the grammar, and just told the library to deal with the priority itself:
 
 ??? example "SLY operator precedence"
     ```py
@@ -261,7 +279,9 @@ LALR парсера Bison, что крайне впечатляет, учиты�
         return ArithOp(p[1], p.expr0, p.expr1, {'lineno':p.lineno})
     ```
 
-Тут такой фокус не пройдёт, но это совершенно не страшно. Весь приоритет операций можно запихнуть на уровень самой грамматики. Вот пример однозначной грамматики, корректно реализующей приоритет арифметических операций:
+This trick won't work here, but it's not a big deal.
+The precedence of the operators can be handled in the grammar.
+Here is an example of an unambiguous grammar that correctly implements the priority of arithmetic operations:
 
 ??? example "Precedence-aware grammar"
     ```py
