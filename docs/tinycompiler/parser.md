@@ -1,4 +1,5 @@
-# Homemade parser
+# DIY parser
+## Introduction
 
 Initially, when I decided to write a compiler in a weekend, I decided there was no point in fiddling around and used a third-party lexical / syntax analyzer.
 My choice fell on [SLY](https://github.com/dabeaz/sly), a rather well-known library.
@@ -25,7 +26,8 @@ This creates a lot of problems. Imagine a stream of tokens comes in `TYPE(int) I
 To decide, we need at least a third token.
 SLY was giving me errors, I was getting annoyed. Probably, it is possible to get out of it, but I was not very interested in it, so I quit.
 
-Then one day I came across a description of the Earley parser. And it turned out that it is a very curious thing, extremely primitive in implementation if you don't chase performance.
+Then one day I came across a description of the [Earley parser](https://en.wikipedia.org/wiki/Earley_parser).
+And it turned out that it is a very curious thing, extremely primitive in implementation if you don't chase performance.
 And Earley parser can parse **any context-independent grammars, including ambiguous ones**.
 
 So let's go, shall we? In parsing, our task is to:

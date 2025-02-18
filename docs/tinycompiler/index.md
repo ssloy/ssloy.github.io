@@ -1,4 +1,9 @@
-# Home
+---
+title: Home
+---
+
+# TinyCompiler: a compiler in a week-end
+## Introduction
 ![](home/compiler.png)
 
 Have you ever wondered how a compiler works, but you never found courage to find out?
