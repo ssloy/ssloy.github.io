@@ -57,6 +57,7 @@ nav:
         - 'tinycompiler/assembly.md'
         - 'tinycompiler/lexer.md'
         - 'tinycompiler/parser.md'
+        - 'tinycompiler/afterword.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 

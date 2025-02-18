@@ -1,9 +1,9 @@
 # DIY parser
 ## Introduction
 
-Initially, when I decided to write a compiler in a weekend, I decided there was no point in fiddling around and used a third-party lexical / syntax analyzer.
+Initially, when I decided to write a compiler in a weekend, I decided there was no point in messing around and used a third-party lexical / syntax analyzer.
 My choice fell on [SLY](https://github.com/dabeaz/sly), a rather well-known library.
-And indeed, a couple of hours of work and my compiler perfectly built syntax trees from source code on *wend*.
+And indeed, a couple of hours of work allowed my compiler to perfectly build syntax trees from source code on *wend*.
 I tried to look under the hood, struggled with lots of technical terms (LL(1), LR, LALR(1) and so on), and decided that parsing is not for me, I have little interest in the theory of formal languages.
 However, in the end it turned out that a basic parser is not so difficult and I rolled up my sleeves.
 

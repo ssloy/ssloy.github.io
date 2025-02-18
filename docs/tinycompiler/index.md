@@ -1,5 +1,6 @@
 ---
 title: Home
+comments: true
 ---
 
 # TinyCompiler: a compiler in a week-end

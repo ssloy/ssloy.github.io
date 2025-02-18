@@ -20,12 +20,11 @@ dmitry.sokolov@univ-lorraine.fr<br/>
 
 # Assorted writings
 
-## [TinyCompiler: a compiler in a week-end](tinycompiler/)
-<img src="tinycompiler/home/compiler.png" width="480">
-
+## [TinyCompiler: a compiler in a week-end](tinycompiler/index.md)
+[<img src="tinycompiler/home/compiler.png" width="480">](tinycompiler/index.md)
 
 
 ## [Cursed fire or `#define` black magic](strange/cursed-fire.md)
-![](strange/cursed-fire/define-320.png)
+[![](strange/cursed-fire/define-320.png)](strange/cursed-fire.md)
 
 

@@ -11,7 +11,7 @@ First of all, why do I raise the question? If you find old-school computer graph
 
 ## The most mundane fire, non-cursed yet
 
-In fact, recently I promised to write a simple, yet quite [rich compiler for the *wend* language](/tinycompiler/) that I just invented over the weekend.
+In fact, recently I promised to write a simple, yet quite [rich compiler for the *wend* language](../tinycompiler/index.md) that I just invented over the weekend.
 Although it's easy to code, it's harder to *describe*.
 A good description needs vibrant examples.
 I'm allergic to code examples like calculating Fibonacci numbers.
