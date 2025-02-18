@@ -1,0 +1,1010 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+    
+    
+      
+        <title>Синтаксический анализатор Уорли - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Синтаксический анализатор Уорли
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    tinycompiler
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            tinycompiler
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ast/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Abstract syntax trees
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sly/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SLY: lexer and parser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../symtable/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Symbol tables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../display/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Display
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assembly/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assembly
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lexer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Homemade lexer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Homemade parser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    strange things
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            strange things
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cursed fire or #define black magic
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      Парсим 1+1 вручную
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Парсим 1+1 вручную">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Понедельник, прибывает символ 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Вторник, прибывает символ +
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Среда, прибывает символ 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Четверг, не прибывает ничего
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Пятница, не прибывает ничего
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      Формализуем подход и пишем код
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      Послесловие
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">Синтаксический анализатор Уорли</h1>
+<p>Изначально, когда я решил написать компилятор за выходные, я решил, что нет смысла заморачиваться, и использовал сторонний лексический / синтаксический анализатор.
+Мой выбор пал на <a href="https://github.com/dabeaz/sly">SLY</a>, довольно известную библиотеку.
+И действительно, пара часов работы, и мой компилятор прекрасно строил синтаксические деревья из исходного кода на <em>wend</em>.
+Я пытался было заглянуть под капот, утонул в море технических терминов (LL(1), LR, LALR(1) и тому подобное), и решил, что парсинг своими руками - это не для меня, теория формальных языков меня слабо интересует.
+Однако же в итоге выяснилось, что базовый синтаксический анализатор - это не так сложно, и я закатал рукава.</p>
+<p>В основном меня на это мотивировало две вещи:</p>
+<ul>
+<li>Отсутствие сторонних зависимостей - это здорово!</li>
+<li>Неприятный синтаксис <em>wend</em>.</li>
+</ul>
+<p>Причём второй пункт меня удручал больше всего. Я хотел язык с C-подобным синтаксисом, но так и не смог придумать под него грамматики, которую смог бы разобрать SLY.
+Вот иллюстрация:</p>
+<p><img alt="" src="../parser/wend-syntax-change.png" /></p>
+<p>Слева тот синтаксис, который я был вынужден использовать, справа тот, который я хотел.
+Насколько я понимаю, SLY использует алгоритм для разбора LALR(1) грамматик, а это означает, что парсер должен понимать, какую грамматическую конструкцию разбирает,
+подглядывая всего лишь на одну лексему вперёд.
+Это создаёт массу проблем. Представьте, что приходит поток лексем <code>TYPE(int) ID(sqrt) ...</code> - это объявление переменной или объявление функции?
+Чтобы решить, нам нужна минимум третья лексема.
+SLY на меня ругался, я раздражался и чесал затылок. Наверное, можно выкрутиться, но мне это было не очень интересно, и я плюнул.</p>
+<p>И однажды наткнулся на описание синтаксического анализатора Уорли. И выяснилось, что это очень любопытная штука, крайне примитивная в реализации, если не гнаться за производительностью.
+А ещё парсер Уорли может разбирать <strong>любые контекстно-независимые грамматики, включая неоднозначные</strong>.</p>
+<p>Ну что, поехали? При синтаксическом анализе нашей задачей является:</p>
+<ol>
+<li>распознать, является ли некая последовательность лексем синтаксически корректной, то есть, соответствующей грамматике нашего языка.</li>
+<li>при отсутствии синтаксических ошибок построить соответствующее абстрактное синтаксическое дерево.</li>
+</ol>
+<p>На втором пункте мы остановимся попозже, для начала сконцентрируемся на первом.</p>
+<h2 id="11">Парсим 1+1 вручную</h2>
+<p>Пока что абстрагируемся от лексера, и просто вручную поработаем с потоками символов и грамматическими правилами.
+Допустим, что у нас есть всего два терминальных символа 1 и +.
+Рассмотрим для начала простейшую грамматику, например, такую:</p>
+<div class="arithmatex">\[
+\begin{align}
+    s &amp;\rightarrow e\\
+    e &amp;\rightarrow 1\\
+    e &amp;\rightarrow e+e
+\end{align}
+\]</div>
+<p>Тут у меня два нетерминальных символа: s, начальный символ грамматики, и e, нетерминал, обозначающий арифметическое выражение.
+Эта грамматика может порождать последовательности символов вида 1, 1+1, 1+1+1 и т.д.
+Обратите внимание, что она неоднозначна: 1+1+1 можно распарсить как (1+1)+1, а можно как 1+(1+1).
+Обычно неодназначных грамматик пытаются избегать, но я специально выбрал этот пример, чтобы показать, что парсеру Уорли это не помеха.</p>
+<p>А теперь представьте себе, что та последовательность, синтаксическую корректность которой нам нужно проверить,
+прибывает по почте, причём <strong>по одному символу в день</strong>.
+Это вполне реалистичная ситуация, когда лексер выдает не сразу массив лексем, а отправляет их по одной.</p>
+<p>Это означает, что пока не кончатся входящие письма, у нас на каждый день будет формироваться какой-то список простеньких задач.
+<strong>В каждой задаче мы будем обрабатывать только один символ грамматического правила.</strong>
+Обработав один символ, мы задачу закрываем (но, правда, можем при этом открыть другую).</p>
+<p>В нашем случае, пока ещё не прибыло ни одного письма, мы можем поставить в очередь задачу, позволяющую получить нетерминал <code>s</code>.
+Я запишу эту задачу как <code>#0(s-&gt;.e, mon)</code>. За решёткой у меня стоит номер задачи, потом идёт обрабатываемое грамматическое правило с маркером, показывающим, какой символ правила мы будем сегодня обрабатывать.
+Ну и в конце идёт метка даты, показывающей, когда мы начали обрабатывать это правило.</p>
+<p>При обработке каждой задачи у нас есть только три варианта:</p>
+<ol>
+<li>Ожидаемый символ - терминал.</li>
+<li>Ожидаемый символ - нетерминал</li>
+<li>Ожидаемого символа нет, маркер стоит в конце грамматического правила.</li>
+</ol>
+<p>Давайте придумаем по ходу пьесы, что делать в каждом из трёх случаев.</p>
+<h3 id="1">Понедельник, прибывает символ 1</h3>
+<p>Список задач на начало дня: <code>#0(s-&gt;.e, mon)</code></p>
+<ol>
+<li>
+<p>Берём пока что единственную задачу <code>#0</code> распознать правило <code>(s-&gt;.e, mon)</code>.
+В этой задаче обрабатываемый символ - это нетерминал <code>e</code>.
+Давайте попробуем предсказать, каким образом мы его можем получить.
+Смотрим в грамматику, и добавляем в список задач правила, позволяющие получить <code>e</code>: 
+<code>#1(e-&gt;.1, mon)</code> и <code>#2(e-&gt;.e + e, mon)</code>. Закрываем текущую задачу.</p>
+</li>
+<li>
+<p>Переходим к следующей задаче <code>#1(e-&gt;.1, mon)</code>. В ней ожидаемый символ (тот, что стоит сразу за маркером) - это терминал, который совпадает с тем, что нам прислали по почте, ура!
+Следующий символ придёт только во вторник, поэтому ставим в список задач на вторник <code>#3(e-&gt;1., пн)</code>, обратите внимание, что мы просто передвинули маркер.</p>
+</li>
+<li>
+<p>Берём задачу <code>#2(e-&gt;.e + e, mon)</code>. В ней ожидаемый символ - это нетерминал <code>e</code>, но правила, позволяющие его получить, мы уже сегодня в таски закидывали.
+Посему задачу пропускаем, чтобы не попасть в бесконечный цикл.
+Задачи на день закончились, идём пить чай.</p>
+</li>
+</ol>
+<p>Список обработанных за день задач: <code>#0(s-&gt;.e, mon)</code>, <code>#1(e-&gt;.1, mon)</code>, <code>#2(e-&gt;.e + e, mon)</code>.</p>
+<h3 id="_2">Вторник, прибывает символ +</h3>
+<p>Список задач на начало дня: <code>#3(e-&gt;1., mon)</code></p>
+<ol>
+<li>
+<p>Берём пока что единственную задачу <code>#3(e-&gt;1., mon)</code>, в ней маркер стоит в конце задачи, а это значит, что мы дошли до конца грамматического правила нетерминала <code>e</code>.
+Временная метка задачи - понедельник, поэтому пробегаем по списку задач понедельника, и ищем те задачи, в которых <code>e</code> идёт сразу за маркером, а это задачи 
+<code>#0(e-&gt;.e, mon)</code> и <code>#2(e-&gt;.e + e, mon)</code>. Добавляем в список задач на сегодня <code>#4(s-&gt;e., mon)</code> и <code>#5(e-&gt;e.+e, mon)</code>. Закрываем <code>#3</code>.</p>
+</li>
+<li>
+<p>Переходим к <code>#4(s-&gt;e., mon)</code>. В ней снова маркер стоит в конце задачи, а это значит, что мы дошли до конца грамматического правила нетерминала <code>s</code>.
+В понедельник у нас не было задач, где <code>s</code> был ожидаемым символом, закрываем <code>#4</code>.</p>
+</li>
+<li>
+<p>Берём <code>#5(e-&gt;e.+e, mon)</code>. В ней ожидаемый символ - это терминал <code>+</code>, который совпадаем с тем символом, что нам прислали по почте, ура!
+Следующий символ придёт только среду, поэтому ставим в список задач на среду <code>#6(e-&gt;e+.e., пн)</code>. Задачи на день закончились, идём пить чай.</p>
+</li>
+</ol>
+<p>Список обработанных за день задач: <code>#3(e-&gt;1., mon)</code>, <code>#4(e-&gt;e., mon)</code>, <code>#5(e-&gt;e.+ e, mon)</code>.</p>
+<h3 id="1_1">Среда, прибывает символ 1</h3>
+<p>Список задач на начало дня: <code>#6(e-&gt;e+.e, mon)</code></p>
+<ol>
+<li>
+<p>Берём единственную задачу <code>#6(e-&gt;e+.e, mon)</code>. Ожидаемый символ - нетерминал <code>e</code>, закидываем в список задач <code>#7(e-&gt;.1, wed)</code> и <code>#8(e-&gt;.e + e, wed)</code>.
+Обратите внимание, что метка времени - среда, а не понедельник как раньше. Напоминаю, что эта метка не вообще время, когда мы начали работать, а время, когда мы начали обрабатывать конкретное грамматическое правило.</p>
+</li>
+<li>
+<p>Переходим к <code>#7(e-&gt;.1, wed)</code>. Ожидаемый символ - терминал <code>1</code>, который совпадает с тем, что прибыл по почте, ура! Закидываем в список задач на четверг <code>#9(e-&gt;1., wed)</code>.</p>
+</li>
+<li>
+<p>Переходим к <code>#8(e-&gt;.e + e, wed)</code>. Ожидаемый символ - нетерминал <code>e</code>, и соответствующие таски мы сегодня уже добавляли при обработке задачи <code>#6</code>. 
+Посему <code>#8</code> пропускаем, чтобы не попасть в бесконечный цикл.  Задачи на день закончились, идём пить чай.</p>
+</li>
+</ol>
+<p>Список обработанных за день задач: <code>#6(e-&gt;e +.e, mon)</code>, <code>#7(e-&gt;.1, wed)</code>, <code>#8(e-&gt;.e + e, wed)</code>.</p>
+<h3 id="_3">Четверг, не прибывает ничего</h3>
+<p>Список задач на начало дня: <code>#9(e-&gt;1., wed)</code>.</p>
+<p>Почта говорит, что больше писем не будет.</p>
+<ol>
+<li>
+<p>Берём единственную задачу <code>#9(e-&gt;1., wed)</code>. В ней символов не ожидается, поскольку маркер стоит в самом конце грамматического правила нетерминала <code>e</code>.
+Пробегаем по списку задач среды, и ищем те задачи, в которых ожидаемым символом является <code>e</code>, это были таски <code>#6(e-&gt;e +.e, mon)</code> и <code>#8(e-&gt;.e + e, wed)</code>.
+Добавляем в список задач  <code>#10(e-&gt;e+e., mon)</code> и <code>#11(e-&gt;e.+e, wed)</code>, закрываем <code>#9</code>.</p>
+</li>
+<li>
+<p>Берём <code>#10(e-&gt;e+e., mon)</code>, это опять оконченное грамматическое правило нетерминала <code>e</code>. Пробегаем по таскам понедельника, ищем задачи, где ожидался <code>e</code>.
+Это <code>#0(s-&gt;.e, mon)</code> и <code>#2(e-&gt;.e + e, mon)</code>.
+Ставми в очередь <code>#12(s-&gt;e., mon)</code> и <code>#13(e-&gt;e. + e, mon)</code>, закрываем <code>#10</code>.</p>
+</li>
+<li>
+<p>Берём <code>#11(e-&gt;e.+e, wed)</code>. В неё ожидаемый символ - это терминал <code>+</code>, а почта нам сказала, что новых символов не будет. Закрываем <code>#11</code>.</p>
+</li>
+<li>
+<p>Берём <code>#12(s-&gt;e., mon)</code>, оконченное грамматическое правило для <code>s</code>. В понедельник не было не одной задачи, где бы ожидался <code>s</code>, закрываем <code>#12</code>.</p>
+</li>
+<li>
+<p>Берём последнюю задачу <code>#13(e-&gt;e. + e, mon)</code>, в ней опять ожидается терминал, которых больше не будет. закрываем <code>#13</code>.</p>
+</li>
+</ol>
+<p>Список обработанных за день задач: <code>#9(e-&gt;1., wed)</code>, <code>#10(e-&gt;e + e., mon)</code>, <code>#11(e-&gt;e.+ e, wed)</code>, <code>#12(s-&gt;e., mon)</code>, <code>#13(e-&gt;e.+ e, mon)</code>.</p>
+<h3 id="_4">Пятница, не прибывает ничего</h3>
+<p>Список задач на начало дня: сегодня ж пятница, какие ещё задачи?!</p>
+<p>Убеждаемся, что в списке обработанных за четверг задач у нас есть оконченное правило, соответствующее начальному нетерминалу <code>s</code>,
+обработка которого началась в понедельник. Такое есть, это <code>#12(s-&gt;e., mon)</code>. Рапортуем об удаче, идём пить пиво.</p>
+<p>Давайте я нарисую график задач:
+<a href="../parser/earley.png"><img alt="" src="../parser/earley.png" /></a></p>
+<p>В нём стрелочками указано, из какой задачи какая получилась.
+Розовые пунктирные стрелки - это задачи, которые мы <strong>не</strong> добавили, чтобы избежать бесконечных циклов.</p>
+<p>Как я уже говорил, при обработке каждой задачи у нас есть только три варианта:</p>
+<ol>
+<li><strong>Ожидаемый символ - терминал.</strong> Проверяем ожидаемый символ с тем, что пришёл, если совпадают, добавляем <strong>на завтра</strong> новую задачу, рисуем зелёную стрелочку.</li>
+<li><strong>Ожидаемый символ - нетерминал.</strong> Пытаемся предсказать, как этот нетерминал может получиться. Добавляем столько же задач, сколько есть соответствующих грамматических правил, рисуем чёрные стрелочки.</li>
+<li><strong>Ожидаемого символа нет,</strong> маркер стоит в конце грамматического правила.
+То есть, мы закончили обработку этого правила, и входная последовательность символов соответствует какому-то нетерминалу.
+Проверяем историю задач, и открываем новые таски для тех задач, где наш нетерминал был ожидаемым символом.
+Рисуем голубые стрелочки, они всегда приходят парами: сплошная идёт из текущей обрабатываемой задачи, а пунктирная показывает, в каком правиле мы передвинули маркер.</li>
+</ol>
+<p>Обратите внимание, что во всей вышеописанной процедуре сами стрелочки мы нигде не хранили, обходились только списком задач на день без связей между ними.
+Даже номер задачи мне нигде не нужен, мне хватает только индекса грамматического правила, индекса маркера и временно́й метки.</p>
+<h2 id="_5">Формализуем подход и пишем код</h2>
+<p>Синтаксический анализатор Уорли обрабатывает по одному входному символу за раз.
+Для каждой входной позиции <span class="arithmatex">\(j \in [0\dots n]\)</span> он строит набор пар <span class="arithmatex">\(J_j\)</span>.
+Каждая пара имеет вид <span class="arithmatex">\((\alpha \rightarrow \beta.\gamma, k)\)</span>. Первая часть элемента - это грамматическое правило <span class="arithmatex">\(\alpha\rightarrow\beta\gamma\)</span>.
+Правило имеет маркер (точку), расположенный в правой части.
+Эта точка показывает, какая часть этого производящего правила была уже обработана.
+Вторая часть пары это индекс <span class="arithmatex">\(k\)</span>, количество лексем, прочитанных до начала разбора нетерминала <span class="arithmatex">\(\alpha\)</span>.
+В коде пару можно представить как класс <code>Task</code>, хранящий три целочисленных индекса.</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span>  <span class="o">=</span> <span class="n">rule</span>  <span class="c1"># index of the parse rule in the grammar</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>   <span class="o">=</span> <span class="n">dot</span>   <span class="c1"># index of next symbol in the rule (dot position)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="c1"># we saw this many tokens when we started the rule</span>
+</span></code></pre></div>
+<p>Алгоритм начинает работу с множества <span class="arithmatex">\(J_0\)</span>, состоящего из одной пары <span class="arithmatex">\((s'\rightarrow .s, 0)\)</span>, где <span class="arithmatex">\(s\)</span> - начальный символ грамматики, а <span class="arithmatex">\(s'\)</span> - новый искусственный символ, введенный для упрощения алгоритма (просто чтобы входное грамматическое правило содержало лишь один нетерминал).
+В коде это можно представить подобным образом:
+<div class="language-py highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="n">worklists</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
+</span></code></pre></div>
+Тут список <code>worklists</code> будет содержать все наборы <span class="arithmatex">\(\{J_j\}_{j=0}^n\)</span>. Алгоритм успешно разбирает последовательность из <span class="arithmatex">\(n\)</span> входных лексем <span class="arithmatex">\(t_0t_1\dots t_{n-1}\)</span>, если пара <span class="arithmatex">\((s'\rightarrow s., 0)\)</span> находится в множестве <span class="arithmatex">\(J_n\)</span>, иначе же рапортует об ошибке.</p>
+<p>Сам алгоритм выглядит следующим образом: поочерёдно, для каждого индекса <span class="arithmatex">\(j \in [0\dots n]\)</span>, мы применяем следующие три правила, изменяющие множество <span class="arithmatex">\(J_j\)</span>, до тех пор, пока ни одно из правил не будет иметь эффекта:</p>
+<ul>
+<li>
+<p><strong>СРАВНЕНИЕ.</strong> Если множество <span class="arithmatex">\(J_j\)</span> содержит пару <span class="arithmatex">\((\alpha\rightarrow\beta . t \gamma, k)\)</span>, где <span class="arithmatex">\(t\)</span> совпадает с текущим входным символом <span class="arithmatex">\(t_j\)</span>, то пара <span class="arithmatex">\((\alpha\rightarrow\beta t . \gamma, k)\)</span> добавляется в <span class="arithmatex">\(J_{j+1}\)</span>.
+Обратите внимание, что это правило не изменяет сам набор <span class="arithmatex">\(J_j\)</span>, и это единственное правило, изменяющее <span class="arithmatex">\(J_{j+1}\)</span>.</p>
+</li>
+<li>
+<p><strong>ПРЕДСКАЗАНИЕ.</strong> Если множество <span class="arithmatex">\(J_j\)</span> содержит пару <span class="arithmatex">\((\alpha\rightarrow \beta . c \gamma, k)\)</span>, где <span class="arithmatex">\(c\)</span> - это нетерминальный символ,
+то для всех правил грамматики вида <span class="arithmatex">\(c\rightarrow \delta\)</span> в <span class="arithmatex">\(J_j\)</span> добавляется пара <span class="arithmatex">\((c\rightarrow .\delta, j)\)</span>.
+Обратите внимание на смену временно́й метки. Заодно заметим, что шаги предсказания могут вызывать другие шаги предсказания, если <span class="arithmatex">\(\delta\)</span> начинается с нетерминала.</p>
+</li>
+<li>
+<p><strong>ЗАВЕРШЕНИЕ.</strong> Если множество <span class="arithmatex">\(J_j\)</span> содержит пару с завершенным правилом <span class="arithmatex">\((c\rightarrow\alpha., k)\)</span>, то для каждой пары вида <span class="arithmatex">\((\beta\rightarrow\gamma . c\delta, l)\)</span> в множестве <span class="arithmatex">\(J_k\)</span>, в <span class="arithmatex">\(J_j\)</span> добавляется пара <span class="arithmatex">\((\beta\rightarrow\gamma c .\delta, l)\)</span>.</p>
+</li>
+</ul>
+<p>Сила парсера Уорли заключается в том, что он параллельно обрабатывает несколько предсказаний и даже завершений.
+Предсказания, которые не оправдались, фактически отмирают, потому что в какой-то момент они приводят к элементам, несовместимым со встреченными входными лексемами.</p>
+<details class="example">
+<summary>Earley recognizer</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span>
+<span class="normal"><a href="#__codelineno-2-24">24</a></span>
+<span class="normal"><a href="#__codelineno-2-25">25</a></span>
+<span class="normal"><a href="#__codelineno-2-26">26</a></span>
+<span class="normal"><a href="#__codelineno-2-27">27</a></span>
+<span class="normal"><a href="#__codelineno-2-28">28</a></span>
+<span class="normal"><a href="#__codelineno-2-29">29</a></span>
+<span class="normal"><a href="#__codelineno-2-30">30</a></span>
+<span class="normal"><a href="#__codelineno-2-31">31</a></span>
+<span class="normal"><a href="#__codelineno-2-32">32</a></span>
+<span class="normal"><a href="#__codelineno-2-33">33</a></span>
+<span class="normal"><a href="#__codelineno-2-34">34</a></span>
+<span class="normal"><a href="#__codelineno-2-35">35</a></span>
+<span class="normal"><a href="#__codelineno-2-36">36</a></span>
+<span class="normal"><a href="#__codelineno-2-37">37</a></span>
+<span class="normal"><a href="#__codelineno-2-38">38</a></span>
+<span class="normal"><a href="#__codelineno-2-39">39</a></span>
+<span class="normal"><a href="#__codelineno-2-40">40</a></span>
+<span class="normal"><a href="#__codelineno-2-41">41</a></span>
+<span class="normal"><a href="#__codelineno-2-42">42</a></span>
+<span class="normal"><a href="#__codelineno-2-43">43</a></span>
+<span class="normal"><a href="#__codelineno-2-44">44</a></span>
+<span class="normal"><a href="#__codelineno-2-45">45</a></span>
+<span class="normal"><a href="#__codelineno-2-46">46</a></span>
+<span class="normal"><a href="#__codelineno-2-47">47</a></span>
+<span class="normal"><a href="#__codelineno-2-48">48</a></span>
+<span class="normal"><a href="#__codelineno-2-49">49</a></span>
+<span class="normal"><a href="#__codelineno-2-50">50</a></span>
+<span class="normal"><a href="#__codelineno-2-51">51</a></span>
+<span class="normal"><a href="#__codelineno-2-52">52</a></span>
+<span class="normal"><a href="#__codelineno-2-53">53</a></span>
+<span class="normal"><a href="#__codelineno-2-54">54</a></span>
+<span class="normal"><a href="#__codelineno-2-55">55</a></span>
+<span class="normal"><a href="#__codelineno-2-56">56</a></span>
+<span class="normal"><a href="#__codelineno-2-57">57</a></span>
+<span class="normal"><a href="#__codelineno-2-58">58</a></span>
+<span class="normal"><a href="#__codelineno-2-59">59</a></span>
+<span class="normal"><a href="#__codelineno-2-60">60</a></span>
+<span class="normal"><a href="#__codelineno-2-61">61</a></span>
+<span class="normal"><a href="#__codelineno-2-62">62</a></span>
+<span class="normal"><a href="#__codelineno-2-63">63</a></span>
+<span class="normal"><a href="#__codelineno-2-64">64</a></span>
+<span class="normal"><a href="#__codelineno-2-65">65</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">terminals</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">grammar</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>          <span class="p">],</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a>           <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>          <span class="p">],</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a>           <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">]]]</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span>  <span class="o">=</span> <span class="n">rule</span>  <span class="c1"># index of the parse rule in the grammar</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>   <span class="o">=</span> <span class="n">dot</span>   <span class="c1"># index of next symbol in the rule (dot position)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="c1"># we saw this many tokens when we started the rule</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_symbol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a>        <span class="n">prod</span> <span class="o">=</span> <span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a>        <span class="k">return</span> <span class="n">prod</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">prod</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">rule</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dot</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">start</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20"></a>        <span class="n">prod</span> <span class="o">=</span> <span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21"></a>        <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prod</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">])</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22"></a>        <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prod</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">:])</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23"></a>        <span class="n">week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mon&#39;</span><span class="p">,</span> <span class="s1">&#39;tue&#39;</span><span class="p">,</span> <span class="s1">&#39;wed&#39;</span><span class="p">,</span> <span class="s1">&#39;thu&#39;</span><span class="p">,</span> <span class="s1">&#39;fri&#39;</span><span class="p">,</span> <span class="s1">&#39;sat&#39;</span><span class="p">,</span> <span class="s1">&#39;sun&#39;</span><span class="p">]</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">week</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25"></a>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26"></a><span class="k">def</span><span class="w"> </span><span class="nf">recognize</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27"></a>    <span class="n">worklists</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28"></a>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">)</span><span class="o">==</span><span class="n">i</span><span class="p">:</span>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31"></a>            <span class="n">worklists</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32"></a>        <span class="k">if</span> <span class="n">task</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>                    <span class="c1"># avoid infinite loops, do not add the same task twice</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33"></a>            <span class="n">worklists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34"></a>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35"></a>    <span class="n">token_counter</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>                                         <span class="c1"># fetch tokens one by one until end of file</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37"></a>        <span class="n">token</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38"></a>        <span class="k">if</span> <span class="n">token_counter</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">):</span>             <span class="c1"># the worklist is empty =&gt; not good</span>
+</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39"></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40"></a>        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>                                           <span class="c1"># task id</span>
+</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41"></a>        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">[</span><span class="n">token_counter</span><span class="p">]):</span>        <span class="c1"># iterate through all tasks in current worklist</span>
+</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42"></a>            <span class="n">task</span>  <span class="o">=</span> <span class="n">worklists</span><span class="p">[</span><span class="n">token_counter</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+</span><span id="__span-2-43"><a id="__codelineno-2-43" name="__codelineno-2-43"></a>            <span class="n">next_symbol</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">next_symbol</span><span class="p">()</span>            <span class="c1"># next symbol in the production rule</span>
+</span><span id="__span-2-44"><a id="__codelineno-2-44" name="__codelineno-2-44"></a>            <span class="k">if</span> <span class="n">next_symbol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>                     <span class="c1"># if no symbol: completed task</span>
+</span><span id="__span-2-45"><a id="__codelineno-2-45" name="__codelineno-2-45"></a>                <span class="k">for</span> <span class="n">prev</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">]:</span>
+</span><span id="__span-2-46"><a id="__codelineno-2-46" name="__codelineno-2-46"></a>                    <span class="k">if</span> <span class="n">prev</span><span class="o">.</span><span class="n">next_symbol</span><span class="p">()</span> <span class="o">==</span> <span class="n">grammar</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+</span><span id="__span-2-47"><a id="__codelineno-2-47" name="__codelineno-2-47"></a>                        <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">prev</span><span class="o">.</span><span class="n">rule</span><span class="p">,</span> <span class="n">prev</span><span class="o">.</span><span class="n">dot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">prev</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+</span><span id="__span-2-48"><a id="__codelineno-2-48" name="__codelineno-2-48"></a>            <span class="k">elif</span> <span class="n">next_symbol</span> <span class="ow">in</span> <span class="n">terminals</span><span class="p">:</span>              <span class="c1"># if next symbol is a terminal,</span>
+</span><span id="__span-2-49"><a id="__codelineno-2-49" name="__codelineno-2-49"></a>                <span class="k">if</span> <span class="n">token</span> <span class="ow">and</span> <span class="n">next_symbol</span> <span class="o">==</span> <span class="n">token</span><span class="p">:</span>      <span class="c1"># scan a token</span>
+</span><span id="__span-2-50"><a id="__codelineno-2-50" name="__codelineno-2-50"></a>                    <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">rule</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">dot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+</span><span id="__span-2-51"><a id="__codelineno-2-51" name="__codelineno-2-51"></a>            <span class="k">else</span><span class="p">:</span>                                       <span class="c1"># if next symbol is nonterminal, emit a prediction task</span>
+</span><span id="__span-2-52"><a id="__codelineno-2-52" name="__codelineno-2-52"></a>                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grammar</span><span class="p">):</span>
+</span><span id="__span-2-53"><a id="__codelineno-2-53" name="__codelineno-2-53"></a>                    <span class="k">if</span> <span class="n">lhs</span> <span class="o">==</span> <span class="n">next_symbol</span><span class="p">:</span>
+</span><span id="__span-2-54"><a id="__codelineno-2-54" name="__codelineno-2-54"></a>                        <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">token_counter</span><span class="p">))</span>
+</span><span id="__span-2-55"><a id="__codelineno-2-55" name="__codelineno-2-55"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-2-56"><a id="__codelineno-2-56" name="__codelineno-2-56"></a>        <span class="n">token_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-2-57"><a id="__codelineno-2-57" name="__codelineno-2-57"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span> <span class="k">break</span>                             <span class="c1"># end of file</span>
+</span><span id="__span-2-58"><a id="__codelineno-2-58" name="__codelineno-2-58"></a>    <span class="n">cur</span> <span class="o">=</span> <span class="p">[</span> <span class="n">task</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">grammar</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># all completed tasks at the end of the parse</span>
+</span><span id="__span-2-59"><a id="__codelineno-2-59" name="__codelineno-2-59"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">worklists</span><span class="p">)</span>
+</span><span id="__span-2-60"><a id="__codelineno-2-60" name="__codelineno-2-60"></a>    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+</span><span id="__span-2-61"><a id="__codelineno-2-61" name="__codelineno-2-61"></a>
+</span><span id="__span-2-62"><a id="__codelineno-2-62" name="__codelineno-2-62"></a><span class="nb">print</span><span class="p">(</span><span class="n">recognize</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+</span><span id="__span-2-63"><a id="__codelineno-2-63" name="__codelineno-2-63"></a>                      <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+</span><span id="__span-2-64"><a id="__codelineno-2-64" name="__codelineno-2-64"></a>                      <span class="s1">&#39;1&#39;</span>
+</span><span id="__span-2-65"><a id="__codelineno-2-65" name="__codelineno-2-65"></a>                     <span class="p">])))</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>При запуске этого кода мы увидим рапорт об успешном распознавании последовательности 1+1, а заодно вот такой список обработанных за неделю задач.
+Сравните его с нарисованным выше графиком, они должны совпадать.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[[(s-&gt;.e, mon), (e-&gt;.1, mon), (e-&gt;.e + e, mon)],
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a> [(e-&gt;1., mon), (s-&gt;e., mon), (e-&gt;e.+ e, mon)],
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a> [(e-&gt;e +.e, mon), (e-&gt;.1, wed), (e-&gt;.e + e, wed)],
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a> [(e-&gt;1., wed), (e-&gt;e + e., mon), (e-&gt;e.+ e, wed), (s-&gt;e., mon), (e-&gt;e.+ e, mon)]]
+</span></code></pre></div></p>
+<p>Вышеприведённый код даёт лишь бинарный ответ, соответствует ли входная последовательность лексем заданной грамматике.
+Как же построить синтаксическое дерево?
+У нас при разборе получился граф (на моём рисунке он соответствует стрелкам, нарисованным сплошными линиями).
+Достаточно лишь проследить путь от начального узла до конечного, причём нас интересуют только сплошные голубые стрелки.
+В данном примере их три, поэтому синтаксическое дерево будет состоять из трёх узлов, корня + и двух ветвей 1 и 1.</p>
+<p>В моём парсере я не стал заморачиваться поиском пути через граф (хотя это вполне возможно),
+а просто добавил в каждый узел ссылку на узел-предок, получая связный список от конечного узла до начального.
+Код можно посмотреть <a href="https://github.com/ssloy/tinycompiler/blob/main/parser.py">в репозитории</a>.</p>
+<h2 id="_6">Послесловие</h2>
+<p>При тщательной реализации синтаксический анализатор Уорли работают за наихудшее время <span class="arithmatex">\(O(n^3)\)</span>, для однозначных грамматик он может работать за <span class="arithmatex">\(O(n^2)\)</span>.
+На LL и LR-грамматиках парсер Уорли вовсе может работать за линейное время.
+Джон Айкок и Найджел Хорспул в своей статье [Practical Earley Parsing] пишут, что умудрились добиться от техник Уорли производительности всего на 50% худшей, нежели у
+LALR парсера Bison, что крайне впечатляет, учитывая, как расширяются возможности.
+В моём компиляторе я заметил ухудшение производительности при уходе со SLY на мой собственный парсер, но время компиляции всё равно остаётся приемлемым.</p>
+<p>Последнее, что стоит упомянуть при смене парсера, так это приоритет операций. Когда я использовал SLY, то в грамматике в одну кучу закинул всю арифметику, и просто сказал библиотеке самой разобраться с приоритетом:</p>
+<details class="example">
+<summary>SLY operator precedence</summary>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">precedence</span> <span class="o">=</span> <span class="p">(</span> <span class="c1"># arithmetic operators take precedence over logical operators</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>     <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">PLUS</span><span class="p">,</span> <span class="n">MINUS</span><span class="p">),</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>     <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">TIMES</span><span class="p">,</span> <span class="n">DIVIDE</span><span class="p">,</span> <span class="n">MOD</span><span class="p">),</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>     <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UMINUS</span><span class="p">),</span> <span class="c1"># unary operators</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>     <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UPLUS</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr PLUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>   <span class="s1">&#39;expr MINUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>   <span class="s1">&#39;expr TIMES expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>   <span class="s1">&#39;expr DIVIDE expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>   <span class="s1">&#39;expr MOD expr&#39;</span><span class="p">)</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="k">return</span> <span class="n">ArithOp</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span></code></pre></div>
+</details>
+<p>Тут такой фокус не пройдёт, но это совершенно не страшно. Весь приоритет операций можно запихнуть на уровень самой грамматики. Вот пример однозначной грамматики, корректно реализующей приоритет арифметических операций:</p>
+<details class="example">
+<summary>Precedence-aware grammar</summary>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">terminals</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMES&#39;</span><span class="p">,</span> <span class="s1">&#39;DIVIDE&#39;</span><span class="p">,</span> <span class="s1">&#39;INTEGER&#39;</span><span class="p">,</span> <span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span> <span class="s1">&#39;RPAREN&#39;</span><span class="p">]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">grammar</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;expression&#39;</span><span class="p">,</span>   <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">]</span>                         <span class="p">],</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">]</span>                           <span class="p">],</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span> <span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;term&#39;</span><span class="p">]</span>        <span class="p">],</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span> <span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;term&#39;</span><span class="p">]</span>         <span class="p">],</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span>                         <span class="p">],</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMES&#39;</span><span class="p">,</span> <span class="s1">&#39;factor&#39;</span><span class="p">]</span>        <span class="p">],</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s1">&#39;DIVIDE&#39;</span><span class="p">,</span> <span class="s1">&#39;factor&#39;</span><span class="p">]</span>       <span class="p">],</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">]</span>                           <span class="p">],</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;atom&#39;</span><span class="p">]</span>                   <span class="p">],</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;atom&#39;</span><span class="p">]</span>                  <span class="p">],</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>           <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;INTEGER&#39;</span><span class="p">]</span>                        <span class="p">],</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>           <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span> <span class="s1">&#39;expression&#39;</span><span class="p">,</span> <span class="s1">&#39;RPAREN&#39;</span><span class="p">]</span> <span class="p">]]</span>
+</span></code></pre></div>
+</details>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
