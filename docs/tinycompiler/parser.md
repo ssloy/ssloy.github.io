@@ -1,4 +1,4 @@
-# Earley parser
+# Homemade parser
 
 Initially, when I decided to write a compiler in a weekend, I decided there was no point in fiddling around and used a third-party lexical / syntax analyzer.
 My choice fell on [SLY](https://github.com/dabeaz/sly), a rather well-known library.

@@ -49,6 +49,13 @@ plugins: []
 
 nav:
     - 'tinycompiler':
+        - 'tinycompiler/index.md'
+        - 'tinycompiler/ast.md'
+        - 'tinycompiler/sly.md'
+        - 'tinycompiler/symtable.md'
+        - 'tinycompiler/display.md'
+        - 'tinycompiler/assembly.md'
+        - 'tinycompiler/lexer.md'
         - 'tinycompiler/parser.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
