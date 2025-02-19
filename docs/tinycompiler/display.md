@@ -1,24 +1,22 @@
 # Displays
 ## Introduction
 
-Вопрос из области ненормального программирования: насколько сложные программы вы сможете написать на питоне, не пользуясь в принципе переменными (а также агрументами функций),
-за исключением пары глобальных массивов?
-Правильный ответ: да любой сложности.
-Если что-то можно сделать на ассемблере, то уж на питоне и подавно!
+A question from the realm of abnormal programming: how complex of a program can you write in python without using variables (or function arguments) at all, except for a couple of global arrays?
+The correct answer: anything.
+If something can be done in assembly, then it can certainly be done in python!
 
-Продолжаем разговор о минималистичном компиляторе, который вполне реально написать за выходные.
-Задачей стоит транслировать код из придуманного мной языка в x86 ассемблер.
-Несмотря на то, что целевым языком является ассемблер, я не мазохист, и пришёл к этому постепенно.
-Сначала я транслировал код в питон, и постепенно урезал функционал целевого языка, пока не остался голый ассемблер.
-Тема сегодняшнего разговора: генерация кода на питоне без использования переменных.
+Despite the fact that tinycompiler targets GNU assembly, I'm not crazy enough to dive into assembly directly.
+I am getting to assembly pretty gradually:
+I started by translating *wend* sources into full-blown python, and now I am reducing the set of features I am allowed to use.
+The topic of today's discussion: generating python code without using variables.
 
 
-## Рекурсия для самых маленьких
-Факториал целого положительного числа $n$ - это произведение всех положительных целых чисел, меньших или равных $n$.
-Например, факториал числа 7 равен $7*6*5*4*3*2*1$, что равняется 5040.
-Факториал числа $n$ записывается как $n!$, и задача его вычисления сводится очевидным образом к вычислению $(n-1)!$, а именно, $n! = n * (n - 1)!$
+## Recursion for Beginners
+The factorial of a positive integer $n$ is the product of all positive integers less than or equal to $n$.
+For example, the factorial of 7 is $7*6*5*4*3*2*1$, which equals 5040.
+The factorial of $n$ is written as $n!$, and the task of computing it is obviously reduced to computing $(n-1)!$, namely, $n! = n * (n - 1)!$
 
-Сама собой напрашивается рекурсивная имплементация:
+A recursive implementation naturally comes to the mind:
 
 ```py
 ssloy@khronos:~$ python3 <<<'
@@ -33,29 +31,28 @@ print(factorial(7))
 5040
 ```
 
-С подобного кода зачастую начинают знакомство с программированием, но обычно оставляют за скобками объяснение того, как непосредственно машина его выполняет.
-Основным инструментом в таком коде является вызов функции, но как он работает?
+This kind of code is often the starting point for learning programming, but explanations of how exactly the machine executes it are usually left out.
+The main tool in this program is the function call, but how does it work?
 
-Типовой (не единственно возможный, именно типовой) механизм реализации вызова функции основан на сохранении аргументов и локальных переменных функции на стеке и выглядит следующим образом:
+A typical (not the only possible, but typical) way for implementing a function call is based on saving the function's arguments and local variables on the stack:
 
-1. В точке вызова на стек помещаются параметры, передаваемые функции (+ обычно номер инструкции, на которую нужно вернуться после завершения работы функции).
-2. Вызываемая функция в ходе работы кладёт на стек собственные локальные переменные.
-3. По завершении вычислений функция очищает стек от своих локальных переменных, записывает результат (обычно в один из регистров процессора).
-4. Команда возврата из функции считывает из стека адрес возврата и выполняет переход по этому адресу.
-Либо непосредственно перед, либо сразу после возврата из функции стек очищается от аргументов функции.
+1. At the call point, the parameters passed to the function are placed on the stack (plus usually the return address for the instruction pointer).
+2. The called function places its own local variables on the stack during execution.
+3. Upon completion, the function clears the stack of its local variables, and writes the result (usually in one of the processor's registers or again in some place reserved on the stack by the caller).
+4. The return instruction jumps to the return address.
+Either immediately before or right after returning from the function, the stack is cleared of the function's arguments.
 
-Нетрудно видеть, что необходимость расширения стека диктуется требованием восстановления состояния вызывающего экземпляра функции (то есть её параметров, локальных данных и адреса возврата) после завершения вызванной функции.
+It is easy to see that the need to grow the stack is dictated by the requirement to restore the state of the calling function instance (i.e., its parameters, local data, and return address) after the called function finishes execution.
 
-Таким образом, при каждом рекурсивном вызове функции создаётся новый набор её параметров и локальных переменных, который вместе с адресом возврата размещается на стеке.
-Чтобы не быть голословным и не теоретизировать лишку, давайте добавим одну строчку интроспекции в наш код с факториалом:
+Thus, with each recursive function call, a new set of its parameters and local variables is created, which, along with the return address, is placed on the stack.
+To avoid being theoretical and to be more practical, let's add one line of introspection to our factorial:
 
-```py
+```py linenums="1" hl_lines="2 6"
 ssloy@khronos:~$ python3 <<<'
 import inspect
 
 def factorial(n):
     result = 1
-    # вот эту строчку я добавил:
     print("instances of n:", [frame[0].f_locals["n"] for frame in reversed(inspect.stack()[:-1])])
     if n > 1:
         result = n * factorial(n-1)
@@ -73,27 +70,28 @@ instances of n: [7, 6, 5, 4, 3, 2, 1]
 5040
 ```
 
-При каждом вызове `factorial(n)` добавленная мной строчка проходит по стеку, и выводит на экран все экземпляры переменной `n`, что находит.
-Для вычисления 7! функция `factorial(n)` вызывается 7 раз, и нетрудно видеть, что в какой-то момент машина хранит все 7 экземпляров переменной.
-Разумеется, для переменной `result` ровно такая же картина.
+With each call to `factorial(n)`, the line I added traverses the stack and prints all instances of the variable `n` that it finds.
+To compute 7!, the `factorial(n)` function is called 7 times, and it is easy to see that at some point, the machine stores all 7 instances of the variable.
+Of course, the same is true for the variable `result`.
 
-## Основная мысль этой статьи
-Питон делает за нас массу работы, но это не значит, что без его помощи нам не обойтись.
-Ассемблер не даёт роскоши автоматической передачи аргументов, надо руками работать со стеком.
-Я предлагаю по-прежнему использовать питон в качестве целевого языка, но урезать используемые возможности до уровня ассемблера: по факту мы будем писать на ассемблере, но с синтаксисом питона.
-У такого подхода два преимущества:
+## The main idea of this article
+Python does a lot of work for us, but that doesn't mean we can't manage without its help.
+Assembly doesn't provide the luxury of automatic argument passing; we have to deal with the stack.
+I propose to continue using python as the target language but to reduce the used capabilities to the level of assembly: in fact, we will be writing in assembly with python syntax.
+This approach has two advantages:
 
-1. Мы не обязаны строго следовать всем ограничениям сразу.
-Например, я могу ограничить возможности передачи аргументов функциям, но не обязан сразу прыгать в мир с четырьмя регистрами.
-Я вполне могу пользоваться питоновским разборщиком выражений, написав комфортное мне `5//-3`, если такое потребуется, вместо километровой портянки инициализации всех нужных регистров с требуемыми флагами.
-Таким образом, я могу в любой момент иметь работающий компилятор, и допиливать его по кусочкам.
+1. We don't have to strictly follow all the constraints at once.
+For example, I can limit the ability to pass arguments to functions but don't have to immediately jump into a world with four registers.
+I can still use python's expression parser, writing a comfortable `5//-3` if needed,
+instead of fiddling with all the required registers and necessary flags.
+Thus, at all times, I can have a working compiler and refine it gradually.
 
-2. Кроме того, мы не обязаны прыгать с головой в не очень дружелюбный для новичков мир, в котором зачастую даже примитивный print() не работает, а уж как работают дебагеры - это отдельная песня.
-Мы можем использовать любимый освоенный IDE, ставить точки останова, выводить на экран что угодно и комфортно изменять руками сгенерированный код, чтобы понять, что же в нём пошло не так.
+2. Additionally, we don't have to dive headfirst into an unfriendly world where even a simple print() often doesn't work, and debugging assembly is a whole different story.
+We can use our favorite IDE, set breakpoints, print anything to the screen, and comfortably modify the generated code by hand to understand what went wrong.
 
-Мы не обязаны пользоваться встроенным стеком питона, можно сэмулировать его работу при помощи самописного стека.
-Давайте заведём глобальный массив `stack`, и будем в нём хранить аргументы и локальные переменные функций.
-Тогда вычисление факториала можно переписать (руками!) следующим образом:
+We don't have to use python's built-in stack; we can emulate its behavior with a custom stack.
+Let's create a global array `stack` and store the arguments and local variables of functions in it.
+Then the factorial can be rewritten (by hand!) as follows:
 
 ```py
 ssloy@khronos:~$ python3 <<<'
@@ -113,25 +111,25 @@ stack.pop()
 5040
 ```
 
-В этом коде мы больше не пользуемся в принципе переменными питона за исключением одного-единственного массива `stack`.
-Эта программа очень похожа на то, что я хочу получить автоматически при помощи моего компилятора, и переход от предыдущей к этой и есть основная мысль статьи.
-Отставьте свою чашку с чаем, посмотрите на код внимательно, если нужно, нарисуйте стек на листочке.
+In this code, we no longer use python variables at all, except for a single array `stack`.
+This program closely resembles what I want to achieve automatically with my compiler, and the transition from the previous code to this one is the main idea of the article.
+Put down your cup of tea, look at the code carefully, and if necessary, draw the stack on paper.
 
-Я написал код руками, и мне не очень нравится, что я был должен вручную отслеживать положение переменных в стеке.
-Для того, чтобы обратиться к одной и той же переменной n, я был вынужден вызывать три разных выражения `stack[-1]`, `stack[-2]` и `stack[-3]`.
-Это не очень хорошо, нужно найти более дубовый способ.
-Самое время вспомнить про таблицы символов из [прошлой статьи](symtable.md).
+I wrote the code by hand, and I don't particularly like that I had to manually track the position of variables on the stack.
+To refer to the same variable `n`, I had to use three different expressions `stack[-1]`, `stack[-2]`, and `stack[-3]`.
+This is not very good, and we need to find a more robust method.
+It's time to recall the symbol tables from the [previous article](symtable.md).
 
-## Подопытный кролик
+## Test Case
 
-Давайте отложим факториал и рассмотрим простейший нетривиальный пример c несколькими разными вызовами функций.
-Слева вы видите исходный код на wend, справа его трансляция в питон при помощи [версии v0.0.3](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.3) моего компилятора.
-Именно она была описана в [прошлой статье про таблицы символов](symtable.md).
-Текущая задача - переписать правую часть руками без использования переменных, практически так же, как я сделал с факториалом.
+Let's put aside the factorial and consider the simplest nontrivial example with several different function calls.
+On the left, you see the original code in wend, and on the right, its translation into python using [version v0.0.3](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.3) of my compiler.
+This version was described in the [previous article](symtable.md) on symbol tables.
+The task at hand is to rewrite the right part **by hand** without using variables, much like I did with the factorial.
 
 [![](display/sopfr1.png)](display/sopfr1.png)
 
-Если вдруг код на картинке слишком ломает глаза, давайте я его дам прямым текстом:
+If the code in the picture is too hard to read, let me provide it as plain text:
 
 ??? example "sopfr.wend"
     ```cpp linenums="1"
@@ -143,48 +141,48 @@ stack.pop()
     --8<-- "display/sopfr.py"
     ```
 
-Данная программа считает для данного числа сумму его простых множителей.
-Например, $20 = 5*2*2$, так что $\mathrm{sopfr}(20) = 2 + 2 + 5 = 9$.
-Эту функцию часто называют [целочисленным логарифмом](https://oeis.org/A001414), что неудивительно, поскольку вполне очевидно, что $\mathrm{sopfr}(a * b) = \mathrm{sopfr}(a) + \mathrm{sopfr}(b)$.
-Математики довольно активно изучают свойства этой функции, но это несколько выходит за рамки нашего обсуждения :)
+This program computes the sum of prime factors for a given number.
+For example, $20 = 5*2*2$, so $\mathrm{sopfr}(20) = 2 + 2 + 5 = 9$.
+This function is often called the [integer logarithm](https://oeis.org/A001414), which is not surprising since it is quite evident that $\mathrm{sopfr}(a * b) = \mathrm{sopfr}(a) + \mathrm{sopfr}(b)$.
+Mathematicians actively study the properties of this function, but that is somewhat beyond our discussion :)
 
-В данном коде мне интересно несколько вещей:
+In this code, I am interested in several things:
 
-1. У нас есть три вложенных области видимости.
-2. У нас есть функции с разным количеством аргументов и разным количеством локальных функций.
-3. У нас есть обращение к **нелокальной** переменной `div` из функции `sopfr_aux`.
+1. We have three nested scopes.
+2. We have functions with different numbers of arguments and different numbers of local functions.
+3. We have a reference to a **non-local** variable `div` from the function `sopfr_aux`.
 
-Последнее представляет особый интерес.
-Давайте вспомним, что в последнем примере с факториалом мне приходилось руками отслеживать положение локальных переменных на стеке, размер которого менялся.
-Это неприятно, но совсем нестрашно, поскольку все изменения стека внутри одной функции известны во время компиляции: сначала я обращаюсь к переменной `n` как `stack[-1]`,
-а после добавления локальной переменной `result` стек вырос, и `n` стал предпоследним элементом `stack[-2]`.
-А что делать, кода стек меняется в рантайме? А ведь это происходит крайне регулярно.
+The last point is of particular interest.
+Let's recall that in the factorial example, I had to manually track the position of local variables on the stack, whose size evolved.
+This is unpleasant but not too bad, as all stack changes within a function are known at compile time: initially, I refer to the variable `n` as `stack[-1]`,
+and after adding the local variable `result`, the stack grows, and `n` becomes the second-to-last element `stack[-2]`.
+But what to do when the stack changes at runtime? This happens quite regularly.
 
-## Упражнение 1
-Давайте вернёмся к нашему подопытному кролику вычисления `sopfr(n)`. Поставим точку останова на строке `rec = div`:
+## Exercise 1
+Let's return to our test case of computing `sopfr(n)`. Set a breakpoint on the line `rec = div`:
 
 ![](display/sopfr-breakpoint.png)
 
-42 раскладывается на множители 2, 3, 7, то есть, интерпретатор должен пройти через эту строчку трижды.
-Возьмите листочек и карандаш, и нарисуйте состояние стека в каждый из трёх раз (меня интересуют только переменные, всякие адреса ни к чему).
+42 decomposes into the factors 2, 3, and 7, meaning the interpreter should pass through this line three times.
+Take a piece of paper and a pencil, and draw the stack state at each of the three passes (I am interested only in variables, no need for addresses).
 
-Давайте я помогу с первой точкой останова.
-Функция `main()` на стек кладёт 42, и это соответствует переменной `n` в функции `sopfr(n)`.
-Она, в свою очередь, кладёт 2 на стек (переменная `div`), и затем снова кладёт 42 (аргумент функции `sopfr_aux(n)`).
-Ну а `sopfr_aux` создаёт локальную переменную `rec`, положив на стек 0, и доходит до точки останова, поскольку 42 делится на 2.
-Таким образом, когда мы дойдём в первый раз до точки останова, стек будет выглядеть следующим образом: [42,2,42,0].
-Вот небольшая анимация процесса:
+Let me help with the first breakpoint.
+The `main()` function places 42 on the stack, which corresponds to the variable `n` in the `sopfr(n)` function.
+It, in turn, places 2 on the stack (variable `div`), and then places 42 again (argument for the `sopfr_aux(n)` function).
+Then `sopfr_aux` creates a local variable `rec`, placing 0 on the stack, and reaches the breakpoint because 42 is divisible by 2.
+Thus, when we reach the breakpoint for the first time, the stack will look like this: [42, 2, 42, 0].
+Here is a small animation of the process:
 
 ![](display/sopfr-stack-animation.gif)
 
-Теперь же оторвитесь от статьи, и попробуйте нарисовать стек для второй и третьей точки останова.
-Задача тривиальная, но готов спорить, что многие ошибутся.
-Если кто ошибся - отписывайтесь в комменты, не стесняйтесь :)
+Now, take a break from the article and try drawing the stack for the second and third breakpoints.
+The task is trivial, but I bet many will make mistakes.
+If anyone made a mistake, don't hesitate to comment :)
 
 ??? question
     ![](display/sopfr-stack.png)
 
-Не удивляйтесь, это совершенно нормальный ответ, вот я добавил самую малость интроспекции кода для проверки результата:
+Don't be surprised, this is a perfectly normal answer. Here, I added a bit of code introspection to check the result:
 
 ??? example "Proof"
     ```py
@@ -221,34 +219,34 @@ stack.pop()
     12
     ```
 
-# Таблицы символов спешат на помощь
-Когда я переписывал на ассемблерном питоне факториал, я обращался к переменным просто по сдвигу от вершины стека, и уже даже для локальных переменных этот сдвиг был разным, но хотя бы был известен в compile time.
-А тут всё сильно иначе.
-Дойдя до нашей точки останова, мы захотим записать `div` в `rec`: одна переменная локальная, а вторая нелокальная, и она закопана очень глубоко по стеку; при этом глубина неизвестна во время компиляции.
-С другой стороны... Давайте посмотрим, как выглядит таблица символов для нашей программы:
+## Symbol Tables to the Rescue
+When I rewrote the factorial in assembly-like Python, I accessed variables simply by their offset from the top of the stack, and even for a local variable, this offset was not the same for different lines, but at least it was known at compile time.
+Here, things are quite different.
+When we reach our breakpoint, we want to assign `div` to `rec`: one variable is local, and the other is non-local and very deeply buried in the stack; the depth is unknown at compile time.
+On the other hand... Let's take a look at the symbol table for our program:
 
 ![](display/sopfr-symtable1.png)
 
-У нас есть три вложенных области видимости переменных: `main`, `sopfr`, `sopfr_aux`.
+We have three nested variable scopes: `main`, `sopfr`, `sopfr_aux`.
 
-В функции `main` переменных нет, в `sopfr` есть две целочисленные переменные `n` и `div`, а в `sopfr_aux` есть две целочисленные переменные `n` и `rec`.
+There are no variables in the `main` function, `sopfr` has two integer variables `n` and `div`, and `sopfr_aux` has two integer variables `n` and `rec`.
 
-До сих пор мой компилятор обращался к переменным по их имени, теперь же пора их пронумеровать и про идентификаторы забыть.
-Вот [diff коммита](https://github.com/ssloy/tinycompiler/commit/0c3ba224d7e1200b0fb15166a48c6af7ac003e70#diff-b60626824b61e9cb42755e5894e5b70f529425116f6c93e40d785f6f31754ffe),
-в котором я просто добавил счётчики областей видимости и переменных внутри каждой области.
-По факту, в таблицу символов я добавил вот эти фиолетовые циферки:
+Until now, my compiler accessed variables by their names, but now it's time to number them and forget about the identifiers.
+Here is the [diff of the commit](https://github.com/ssloy/tinycompiler/commit/0c3ba224d7e1200b0fb15166a48c6af7ac003e70#diff-b60626824b61e9cb42755e5894e5b70f529425116f6c93e40d785f6f31754ffe),
+in which I simply added counters for scopes and variables within each scope.
+In fact, I added these purple numbers to the symbol table:
 
 ![](display/sopfr-symtable2.png)
 
-Теперь, когда я захочу обратиться к переменной `div`, мне не нужен её идентификатор, мне достаточно знать, что это переменная с индексом 1 в области видимости 1, то есть для идентификации мне хватит пары чисел.
-Теперь у нас есть всё необходимое для того, чтобы избавиться от переменных и для `sopfr`, который изрядно сложнее факториала.
-Напоминаю, что я по-прежнему пишу код руками, мне это нужно для того, чтобы понять, как будет работать мой компилятор.
+Now, when I want to access the variable `div`, I don't need its identifier; I only need to know that it is variable number 1 in scope 1, i.e., a pair of numbers is sufficient for identification.
+Now we have everything we need to eliminate variables for `sopfr`, which is considerably more complex than the factorial example.
+Remember, I am still writing the code by hand; I need this to understand how my compiler will work.
 
-Вот код картинкой:
+Here is the code as an image:
 
 [![](display/sopfr2.png)](display/sopfr2.png)
 
-И он же текстом:
+And here it is as text:
 
 ??? example "sopfr-no-variables.py"
     ```py
@@ -313,21 +311,21 @@ stack.pop()
     12
     ```
 
-На первый взгляд пугающе, но на самом деле ничего сложного.
-Давайте разберём, что тут происходит.
-Перво-наперво смотрим на то, что у нас добавилось глобальных переменных.
-Теперь у нас есть не только `stack`, но также появились массив `display` и переменная `eax`.
-Стек своей роли не менял, переменная `eax` эмулирует регистр процессора, и согласно договорённости о вызовах функций для x86, я буду класть в этот "регистр" возвращаемое значение функций.
+At first glance, it looks intimidating, but in reality, it's not that complicated.
+Let's break down what is happening here.
+First and foremost, let's look at the new global variables.
+We now have not only `stack`, but also an array `display` and a variable `eax`.
+The stack's role remains unchanged, the variable `eax` emulates a processor register, and according to the x86 function call convention, I will place the return value of functions in this "register."
 
-А вот с глобальным массивом `display` интереснее.
-Обратите внимание, что он непустой.
-Этот массив не будет менять своего размера, количество его ячеек равно количеству разных областей видимости в нашей таблице символов, в данном случае 3.
-Смысл в том, что при вызове каждой функции мы будем записывать в соответствующую ячейку индекс вершины стека,
-что позволит нам обратиться к переменной `div` как `stack[display[1]+1]`, а к переменной `rec` как `stack[display[2]+1]`.
-Эта техника убирает наглухо зависимость от рантайма, каждая переменная всегда идентифицируется одной и той же, постоянной парой чисел, которую мы просто берём из таблицы символов.
-Разумеется, при вызове функции нам нужно будет сохранить (на стек, куда же ещё) старое значение `display`, а по завершении его восстановить.
+The global array `display` is more interesting.
+Notice that it is not empty.
+This array will not change its size; the number of its cells equals the number of different scopes in our symbol table, in this case, 3.
+The idea is that with each function call, we will record the stack size in the corresponding cell,
+allowing us to access the variable `div` as `stack[display[1]+1]` and the variable `rec` as `stack[display[2]+1]`.
+This technique completely removes runtime dependency; each variable is always identified by the same, constant pair of numbers that we simply take from the symbol table.
+Of course, when calling a function, we will need to save the old value of `display` (on the stack, where else?) and restore it upon completion.
 
-Таким образом, тело любой функции с `nlocals` локальных переменных и `nargs` параметров у нас будет выглядеть следующим образом:
+Thus, the body of any function with `nlocals` local variables and `nargs` parameters will look as follows:
 
 ```py
 def foo():
@@ -342,30 +340,30 @@ def foo():
     del stack[-nlocals:]
 ```
 
-Ну а вызов такой функции будет выглядеть очень просто:
+And here is a procedure for a function call:
 
-1. положить на стек `nargs` значений,
-2. вызвать функцию,
-3. удалить со стека `nargs` значений.
+1. Push `nargs` values onto the stack,
+2. Call the function,
+3. Remove `nargs` values from the stack.
 
-Я не просто так остановился на `sopfr`, я потратил целый день на то, чтобы выбрать пример.
-Он хорош тем, что у него есть целых три разных функции, у которых разное количество параметров, разное количество локальных переменных, и даже есть нелокальная переменная.
-Таким образом, у него есть три тела функции, и даже ещё больше разных вызовов, что позволяет увидеть, что оформляются они абсолютно одинаково и исключительно при помощи информации, доступной из таблицы символов.
+I didn't randomly pick `sopfr` for nothing, I spent an entire day choosing an example.
+I like it because it remains manageable for by-hand manipulation, but at the same it has as three different functions, each with a different number of parameters, a different number of local variables, and even a non-local variable.
+Thus, it has three function bodies and even more different calls, allowing you to see that they are all formatted exactly the same way, using only the information available from the symbol table.
 
-## Упражнение 2
-Код мы переписали, но структура-то его не изменилась.
-Давайте оставим точку останова ровно там же, где и раньше, и в качестве упражнения отрисуем состояние `display` и `stack` все три раза.
-Сейчас я прятать результат не буду, всё равно сходу стрелочки не запомните.
-Не смотрите особо на ответ, нарисуйте стек по-честному, оно поможет понять, что и в какой момент мы сохраняем.
+## Exercise 2
+We have rewritten the code, but its structure hasn't changed.
+Let's leave the breakpoint exactly where it was before and, as an exercise, draw the state of `display` and `stack` all three times.
+I won't hide the result this time; you won't remember the arrows right away anyway.
+Don't cheat, draw the stack honestly; it will help you understand what and when we are saving.
 
-Ответ:
+Here is the answer:
 
 [![](display/exercise2.png)](display/exercise2.png)
 
-## Финишная прямая: оценка значений выражений
-Осталось совсем немного до ассемблерного питона.
-Финальный штрих - это оценка значений выражений.
-Давайте представим, что у нас есть вот такая программа:
+## Final stretch: evaluating expressions
+We are now very close to assembly-like python.
+The final touch is evaluating expressions.
+Let's imagine we have the following program:
 
 ```cpp
 fun main() {
@@ -377,75 +375,73 @@ fun main() {
 }
 ```
 
-Тогда в нашей таблице символов у нас будет одна область видимости переменных с идентификатором 0, и внутри у неё будут две переменных с идентификаторами 0 и 1, соответственно.
-В данный момент меня интересует, как посчитать выражение `a+b*2`.
+Then in our symbol table, we will have one scope with identifier 0, and within it, there will be two variables with identifiers 0 and 1, respectively.
+At this point, I am interested in how to evaluate the expression `a+b*2`.
 
-В ассемблере оно будет выглядеть как-то так (напоминаю, что в GNU ассемблере операторы имеют вид `op src dst`):
+In assembly, it will look something like this (reminder: in GNU assembler, the operators have the form `op src dst`):
 
 ```asm
-mov display+0, %eax  # найти фрейм функции main
-mov -1(%eax), %ebx   # положить значение b в регистр ebx
-mov -0(%eax), %eax   # положить значение a в регистр eax
+mov display+0, %eax  # find the frame of main() function
+mov -1(%eax), %ebx   # put b into ebx register
+mov -0(%eax), %eax   # put a into eax register
 imul 2, %ebx         # ebx = 2 * ebx
 add %ebx, %eax       # eax = eax + ebx
 ```
 
-Всё бы хорошо, но вот только тут мне пришлось хитрить: для того, чтобы положить `b` в `ebx`, мне нужно испортить значение `eax`, так что сначала я читал аргумент `b`, и только потом `a`.
-А ещё я хитро положил результат `2*ebx` назад в `ebx`...
-А ещё надо помнить, что регистров очень мало, и на выражение `a + b * 2 - foo(c - 3, d + 10*d, bar(a/4))` регистров не хватит гарантированно.
+Here I cheated a bit: in order to put `b` into `ebx`, I had to spoil the value of `eax`, so I read the argument `b` first, and then `a`.
+I also cleverly put the result of `2*ebx` back into `ebx`...
+And we must remember that registers are very limited, so for the expression `a + b * 2 - foo(c - 3, d + 10*d, bar(a/4))`, there will definitely not be enough registers.
 
-Ну да не беда.
-Давайте вспомним, что мы пишем компилятор, и что парсер нам построил синтаксическое дерево выражения, которое выглядит следующим образом:
-
+But that's okay.
+Let's remember that we are writing a compiler, and the parser has built a syntax tree of the expression for us, which looks like this:
 
 ![](display/expr.png)
 
-Тогда мы можем сгенерировать код оценки значения выражения при помощи обхода дерева в глубину, используя стек для хранения промежуточных выражений.
-Представьте, что мы договоримся об очень простой вещи: каждый узел выражения сохраняет своё значение в одном и том же регистре,
-например, `%eax` (кстати, вызов функции - это тоже выражение, и в примере с `sopfr` вызов функции именно что сохранял свой результат в `%eax`).
-
-И тогда единственная (рекурсивная) операция оценки выражения может выглядеть следующим образом (для простоты я говорю здесь только о бинарных операциях типа арифметических):
+Then we can generate the code to evaluate the expression by traversing the tree depth-first, using the stack to store intermediate expressions.
+Imagine we agree on a very simple rule: each node of the expression saves its value in the same register,
+for example, `%eax` (by the way, a function call is also an expression, and in the `sopfr` example, the function call saved its result in `%eax`).
+Then the only (recursive) operation to evaluate an expression can look like this (for simplicity, I am only talking about binary operations like arithmetic):
 
 ```asm
-оценить левое выражение (результат сохранён в %eax)
+evaluate the left expression (result saved in %eax)
 push(%eax)
-оценить правое выражение (результат сохранён в %eax)
-переложить %eax в %ebx
+evaluate the right expression (result saved in %eax)
+move %eax to %ebx
 %eax = pop()
-%eax = операция над %eax и %ebx
+%eax = binary operation on %eax and %ebx
 ```
 
-Используя такой подход, выражение `a+2*b` может быть оценено следущим псевдокодом:
+Using this approach, the expression `a+2*b` can be evaluated with the following pseudocode:
 
 ```asm
-положить a в %eax                       \
-push(%eax)                               |
-положить 2 в %eax      \                 |
-push(%eax)              |                |
-положить b в %eax       | 2*b сохранено  | a + 2*b сохранено
-переложить %eax в %ebx  |    в %eax      |    в %eax
-%eax = pop()            |                |
-%eax = %eax * %ebx     /                 |
-переложить %eax в %ebx                   |
-%eax = pop()                             |
-%eax = %eax + %ebx                      /
+move a to %eax                       \
+push(%eax)                            |
+move 2 to %eax      \                 |
+push(%eax)           |                |
+move b to %eax       | 2*b saved in   | a + 2*b saved in %eax
+move %eax to %ebx    |    в %eax      |
+%eax = pop()         |                |
+%eax = %eax * %ebx  /                 |
+move %eax to %ebx                     |
+%eax = pop()                          |
+%eax = %eax + %ebx                   /
 ```
 
-Обратите внимание, что код явно неоптимален, очень легко можно сэкономить много чего (собственно, ассемблерный код, который я привёл ранее, сильно проще и не использует стека).
-Но на данном этапе меня оптимизация не интересует в принципе.
-Мне нужно найти общий паттерн оценки выражений, и, похоже, он найден!
-Об оптимизирующем компиляторе мы поговорим в отдельный раз.
+Note that the code is clearly suboptimal; it is very easy to save a lot (in fact, the assembly code I provided earlier is much simpler and does not use the stack).
+But at this stage, I am not interested in optimization at all.
+I need to find a general pattern for evaluating expressions, and it seems that I have found it!
+We will talk about an optimizing compiler another time.
 
-Зато такой подход имеет неоспоримое преимущество: он использует только два регистра и стек, больше ему ничего не нужно!
-Так что finishing touch над нашей `sopfr`: все выражения оцениваются в регистр `eax`.
-Я по-прежнему написал код руками, но опять же, исключительно для проверки работоспособности подхода.
-Узрите же питонассемблерный код!
+However, this approach has an undeniable advantage: it uses only two registers and the stack, nothing more!
+So, the finishing touch on our `sopfr`: all expressions are evaluated in the `eax` register.
+I still wrote the code by hand, but again, only to test the viability of the approach.
+Behold the python assembly-ish code!
 
 [![](display/sopfr3.png)](display/sopfr3.png)
 
-И он же текстом:
+And here it is as text:
 
-??? example "fully castrated python"
+??? example "assembly-ish python"
     ```py
     ssloy@khronos:~$ python3 <<<'
     def main():
@@ -548,21 +544,15 @@ push(%eax)              |                |
     12
     ```
 
+## Summary
+I reiterate, the most important thing in this code is the repeatability of the same patterns for function bodies, function calls, and expression evaluation.
+These patterns do not require much thought; which is perfect for automating the process.
 
-## Подводим итог
-Повторюсь, что важно в этом коде, так это повторяемость одних и тех же паттернов тела функции, вызова функции и оценки значения выражений,
-они в принципе не требуют работы головного мозга, всё пишется исключительно при помощи спинного, что отлично подходит для автоматизации процесса.
+[Here](https://github.com/ssloy/tinycompiler/commit/0c3ba224d7e1200b0fb15166a48c6af7ac003e70) you can see all the changes in the repository since the previous release; there are very few.
+The compiler version for testing is [v0.0.4](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.4).
 
-[Вот здесь](https://github.com/ssloy/tinycompiler/commit/0c3ba224d7e1200b0fb15166a48c6af7ac003e70) можно посмотреть на все изменения в репозитории с предыдущего релиза, их совсем немного.
-Версия компилятора для тестирования - [v0.0.4](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.4).
-
-В итоге мы (почти) не пользуемся ничем от питона, что не умеет ассемблер напрямую.
-Практически единственное, что нужно для генерации ассемблерного кода - это поменять трафарет, через который мы пишем код.
-В следующий как раз об этом и поговорим!
-
-
-
-
-
+In the end, we (almost) do not use anything from python that assembly cannot handle directly.
+Virtually the only thing needed for assembly generation is to change the template for our *pretty printer*.
+We will talk about this next time!
 
 --8<-- "comments.html"
