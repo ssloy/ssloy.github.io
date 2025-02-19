@@ -23,6 +23,9 @@ dmitry.sokolov@univ-lorraine.fr<br/>
 ## [TinyCompiler: a compiler in a week-end](tinycompiler/index.md)
 [<img src="tinycompiler/home/compiler.png" width="480">](tinycompiler/index.md)
 
+## [TinyOptimizer: an *optimizing* compiler challenge](tinyoptimizer/index.md)
+[<img src="tinyoptimizer/home/tinyoptimizer.png" width="480">](tinyoptimizer/index.md)
+
 
 ## [Cursed fire or `#define` black magic](strange/cursed-fire.md)
 [![](strange/cursed-fire/define-320.png)](strange/cursed-fire.md)

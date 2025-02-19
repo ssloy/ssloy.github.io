@@ -59,6 +59,9 @@ nav:
         - 'tinycompiler/lexer.md'
         - 'tinycompiler/parser.md'
         - 'tinycompiler/afterword.md'
+    - 'tinyoptimizer':
+        - 'tinyoptimizer/index.md'
+        - 'tinyoptimizer/mem2reg.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 
