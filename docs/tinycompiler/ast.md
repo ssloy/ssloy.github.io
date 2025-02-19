@@ -1,136 +1,185 @@
 # Abstract syntax trees
 
 ## Introduction
-Я пролистал некоторое количество лекций по компиляции, и практически все они начинаются с лексера и парсера.
-Я же предлагаю подождать с этим до следующего раза, а для начала задаться вопросом, каким именно объектом мы хотим манипулировать.
 
-На вход у нас будет кусок текста (просто длинная строка), на выход мы тоже должны выдать кусок текста.
-И между этими текстами должна сохраниться какая-то сущность, смысл.
-Нам нужен способ этот самый смысл выразить, уходя от голого текста, с которым работать крайне неудобно.
+I've checked several lectures on compilers, and nearly all of them start with lexers and parsers.
+However, I suggest postponing that for now and first asking ourselves: **what kind of object do we actually want to work with?**
 
-Неотъемлемой частью любого (императивного? пуристы, поправьте меня) языка программирования являются выражения, как арифметические, так и логические.
-Пионером извлечения смысла из записи выражений был [Ян Лукасевич](https://en.wikipedia.org/wiki/Jan_%C5%81ukasiewicz),
-который знаменит, помимо прочего, своей [обратной польской записью](https://en.wikipedia.org/wiki/Reverse_Polish_notation).
-Например, рассмотрим булевское выражение в [инфиксной записи](https://en.wikipedia.org/wiki/Infix_notation):
+Our input is a piece of text (just a long string), and our output should also be a piece of text.
+But between these two, we need to preserve some kind of entity — **a meaning**.
+We need a way to express this meaning, moving away from raw text, which is highly inconvenient to work with.
+
+An essential part of any (imperative? Purists, feel free to correct me) programming language are **expressions**, both arithmetic and logical.
+One of the pioneers in formalizing expressions was [Jan Łukasiewicz](https://en.wikipedia.org/wiki/Jan_%C5%81ukasiewicz),
+who is best known for his work on [Reverse Polish Notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation).
+
+For example, consider the following Boolean expression in [infix notation](https://en.wikipedia.org/wiki/Infix_notation):
 
 $$
 ((B\wedge A)\wedge(\neg(B\wedge A))) \wedge ((\neg C) \rightarrow A)
 $$
 
-Для вычисления выражения мы должны произвести операции в определённом порядке, который соответствует следующему дереву:
+To evaluate this expression, we must follow a specific order of operations, which can be represented as the following tree:
 
 ![](ast/tree.png)
 
-Для того, чтобы вычислить значение в узле дерева, мы должны оценить всех его потомков.
-То есть, в нашем вычислителе нам нужно уметь выделять память для хранения промежуточных результатов.
-На обычных калькуляторах для этого часто используются кнопки = (для получения промежуточного результата) и m+ (для сохранения его в память).
-Ян Лукасевич предложил использовать стек, и каждый раз, вычисляя значение в узле, просто брать выражения с верхушки стека, что соответствует обходу нашего дерева в глубину.
-В нашем примере мы кладём на стек $A$, затем $C$.
-Операция $\neg$ унарная, поэтому берём со стека только один элемент, оцениваем его, и кладём результат на стек.
-В данный момент на стеке у нас два элемента, $A$ и $\neg C$, поэтому бинарная операция $\rightarrow$ их возьмёт оба и превратит в один результат на стеке $((\neg C)\rightarrow A)$.
-Если мы продолжим обход дерева в глубину, то все узлы будут посещены в следующем порядке:
+To compute the value of any node in the tree, we first need to evaluate its children.
+This means we require memory to store intermediate results.
+In standard calculators, this is often done using the `=` button (for intermediate results) and the `m+` button (for storing values).
+Jan Łukasiewicz proposed using a **stack** instead: whenever we compute the value of a node,
+we simply take the operands from the top of the stack, corresponding to a **depth-first traversal** of our tree.
+
+In our example, we first push $A$ onto the stack, then $C$.
+Since $\neg$ is a **unary** operation, we pop a single element, evaluate it, and push the result back onto the stack.
+At this point, our stack contains two elements: $A$ and $\neg C$.
+The **binary** operation $\rightarrow$ then takes both values, computes the result, and pushes it back onto the stack: $((\neg C) \rightarrow A)$.
+
+If we continue traversing the tree in depth-first order, all nodes will be visited in the following sequence:
 
 $$
 A C \neg \rightarrow A B \wedge \neg A B \wedge \wedge \wedge
 $$
 
-Эта строка - наше изначальное выражение, переписанное из инфиксной нотации в обратную польскую запись.
-По факту, мы имеем две записи одного и того же алгоритма на двух разных языках, а дерево помогает не отвлекаться на языковые трудности, а работать со смыслом.
+This string is our original expression, rewritten from infix notation into reverse Polish notation.
+Essentially, we have two representations of the same algorithm in two different languages,
+while the tree helps us focus on the meaning rather than the linguistic differences.
 
-Разрешу себе отвечься: польская (постфиксная) запись позволяет избавиться от скобок в записи и от использования кнопки '=' на калькуляторе, что изрядно укорачивало программы для этих калькуляторов.
-В СССР были широко распространены программируемые калькуляторы [МК-61](https://en.wikipedia.org/wiki/Elektronika_MK-61) и [МК-52](https://en.wikipedia.org/wiki/Elektronika_MK-52), не имевшие кнопки равенства.
-Как же я упивался своим могуществом в младших классах, притащив в школу калькулятор, которым никто кроме меня не мог воспользоваться! :)
+Let me digress for a moment: Polish (postfix) notation eliminates the need for parentheses and the `=` button on calculators,
+which significantly simplified programs for such devices.
 
-В начале 80х годов Hewlett-Packard рекламировала свой знаменитый [HP-12C](https://en.wikipedia.org/wiki/HP-12C) вот такой картинкой:
+In the USSR, programmable calculators like [Elektronika MK-61](https://en.wikipedia.org/wiki/Elektronika_MK-61)
+and [MK-52](https://en.wikipedia.org/wiki/Elektronika_MK-52) were widely used — without an `=` button.
+Oh, how I smirked in elementary school, bringing in a calculator that no one but me could figure out! :)
+
+In the early '80s, Hewlett-Packard advertised its legendary [HP-12C](https://en.wikipedia.org/wiki/HP-12C) with this poster:
 
 ![](ast/no-equals-780x440.png)
 
-Поиграю в Капитана Очевидность: перечёркнутый знак равенства тут обыгрывается одновременно как калькулятор, на котором нет кнопки '=', а также как то, что компании нет равных.
-И лично я получаю дополнительное извращённое удовольствие от ношения футболки с таким принтом в 20х годах XXIго века, хотя и не люблю быть ходячим рекламным биллбордом.
-Но количество едких комментариев от непонимающих окружающих перевешивает все моральные неудобства от рекламы на пузе :)
+Let me play Captain Obvious for a second: the crossed-out `=` sign simultaneously represents the absence of that button on the calculator
+and the idea that HP is unrivaled. It was a deliberate pun. And an inspired one.
 
-Шутки в сторону, обратная польская запись - это просто линейная запись синтаксического дерева выражения, которое и есть суть, смысл.
+Personally, I get a twisted pleasure wearing a T-shirt with this print in the 2020s, even though I hate being a walking billboard.
+But the number of angry comments from confused people makes up for any moral discomfort of advertising on my belly!
 
-## Подопытный кролик
-Сегодня мы будем работать вот с таким кодом, который вычисляет $\sqrt\pi$, который хранится как число с фиксированной точкой.
+Jokes aside, reverse Polish notation is simply a linear representation of an expression’s syntax tree — the core idea, the meaning.
+
+## Test Subject
+
+Today, we'll work with a piece of code that computes $\sqrt\pi$, storing it as a fixed-point number.
 
 ```cpp linenums="1"
 --8<-- "parser/sqrt-before.wend"
 ```
 
-### Представление вещественных чисел при помощи целочисленных переменных
-В качестве лирического отступления давайте разберёмся в том, что делает наша программа-пример.
-Я не стал добавлять в wend ни стандартной плавающей точки ieee754, ни позитов.
-Это сделать несложно, но раздует компилятор, а я хочу, чтобы он был как можно более компактным.
-Двух разных типов (`bool` и `int`) мне вполне хватит для того, чтобы показать, как работает проверка типов.
+### Representing real numbers with integer variables
 
-Что же делать, если мне хочется уметь работать с вещественными числами?
-Мои 32-битные переменные хоть и называются целочисленными, но на самом деле я их могу интерпретировать вообще как хочу.
-Давайте представим, что я хочу хранить число $\pi$ с точностью до четвёртого знака после запятой.
-Если я умножу $\pi$ на $10^5$ , то получу 31415.9265(...).
-То есть, я могу написать в коде `p = 31415; print p/10000; print "."; print p%10000;`, и получу на экране заветное 3.1415.
+As a brief digression, let's analyze what our example program does.
+I have not included IEEE 754 floating-point numbers or posits in *wend*.
+It's not difficult to do, but it would bloat the compiler, and I want to keep it as compact as possible.
+Having just two different types (`bool` and `int`) is sufficient to demonstrate how type checking works.
 
-Идея очень простая: мы выбираем некий множитель $m$, и для представления нужного числа (в данном случае $\pi$) мы храним целую часть числителя дроби $(\pi*m)/m$.
-Размер числа $m$ нам даёт фиксированную точность представления вещественного числа.
-Исторически чаще всего выбирают в качестве множителя степени двойки, поскольку можно заменить (когда-то) дорогие операции деления и нахождения остатка от деления на дешёвые сдвиг и побитовое "И".
-Например, если $m$ выбрано равным $2^31$, то можно хранить числа от -1 до 1 с шагом примерно $4,7*10^{-10}$; а если $m$ выбрано равным $2^{10}$,
-то можно представлять числа от -2'097'152 до 2'097'151 с шагом 0,0009765625.
+So what should I do if I want to work with real numbers?
+My 32-bit variables may be labeled as integers, but I can interpret them however I like.
+Let's say I want to store the number $\pi$ with an accuracy up to the fourth decimal place.
+Multiplying $\pi$ by $10^5$ results in 31415.9265(...).
+Thus, I can write the following code:
 
-Давайте представим, что у меня есть переменная `p`, в которой хранятся 32 вот таких бита: `00000000000000000110010010000111`.
-Если я сделаю `print p;`, то получу на экране 25735.
-Однако же в я хочу интепретировать как целое число только старшие 19 битов, а вот младшие 13 - это дробная часть.
-Если я сделаю `print p/8192; print "."; print ((p%8192)*10000)/8192;`, то получу на экране 3.1414, то есть, число $\pi$ с точностью в 13 битов после запятой, что чуть-чуть грубее одной десятитысячной.
+```wend
+p = 31415;
+print p/10000;
+print ".";
+print p%10000;
+```
 
-Сложение и вычитание чисел с фиксированной точкой выполняются с помощью целочисленной арифметики при условии, что экспоненты левого и правого операндов одинаковы.
-Если у нас есть два числа $p$ и $q$ с фиксированной точкой одинаковой точности и их соответствующее целочисленное представление $p*m$ и $q*m$,
-то сумма их представлений $p*m+q*m$ является представлением суммы самих чисел $p+q$, поскольку $p*m/m + q*m/m = (p+q)*m/m$.
-С разностью то же самое.
-С умножением, однако, нужно чуть поработать: $(p*m) * (q*m) = p*q*m^2$, поэтому для представления числа $p*q$ с точностью $m$ нужно поделить на $m$ произведение представлений $p*m$ и $q*m$.
+This will print `3.1415` on the screen.
 
-### Вычисление квадратного корня методом Ньютона
-Моя программа-пример вычисляет квадратный корень из $\pi$ с точностью до 13 битов.
-Сам алгоритм очень простой: если мы хотим извлечь корень $x = \sqrt{a}$ для какого-то положительно числа $a$,
-то мы можем использовать итеративный метод: выберем произвольное число $x_1$ (например 1) и определим последовательность
+The idea is simple: we choose a multiplier $m$, and to represent a desired number (in this case, $\pi$), we store the integer part of the fraction $(\pi*m)/m$.
+The value of $m$ determines the fixed precision of our real number representation.
+Historically, powers of two have been the preferred choice for $m$, as division and modulo operations can be replaced with cheaper bit shifts and bitwise AND operations.
+For example, if $m$ is $2^{31}$, we can represent numbers from -1 to 1 with a step size of approximately $4.7 \times 10^{-10}$.
+If $m$ is $2^{10}$, we can represent numbers from -2,097,152 to 2,097,151 with a step size of 0.0009765625.
+
+Now, let's assume we have a variable `p` containing the following 32-bit value:
+`00000000000000000110010010000111`
+If we execute `print p;`, the output will be `25735`.
+However, I want to interpret only the upper 19 bits as the integer part, while the lower 13 bits represent the fractional part.
+Using the following code:
+
+```wend
+print p/8192;
+print ".";
+print ((p%8192)*10000)/8192;
+```
+
+The output will be `3.1414`, which represents $\pi$ with a precision of 13 bits after the decimal point, slightly coarser than one ten-thousandth.
+
+Addition and subtraction of fixed-point numbers are performed using integer arithmetic, provided that the exponents of both operands are the same.
+If we have two fixed-point numbers $p$ and $q$ of the same precision, represented as $p*m$ and $q*m$, then their sum:
+
+$$ p*m + q*m $$
+
+is the representation of the sum $p + q$, since:
+
+$$ \frac{p*m}{m} + \frac{q*m}{m} = \frac{(p+q)*m}{m} $$
+
+The same logic applies to subtraction.
+Multiplication, however, requires an adjustment:
+
+$$ (p*m) * (q*m) = p*q*m^2 $$
+
+To correctly represent the product $p*q$ with precision $m$, we must divide the product $p*m * q*m$ by $m$.
+
+### Computing the Square Root Using Newton's Method
+
+My example program computes the square root of $\pi$ with 13-bit precision.
+The algorithm itself is quite simple: if we want to compute $x = \sqrt{a}$ for some positive number $a$,
+we can use an iterative method. We start with an arbitrary value $x_1$ (e.g., 1) and define the sequence:
 
 $$
-x_{n+1} = \frac12\left(x_n + \frac{a}{x_n}\right).
+x_{n+1} = \frac{1}{2}\left(x_n + \frac{a}{x_n}\right).
 $$
 
-Интуитивно это вполне очевидно: если $x_n$ слишком большой ($x_n>\sqrt a$) , то $a/x_n$ будет слишком маленьким ($a/x_n < \sqrt a$) , и их среднее арифметическое $x_{n+1}$ будет ближе к $a$.
-Этот алгоритм был известен ещё в Вавилоне больше трёх тысяч лет назад: знаменитая табличка YBC7289 содержит значение $\sqrt 2$ с точностью до шести знаков.
-Три тысячи лет спустя было обнаружено, что этот алгоритм эквивалентен методу Ньютона нахождения корня уравнения $f(x) = x^2 - a$:
-имея приближение корня $x_{n}$, мы можем приблизить функцию $f$ её касательной при помощи разложения в ряд Тейлора первой степени $f(x_n) + f'(x_n)(x-x_n)$, 
-приравнять эту функцию нулю и получить улучшенное приближение корня $x_{n+1}= x_n - \frac{f(x_n)}{f'(x_n)}$, выведя ровно Вавилонскую формулу.
+Intuitively, this makes sense: if $x_n$ is too large ($x_n > \sqrt{a}$), then $a/x_n$ will be too small ($a/x_n < \sqrt{a}$),
+and their arithmetic mean $x_{n+1}$ will be closer to $\sqrt{a}$.
+This algorithm was known in Babylon over three thousand years ago — the famous [YBC 7289 tablet](https://en.wikipedia.org/wiki/YBC_7289) contains a value of $\sqrt{2}$ accurate to six decimal places.
 
-Единственное, что осталось понять, так это когда нам нужно остановиться.
-В моём коде я останавливаюсь тогда, когда новое приближение просто равно предыдущему.
-Ффух, математика закончилась, извините, но я не мог не объяснить, что и как делает тестовая программа.
-Я выбрал именно этот пример, поскольку он достаточно короткий, но при этом использует все инструкции моего языка wend.
+Three thousand years later, it was discovered that this algorithm is equivalent to Newton's method for finding roots of the equation $f(x) = x^2 - a$.
+Given an approximation $x_n$, we approximate the function $f$ by its tangent at $x_n$ using a first-order Taylor expansion:
+
+$$ f(x_n) + f'(x_n)(x - x_n) $$
+
+Setting this function to zero gives us an improved root approximation:
+
+$$ x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} $$
+
+which leads exactly to the Babylonian formula.
+
+The only remaining question is when to stop.
+In my code, I stop when the new approximation is exactly equal to the previous one.
+Phew, that’s the end of the math! Apologies, but I had to explain what the test program does.
+I chose this example because it is short enough while still using almost all concepts of *wend*.
 
 ## AST for the sqrt()
 
-Давайте нарисуем синтаксическое дерево нашей программы.
-Корнем дерева является точка входа, функция `main()`.
-Как-то так выглядит полное дерево:
+Let me draw the syntax tree of our program.
+The root of the tree is the entry point, the `main()` function.
+Here’s what the full tree looks like:
 
 ![](ast/sqrt.png)
 
-У `main` есть две вложенные функции, которые являются потомками списка функций `fun`, а также список инструкций `body`.
-Нужно понимать, что это дерево выражает структуру программы, но не само её выполнение:
-в отличие от предыдущего примера, для вычисления значения в узле `println` нам может понадобиться сделать несколько рекурсивных вызовов оценки соседнего узла `sqrt`,
-однако это дерево является абстракцией, которую мы строим из текста программы на *wend*,
-и из которой можно сгенерировать программы на различных языках.
-Сегодня я напишу код, который переводит это дерево в код на питоне.
+The `main` function has two nested functions, which are children of the function list `fun`, as well as an instruction list `body`.
+It is important to understand that this tree represents the structure of the program, but not its execution.
+Unlike the previous example with RPN, to compute the value at the `println` node, we might need to make multiple recursive evaluations of the neighboring `sqrt` node.
 
-Всё, у меня уже нестерпимо чешутся руки, столько разговоров, и ни одной строчки кода, которую можно выполнить! Давайте исправлять ситуацию.
-Посмотрите внимательно на дерево: мы можем воплотить эту абстракцию в код с узлами трёх основных типов, а именно:
+Enough talking — I'm impatient to write some actual code! Let's get started.
+Take a close look at the tree: we can implement this abstraction with three main types of nodes:
 
-1. объявления функций
-2. инструкции
-3. выражения
+1. Function declarations
+2. Statements
+3. Expressions
 
-Давайте создадим модуль `syntree.py`, который будет исключительно хранить данные, никакой логики в нём не будет.
-Тогда класс объявления функции может выглядеть как-то так:
+Let's create a module [syntree.py](https://github.com/ssloy/tinycompiler/blob/4c46a43550e6303ec9ce0ea10327e43648a6fa27/syntree.py), which will store data exclusively, without any logic.
+A function declaration class might look something like this:
 
 ```py
 class Function:
@@ -143,17 +192,17 @@ class Function:
         self.deco = deco or {} # decoration dictionary to be filled by the parser (line number) and by the semantic analyzer (return type, scope id etc)
 ```
 
-В нём есть поле имени функции, списка аргументов, локальных переменных, вложенных функций и список инструкций, составляющий тело функции.
-Я ещё добавил дополнительный словарь `deco`, в который буду совать всякую не очень интересную информацию типа номера строки в файле, чтобы обработчик ошибок ругался не очень уж непонятными словами.
-Но это будет сильно позже, пока что это будет пустой словарь.
+The class has a field for the function name, a list of arguments, local variables, nested functions, and a list of instructions that make up the function body.
+I also added an additional dictionary called `deco`, where I will put various uninteresting information such as the line number in the file, so that the error handler doesn't complain in very cryptic terms.
+But that will be much later, for now, it will be an empty dictionary.
 
-Ровно таким же образом я написал классы инструкций `Print`, `Return`, `Assign`, `While`, `IfThenElse`, а также выражений `ArithOp`, `LogicOp`, `Integer`, `Boolean`, `String`, `Var` и `FunCall`.
-Всё, больше ничего для компилятора wend не нужно!
-Код модуля содержит 64 строчки, и я не буду его тут приводить полностью, поскольку в нём нет вообще никакой логики, это чисто хранилище.
-Он больше не должен изменяться до самого конца (ну, по крайней мере, если у меня не совсем кривые руки :) )
-Исходник [доступен на гитхабе](https://github.com/ssloy/tinycompiler/blob/main/syntree.py).
+In exactly the same way, I have written instruction classes `Print`, `Return`, `Assign`, `While`, `IfThenElse`, as well as expression classes `ArithOp`, `LogicOp`, `Integer`, `Boolean`, `String`, `Var`, and `FunCall`.
+That's all, nothing more is needed for the `wend` compiler!
+The module code contains 64 lines, and I will not include it here in full, as it does not contain any logic, it is purely a storage.
+It should no longer change until the very end (well, at least if my hands aren't completely crooked :) )
+The source code is [available on GitHub](https://github.com/ssloy/tinycompiler/blob/4c46a43550e6303ec9ce0ea10327e43648a6fa27/syntree.py).
 
-А вот теперь давайте писать интересный код. Созадим синтаксическое дерево из нашего примера:
+Now let's write some interesting code. Let's create a syntax tree from our example:
 
 ??? example "AST created manually"
     ```py
@@ -214,25 +263,23 @@ class Function:
         {'type':Type.VOID})     # return type
     ```
 
+We will discuss next time about how to create such a tree from source text automatically.
+For now, compare this code to the tree diagram.
+An attentive reader will notice some discrepancies, for example, the unary operation `-x` is represented as the binary operation `0-x`, but these are implementation details:
+the programmer using *wend* should be able to write `-x` without worrying about how exactly this expression is transformed into a syntax tree.
 
-О том, как создавать такое дерево из текста исходника автоматически, мы поговорим в следующий раз.
-А пока что сравните этот код с рисунком дерева.
-Внимательный читатель заметит некоторые несоответствия, например, унарная операция -x у меня представляется как бинарная операция 0-x, но это, как говорится, детали реализации:
-программист на *wend* должен иметь возможность написать -x, а уж как это выражение превращается в бинарный узел в синтаксическом дереве внутри компилятора - не его забота.
+For completeness, I have included the type of variables and function returns in the decoration dictionaries of our Christmas tree, but at this stage, I will not use it,
+as Python has dynamic typing, and type inference and checking will concern me much later.
 
-Для полноты картины я засунул в словари украшений нашей новогодней ёлки тип переменных и возврата функции, но на данном этапе я не буду его использовать,
-поскольку питон имеет динамическую типизацию, и вывод типов и их проверка будут меня волновать сильно позже.
+## From syntax tree to python code
+The final code can be generated with a simple depth-first traversal of our syntax tree.
+For example, if we visit an `Assign` node, it is guaranteed to have only two children: a `Var` node representing the variable we are assigning to,
+and one of the expression nodes `ArithOp`, `LogicOp`, `Integer`, `Boolean`, `Var`, and `FunCall`.
+Note that the `Var` node itself is an expression (we can assign the value of another variable, right?).
+However, as you might have noticed, I am not obsessed by hierarchy of classes, and there is no inheritance at all; the separation into expressions and instructions is quite informal.
 
-
-## От синтаксического дерева к коду на питоне
-Конечный код может быть сгенерирован одним простым обходом нашего синтаксического дерева в глубину.
-Наример, если мы посетили узел `Assign`, он гарантированно имеет только два потомка: узел `Var`, который представляет собой переменную, в которую мы записываем,
-и один из узлов-выражений `ArithOp`, `LogicOp`, `Integer`, `Boolean`, `Var` и `FunCall`.
-Обратите внимание, что что узел `Var` сам является выражением (мы же можем присвоить значение другой переменной?).
-Впрочем, как вы могли заметить, я не упарывался по иерархии классов, и никакого наследования у меня нет в принципе, деление на выражения и инструкции весьма условно.
-
-Возвращаясь к генерации кода во время посещения узла инструкции `Assign`, этот узел синтаксического дерева содержит два потомка: строку `Assign.name` и ссылку на другой узел-выражение `Assign.expr`.
-Мой код компилятора выглядит следующим образом:
+Back to the code generation during the visit of an `Assign`, this node has two children: the string `Assign.name` and a reference to another expression node `Assign.expr`.
+My compiler code has the following structure:
 
 ```py
 def stat(n):
@@ -242,11 +289,9 @@ def stat(n):
     [...]
 ```
 
-
-То есть, мы генерируем код типа `x = src`, где `src` - это код выражения, сгенерированный вызовом функции `expr(n.expr)`.
-[Полный исходник генератора кода](https://github.com/ssloy/tinycompiler/blob/main/transpy_naive.py) из синтаксического дерева можно найти на гитхабе, там всего 50 строчек.
-[Натравив наш недокомпилятор](https://github.com/ssloy/tinycompiler/blob/main/tests/test_syntree.py) на вручную построенное синтаксическое дерево, получим следующий результат:
-
+That is, we generate code like `x = src`, where `src` is the expression code generated by the call to the `expr(n.expr)` function.
+The [full source code of the code generator](https://github.com/ssloy/tinycompiler/blob/4c46a43550e6303ec9ce0ea10327e43648a6fa27/transpy_naive.py) from the syntax tree can be found on GitHub, it's just 50 lines.
+By [running our not-yet-a-compiler](https://github.com/ssloy/tinycompiler/blob/4c46a43550e6303ec9ce0ea10327e43648a6fa27/tests/test_syntree.py) on a manually constructed syntax tree, we get the following result:
 
 ```py
 def main():
@@ -278,9 +323,9 @@ def main():
     print(sqrt(25735, 8192), end='\n')
 ```
 
-При запуске этого файла на экране выведется 14519, что является представлением числа $\sqrt\pi$ с точностью до 13 битов после запятой!
-Про вывод 3.1414 вместо 14519 мы поговорим в следующий раз, поскольку неохота мне больше строить синтаксические деревья вручную.
-Так что тема следующего разговора - парсинг исходников.
+When this file is run, 14519 will be displayed on the screen, which is the representation of the number $\sqrt\pi$ with a precision of 13 bits after the decimal point!
+We'll talk about displaying 3.1414 instead of 14519 next time, as I don't feel like manually constructing syntax trees any further.
 
+Check the [v0.0.1](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.1) tag in the repository.
 
 --8<-- "comments.html"

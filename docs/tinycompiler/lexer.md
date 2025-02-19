@@ -1,56 +1,57 @@
 # DIY lexer
 
-Как я уже и говорил, разделение лексера и парсера позволяет последнему работать с более упорядоченным и содержательным материалом, нежели исходный текст.
-Но при этом и лексер, и парсер оба являются синтаксическими анализаторами, просто работающими на разном уровне.
-Они принимают на вход список символов и создают структуру более высокого уровня.
+As I said before, the separation of the syntax analysis into lexer and parser allows the latter to work with more organized and meaningful material than the source text.
+But at the same time, both lexer and parser are syntactic analyzers, just working at a different level.
+They take a list of characters as input and create a higher-level structure.
 
-Лексер работает с регулярными языками — это такие языки, которые можно распознать за один линейный проход по тексту, не возвращаясь назад и не сохраняя сложную информацию о предыдущих символах.
-Такой подход делает разбор предсказуемым и эффективным: в каждый момент времени лексер принимает решение, глядя только на текущий символ (или небольшой фиксированный буфер символов).
-Благодаря этому разбор можно реализовать с помощью конечного автомата, где каждое состояние определяет, что делать при встрече следующего символа, без необходимости хранить дополнительный контекст.
+The lexer works with regular languages, which are languages that can be recognized in one linear pass through the text without going back and storing complex information about previous characters.
+This approach makes analysis predictable and efficient: at any given time, the lexer makes a decision by looking only at the current character (or a small fixed buffer of characters).
+Because of this, lexing can be implemented using a finite state machine, where each state determines what to do when the next symbol is encountered, without the need to store additional context.
 
-В целом, создание лексера - на удивление простая задача, эта статья будет короткой :)
-Единственное, что код не очень приятный для чтения, поэтому я начну с самой простой его версии, и буду его постепенно расширять.
+Overall, creating a lexer is a surprisingly simple task, this article will be short :)
+The only thing is that the code is not very pleasant to read, so I will start with the simplest version of it, and will expand it gradually.
 
-## Распознаём числа
+## Recognizing numbers
 
-Давайте представим, что у нас есть есть вот такой исходный файл:
+Let us suppose we have following source file:
 ```
 0 // this is a comment to ignore by the lexer
 1337
 ```
 
-А нам нужно его превратить в более осмысленные лексемы
+We need to convert it into the following tokens:
 ```
 [
     INTEGER(0),
     INTEGER(1337)
 ]
 ```
-Как это сделать?
-Как я и сказал, мы превратим исходник в поток символов, а затем будем их один за одним обрабатывать.
-Принятием всех решений у меня будет заниматься вот такой конечный автомат с тремя состояниями:
+How do we do that?
+As I said, we will turn the source into a stream of characters, and then process them one by one.
+I will make all the decisions with this finite state machine made of three states:
 
 ![](lexer/lexer0.png)
 
-Состояние 0 является начальным, оно соответствует поиску начала новой лексемы.
-Пока мы в нём находимся, мы просто игнорируем все пробелы, табуляции и переносы строк, что нам приходят из исходного файла.
-Как только мы увидели два слеша, мы переходим в состояние 1, которое соответствует сканированию строкового комментария.
-В этом состоянии мы игнорируем все символы помимо переноса строки, при котором возвращаемся в состояние 0.
+State 0 is the initial state, in this state we are looking for the beginning of a new token.
+While in state 0, we simply ignore all spaces, tabs and line breaks that come from the source file.
+As soon as we see two slashes, we move to state 1, which corresponds to scanning a string comment.
+In this state, we ignore all characters other than the line break, which returns us to the state 0.
 
-Если же мы, будучи в состоянии 0, встретим цифру, то немедленно переходим в состояние 2, соответствующее сканированию числовой лексемы.
-При любом символе, отличающемся от цифры, мы возвращаемся в состояние 0.
-Я забыл нарисовать на этом рисунке, но когда мы находимся в состоянии поиска новой лексемы, то любой входящий текст кроме цифр, пробелов или пары слешей, должен вызывать лексическую ошибку.
+If, while in state 0, we encounter a digit, we immediately go to the state 2, which corresponds to scanning a numeric token.
+At any character other than a digit, we return to state 0.
+I forgot to draw in this figure, but, while in state 0, we encounter any incoming character other than digits, spaces, or a pair of slashes, this should cause a lexical error.
 
-Вот реализация подобного лексера:
+Here is an implementation of such a lexer:
 
 ??? example "Comments and integer tokens"
     ```py linenums="1"
     --8<-- "lexer/lexer0.py"
     ```
 
-## Строки
-Для распознавания строк достаточно добавить состояние 3, в которое мы переходим по встреченной кавычке, и из которого по встреченной же кавычке мы выходим.
-Если же до второй кавычки нам встретился перенос строки, то это лексическая ошибка.
+## Strings
+
+To recognize strings, it is enough to add state 3, to which we move by the quotation mark, and from which we exit by the second quotation mark.
+If we encounter a line break before the second quote, it is a lexical error.
 
 ![](lexer/lexer1.png)
 
@@ -59,11 +60,13 @@
     --8<-- "lexer/lexer1.py"
     ```
 
-## Идентификаторы и ключевые слова
-Усложняем задачу, добавляем разбор идентификаторов переменных и ключевых слов.
-Я хочу, чтобы `_identifier` был разобран как `ID(_identifier)`, а `while` был опознан как ключевое слово, и чтобы была выдана лексема `WHILE`.
-На самом деле, само по себе лексическое правило разбора для них одно и тоже, просто перед выдачей лексемы мы проверяем, не входит ли текст в список зарезервированных слов.
-Вот у нас добавляется состояние 4, в которое мы заходим либо по подчёркиванию, либо по букве, и дальше всё как обычно:
+## Identifiers and keywords
+Let us add parsing of variable identifiers and keywords.
+I want `_identifier` to be parsed as `ID(_identifier)`, and `while` to be recognized as a keyword, with token `WHILE` to be emitted.
+In fact, both are recognized by the same state of the automaton,
+but before issuing the token we check whether the text is in the list of  reserved words.
+
+We enter to the state 4 by encountering either and underscore character or a letter, and then it's business as usual:
 
 ![](lexer/lexer2.png)
 ??? example "Identifiers and reserved words"
@@ -71,13 +74,15 @@
     --8<-- "lexer/lexer2.py"
     ```
 
-## Одно- и двухбуквенные лексемы
-Ну и напоследок мне осталась всякая мелочь типа знаков арифметических операций, сравнения и тому подобного.
-Если разбираемый кусок состоит из максимум двух символов, то я даже отдельного состояния в своём автомате на это заводить не хочу, проверю, не выходя из состояния 0:
+## One- and two-character lexemes
+Finally, we need all the little things like arithmetic operation signs, comparisons and so on.
+If the text to be recognized consists of two characters max,
+I don't even bother to create a separate state,
+I am issuing the tokens directly from the state 0:
 
 ![](lexer/lexer3.png)
 
-Вот полный код лексера для *wend*, который заменил лексер SLY:
+Here is the full lexer code for *wend*, which replaced the SLY lexer:
 
 ??? example "Operators"
     ```py linenums="1" hl_lines="10-11 27-31 71-72"
