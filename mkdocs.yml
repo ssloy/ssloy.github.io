@@ -23,6 +23,7 @@ markdown_extensions:
             - docs/
             - docs/strange/
             - docs/tinycompiler/
+            - docs/tinyoptimizer/
     - pymdownx.superfences
     - admonition
     - pymdownx.details
