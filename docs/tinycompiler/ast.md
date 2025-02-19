@@ -129,7 +129,7 @@ $$ (p*m) * (q*m) = p*q*m^2 $$
 
 To correctly represent the product $p*q$ with precision $m$, we must divide the product $p*m * q*m$ by $m$.
 
-### Computing the Square Root Using Newton's Method
+### Computing the square root using Newton's method
 
 My example program computes the square root of $\pi$ with 13-bit precision.
 The algorithm itself is quite simple: if we want to compute $x = \sqrt{a}$ for some positive number $a$,

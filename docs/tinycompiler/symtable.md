@@ -327,7 +327,7 @@ for this, I simply append a unique suffix to the function name, and voilà, we h
 
 You can get the current code by tag [v0.0.3](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.3).
 
-## Afterword
+## Next on the channel
 
 This time we fixed the compiler by using the `nonlocal` keyword.
 But let's not lose from the sight the fact that our target language is not Python, but assembly, and it certainly knows nothing about closures!

@@ -1,25 +1,25 @@
 # Assembly generation
 ## Introduction
 
-На этот раз мы добрались до определённой вехи: наконец-то будем генерировать не питоновский код, а ассемблерный.
-Работу со стеком и регистрами, которые доставляют наибольшее количество проблем новичкам в ассемблере, мы разобрали в предыдущей статье, так что на этот раз осталось всего ничего.
-На данный момент наш компилятор генерирует питоновский код, структура которого полностью соответствует желаемому ассемблерному.
-Единственный момент, с которым осталось разобраться — это с выводом на экран, всё остальное уже решительно готово.
+This time we have reached a milestone: we will finally be generating assembly instead of python.
+We covered working with the stack and registers, which cause the most problems for beginners in assembly, in the previous article, so this time there is very little left to do.
+At this point, our compiler generates python code whose structure completely matches the desired assembly.
+The only remaining task is to handle screen output, everything else is ready.
 
-## Hello world, или вывод строк на экран
+## Hello World, or printing strings to the screen
 
-Чаще всего в учебных компиляторах выбирают ассемблер MIPS, но мне не нравится запускать код в эмуляторе, поэтому я недолго думал, и выбрал x86 GNU ассемблер, благо, он идёт в составе gcc.
-Не могу точно сказать почему, но захотелось мне 32-битную версию.
-Для наших целей совершенно ни к чему быть ассемблерным гуру, но программы уровня хелловорлд писать надо уметь.
+Most educational compilers choose MIPS assembly, but I don't like running code in an emulator, so I chose x86 GNU assembly, which comes with gcc, without much thought.
+I can't say exactly why, but I wanted the 32-bit version.
+For our purposes, it is not necessary to be an assembly guru, but we need to be able to write programs at the "Hello World" level.
 
-Давайте сделаем заготовку, от которой будем впоследствии отталкиваться.
-Представим, что у нас есть файл [helloworld.s](assembly/helloworld.s) со следующим содержимым:
+Let's create a template that we will build upon.
+Imagine we have a file [helloworld.s](assembly/helloworld.s) with the following content:
 
 ```asm linenums="1"
 --8<-- "assembly/helloworld.s"
 ```
 
-Тогда мы его можем скомпилировать при помощи команд as и ld следующим образом:
+Then we can compile it using the `as` and `ld` commands as follows:
 
 ```
 as --march=i386 --32 -o helloworld.o helloworld.s &&
@@ -27,10 +27,10 @@ ld -m elf_i386 helloworld.o -o helloworld &&
 ./helloworld
 ```
 
-Если всё пошло хорошо, то на экране должно красоваться гордое приветствие.
-Теперь давайте разбираться, что же там происходит.
-А там только два системных вызова — `sys_write` и `sys_exit`.
-На сях то же самое можно было бы написать следующим образом:
+If everything went well, you should see a proud greeting on the screen.
+Now let's understand what is happening there.
+There are only two system calls — `sys_write` and `sys_exit`.
+In C, the same thing could be written as follows:
 
 ```cpp
 #include <sys/syscall.h>
@@ -42,51 +42,51 @@ int main(void) {
 }
 ```
 
-Если звёзды правильно сойдутся, то gcc сгенерирует примерно такой же ассемблерный код.
-Для наших нужд никаких других системных вызовов больше не нужно, `write` и `exit` нам хватит за глаза, ведь единственное взаимодействие с внешним миром в wend — это вывод на экран.
+If the stars align correctly, gcc will generate approximately the same assembly code.
+For our needs, no other system calls are required; `write` and `exit` are more than enough, as the only interaction with the outside world in *wend* is screen output.
 
-Wend не умеет никаких операций со строками, только вывод константных строк на экран, поэтому мой компилятор для каждой строки просто создаёт в заголовке уникальный идентификатор ровно как для нашего hello world.
-Для вывода на экран булевых значений две константные строки `true` и `false`.
-А что с числами? А вот тут придётся чуть‑чуть поработать.
-Я лентяй, и мне неохота было разбираться с линковкой glibc и тому подобного, поэтому роскошь `printf` мне недоступна.
-Ну и ладно, мы и с `sys_write` управимся :)
+*Wend* does not perform any string operations, only printing constant strings to the screen, so my compiler creates a unique identifier for each string in the header just like for our hello world.
+For printing boolean values, two constant strings `"true"` and `"false"` are used.
+What about numbers? Well, here we need to do a bit of work.
+I'm lazy and didn't want to deal with linking glibc and the like, so the luxury of `printf` is unavailable to me.
+No problem, `sys_write` is more than enough!
 
-# Вывод на экран десятичных чисел
+## Printing decimal numbers
 
-`sys_write` умеет выводить на экран строки, поэтому нам надо научиться конвертировать числа (у меня только знаковые 32-битные) в строковое представление.
-Для этого я закатал рукава и написал функцию [`print_int32`](assembly/print_int32.s):
+`sys_write` can print strings to the screen, so we need to learn how to convert numbers (I only have signed 32-bit numbers) to string representation.
+For this, I rolled up my sleeves and wrote the function [`print_int32`](assembly/print_int32.s):
+
 
 ```asm linenums="1"
 --8<-- "assembly/print_int32.s"
 ```
 
-Чужой ассемблерный код читать непросто, поэтому давайте я приведу [питоновский эквивалент](assembly/print_int32.py) нашей функции:
+
+Reading someone else's assembly code is not easy, so let me provide the [python equivalent](assembly/print_int32.py) of our function:
 
 ```py linenums="1"
 --8<-- "assembly/print_int32.py"
 ```
 
-`write` я буду вызывать только один раз, поэтому нужно подготовить строковый буфер.
-32-битное число не потребует больше 11 символов, поэтому я выделяю 16 под буфер (чтобы стек был выровнен по краю машинного слова).
-Затем конвертирую в строку модуль заданного числа, и в конце приклеиваю минус, если число было отрицательным.
+I am calling `write` only once, so we need to prepare a string buffer.
+A 32-bit number will not require more than 11 characters, so I allocate 16 for the buffer (to align the stack to the edge of the machine word).
+Then I convert the absolute value of the given number to a string, and finally attach a minus if the number was negative.
 
-При помощи такой нехитрой гимнастики мы можем выводить на экран строки и числа, и, что характерно, без головной боли линковки с какой-нибудь 32-битной версией libc на 64-битной системе.
+This way, we can print strings and numbers to the screen, and notably, without the headache of linking with some 32-bit version of libc on a 64-bit system.
 
-А такой вывод на экран необходим не только для поддержки инструкции `print` нашего языка, но и для отладки.
-GDB это для слабых духом, вставка вывода на экран где ни попадя — это наше всё ;)
+This code allows to compile the `print` statement of our language, but in addition to that, it is handy for debugging.
+GDB is for the faint-hearted; inserting print statements everywhere is our thing ;)
 
-# Собираем всё вместе
-Ну, собственно, и всё.
-Теперь берём шаблон генерации питоновского кода, и вместо вывода питоновского `print()` достаточно написать `call print_int32`, вместо `eax = eax * ebx` написать `imull %ebx, %eax`.
-Таким образом планомерно переводим питоновские инструкции в ассемблерные, и дело в шляпе! Никаких тонкостей не осталось, долгожданный компилятор почти готов.
-Можно взять [релиз v0.0.5](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.5) и с ним поиграть.
+## Putting it all together
+Well, that's about it.
+Now, we take the python code generation template, and instead of outputting python's `print()`, we simply write `call print_int32`, and instead of `eax = eax * ebx`, we write `imull %ebx, %eax`.
+Thus, we gradually translate python instructions into assembly, and we're done! No subtleties left, the long-awaited compiler is almost ready.
+You can take [release v0.0.5](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.5) and play with it.
 
-Промежуточная цель достигнута: мы научились компилировать собственный язык в настоящий x86 GNU ассемблер.
-На данный момент для парсинга я пользуюсь сторонней библиотекой sly, но по пути меня слегка занесло, и выяснилось, что написать свой парсер совсем несложно.
-А заодно можно будет грамматику языка подправить, чтобы приятнее писать можно было!
+The intermediate goal has been achieved: we have learned to compile our own language into real x86 GNU assembly.
+At the moment, I am using the external library sly for parsing, but along the way, I found out that writing your own parser is not difficult at all.
+And at the same time, we can tweak the grammar of the language to make it more pleasant!
 
-Таким образом, следующие две статьи будут о том, как самостоятельно сделать лексер и парсер, [готовый код уже лежит в репозитории](https://github.com/ssloy/tinycompiler).
-
-
+The next two articles will be about how to create a lexer and parser yourself, [the ready code is already in the repository](https://github.com/ssloy/tinycompiler).
 
 --8<-- "comments.html"
