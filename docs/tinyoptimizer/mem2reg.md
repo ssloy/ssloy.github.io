@@ -2,31 +2,30 @@
 
 ## LLVM IR
 
-Для своей работы компилятор должен иметь какую-то структуру данных, которая позволяет представлять код.
-На данный момент в качестве такого промежуточного (между wend и ассемблером) представления я использую синтаксическое дерево.
-В принципе, какие-то оптимизации возможны и с такой структурой, но всё же есть лучшие альтернативы.
+Ahe compiler needs a data structure to represent code.
+Currently, I use a syntax tree as an intermediate representation between *wend* and assembly.
+While some optimizations are possible with this structure, there are better alternatives.
 
-Я решил, что LLVM IR как нельзя лучше подходит для моего компилятора.
-Мой проект не имеет внешних зависимостей, и я не собираюсь полагаться на LLVM,
-но при этом иметь возможность сохранить на диск моё промежуточное представление и непосредственно её запустить при помощи внешнего инструмента - это бесценно!
+I have decided that LLVM IR is an excellent fit for my compiler.
+My project has no external dependencies, and I do not intend to rely on LLVM.
+However, having the ability to save my intermediate representation to disk and execute it using an external tool is invaluable!
 
-Давайте посмотрим, что сделает clang с вот [таким файлом](mem2reg/max.c)
+Let's see what Clang does with the following [file](mem2reg/max.c):
 
 ```cpp linenums="1"
 --8<-- "mem2reg/max.c"
 ```
 
-Запускаем `clang -cc1 -O0 -emit-llvm -disable-O0-optnone max.c -o max.ll` и получаем [файл следующего содержания](mem2reg/max.ll):
-
+We run `clang -cc1 -O0 -emit-llvm -disable-O0-optnone max.c -o max.ll` ant get [the following file](mem2reg/max.ll):
 
 ??? example "max.ll"
     ```llvm linenums="1"
     --8<-- "mem2reg/max.ll"
     ```
 
-Это и есть промежуточное представление кланга о нашей функции int `max(int, int)`.
-Его можно отрисовать чуть более наглядно при помощи того же llvm.
-Запускаем вот такой скрипт, который отрисует все .ll файлы в текущей папке:
+This is Clang's intermediate representation of our `int max(int, int)` function.
+It can be better visualized using LLVM tools.
+The following script renders all `.ll` files in the current directory:
 
 ??? example "draw.sh"
     ```shell
@@ -41,201 +40,203 @@
     done
     ```
 
-И получаем наш `int max(int, int)`:
+And here is our `int max(int, int)`:
 
 ![](mem2reg/max_dot.png)
 
-В принципе, это тот же самый файл с промежуточным кодом, но тут явно виден граф потока управления, который, собственно, и является структурой, представляющей код в недрах компилятора.
-Промежуточный код LLVM - это своего рода ассемблерный код, который можно разбить на базовые блоки с линейным кодом.
-Каждый базовый блок заканчивается инструкцией ветвления `br` (ну или обычным `ret`), и их можно нарисовать рёбрами между базовыми блоками.
-Видов инструкций крайне немного, и всё действительно очень похоже на ассемблер, только для виртуальной машины, а не для настоящей.
+In essence, this is the same intermediate code file, but here the control flow graph is explicitly visible.
+LLVM intermediate code is akin to assembly code, which can be broken down into basic blocks of linear code.
+Each basic block ends with a `br` branching instruction (or a simple `ret`), and they can be visualized as edges connecting basic blocks.
+There are very few instruction types, making it very similar to assembly, but for a virtual machine rather than real hardware.
 
-Обратите внимание, что кланг сгенерировал максимально дубовый код, абсолютно никаких оптимизаций.
-Для всех трёх переменных `a`, `b` и `result` он выделил место на стеке (инструкция `alloca`), и любое обращение к ним происходит явно при помощи инструкций `load` и `store`.
-Разумеется, это страшно неэффективно, но кланг ничуть это не беспокоит, поскольку улучшение кода - это задача LLVM, а не clang.
+Notice that Clang has generated a completely unoptimized version of the code.
+For all three variables `a`, `b`, and `result`, it allocated space on the stack using the `alloca` instruction, and every access to them is explicitly handled via `load` and `store` instructions.
+Of course, this is highly inefficient, but Clang does not care, as optimizing the code is LLVM’s responsibility, not Clang's.
 
 ## TinyCompiler -> TinyOptimizer
 
-Ну и славно, tinycompiler генерирует дубовый ассемблерный код, а поскольку байткод LLVM IR от ассемблера не особо отличается, мне ничто не мешает просто сменить темплейты целевого языка с GNU assembly на LLVM IR.
-Поскольку llvm позволяет запускать напрямую файлы своего промежуточного языка, то я пока что выкину ассемблер, и добавлю его в самом конце, когда закончу играть с оптимизациями.
+Well, that works fine — tinycompiler generates basic assembly-like code.
+Since LLVM IR bytecode is not much different from assembly, I can simply switch the target language templates from GNU assembly to LLVM IR.
+Since LLVM allows direct execution of its intermediate language files, I will temporarily discard assembly output and reintroduce it only after finishing optimization experiments.
 
-Я не имею ни малейшего представления, куда меня заведёт эта кривая дорожка, да и я хотел бы оставить [tinycompiler](https://github.com/ssloy/tinycompiler) минималистичным,
-так что я его форкнул в [tinyoptimizer](https://github.com/ssloy/tinyoptimizer).
-К слову сказать, какого чёрта на гитхабе нельзя форкнуть свой собственный репозиторий? Мне пришлось создать клон, а не форк...
+I have no idea where this path will lead me, and I want to keep [tinycompiler](https://github.com/ssloy/tinycompiler) minimalistic.
+So, I forked it into [tinyoptimizer](https://github.com/ssloy/tinyoptimizer).
+By the way, why on earth doesn’t GitHub allow users to fork their own repositories?
+I had to create a clone instead of a proper fork.
 
-[Вот тут коммит](https://github.com/ssloy/tinyoptimizer/tree/da3e700a77a7d2d261e49e06c4092e7765443cfa), в котором я сменил темплейт языка.
-По пути я сделал ещё небольшое изменение: поскольку ассемблер не имеет переменных, то я к ним обращался при помощи смещения на стеке, а у LLVM IR вполне себе есть нормальные идентификаторы и передача параметров функциям (посмотрите на пример, что я привёл ранее), почему бы ими не воспользоваться? Остаётся вопрос с доступом к переменным, которые были объявлены вне функции.
-В tinycompiler я к ним обращался при помощи [дисплеев](../tinycompiler/display.md), но сейчас просто добавил к параметрам функций указатели на внешние переменные, и дело с концом.
+[Here is the commit](https://github.com/ssloy/tinyoptimizer/tree/da3e700a77a7d2d261e49e06c4092e7765443cfa) where I switched the language template.
+Along the way, I made a small change: since assembly lacks variables, I previously accessed them via stack offsets.
+However, LLVM IR supports proper identifiers and parameter passing (as seen in the earlier example), so why not take advantage of them?
+This leaves the question of accessing variables declared outside a function.
+In tinycompiler, I handled this using [displays](../tinycompiler/display.md), but now I simply added pointers to external variables as function parameters, and that’s it.
 
-Давайте приведу пример.
-Среди моих тестовых программ есть вот такая:
+Let me provide an example.
+Among my test programs, there is this one:
 
 ??? example "sopfr.wend"
     ```cpp linenums="1"
     --8<-- "mem2reg/sopfr.wend"
     ```
 
-Для этой программы на *wend* я генерирую промежуточный код LLVM, который был бы сгенерирован клангом из вот такого сишного эквивалента:
+For this *wend* program, I generate LLVM IR, which would have been produced by Clang from the following C equivalent:
 
 ??? example "sopfr.c"
     ```cpp linenums="1"
     --8<-- "mem2reg/sopfr.c"
     ```
-Я преобразовываю вложенные функции в обычные, и прокидываю указатели на необходимые переменные.
-Таким образом, `sopfr_aux` автоматически получает указатель на переменную `div`, которая живёт на фрейме стека функции `sopfr`.
-Разумеется, я привёл сишный эквиалент просто для читабельности, я из *wend* генерирую промежуточный код llvm напрямую.
 
+I convert nested functions into regular ones and pass pointers to the necessary variables.
+Thus, `sopfr_aux` automatically receives a pointer to the `div` variable, which resides in the stack frame of the `sopfr` function.
+Of course, I provided the C equivalent just for readability — I generate LLVM IR directly from *wend*.
 
-## Тема сегодняшней статьи: mem2reg
-Наконец-то мы добрались до темы этой статьи.
-Сегодня мы будем разбираться с прогоном mem2reg.
-Давайте снова рассмотрим функцию нахождения максума двух чисел.
-Кланг её преобразует в промежуточный код, который показан справа на рисунке.
-А теперь давайте отложим кланг и попросим llvm его чуточку улучшить.
-Не до конца, лишь один явно указанный проход, который занимается выносом переменных из памяти в регистры.
+## Today's topic: mem2reg
+
+Finally, we have reached the main topic of this article.
+Today, we will explore the `mem2reg` pass.
+Let's revisit the function for finding the maximum of two numbers.
+Clang transforms it into the intermediate code shown on the right in the image below.
+Now, let's put Clang aside and ask LLVM to improve the code slightly — not fully optimize it, just perform a single explicitly specified pass that promotes memory-stored variables to registers.
 
 [![](mem2reg/max.png)](mem2reg/max.png)
 
-Запускаем `opt -passes=mem2reg max.ll -S`, и получаем преобразованный код, показанный на картинке слева.
-Что любопытно, все инструкции `alloca`, `load` и `store` убраны начисто, а вместо них появилась странная инструкция `phi`.
-Что же это такое?
+We run `opt -passes=mem2reg max.ll -S` and obtain the transformed code shown on the left in the image.
+Interestingly, all `alloca`, `load`, and `store` instructions have been completely removed, replaced by a peculiar `phi` instruction.
+What exactly is this?
 
-Давайте посмотрим, [как её определяют](https://github.com/llvm/llvm-project/blob/f451d27b387cdff14f0f45f1b3314090a5008e0c/llvm/include/llvm/IR/Instructions.h#L2608) сами разработчики llvm :)
+Let's take a look at [how LLVM developers define it](https://github.com/llvm/llvm-project/blob/f451d27b387cdff14f0f45f1b3314090a5008e0c/llvm/include/llvm/IR/Instructions.h#L2608) :).
 
 ![](mem2reg/phinode.png)
 
-Промежуточный код LLVM основан на форме статического единственного присваивания (SSA).
-Основная идея построения SSA-формы заключается в выделении **уникальных** имен всем результатам присваивания.
-Практически все программы содержат ветвления и узлы слияния.
-В узлах слияния необходимо добавлять специальную форму присваивания, называемую $\phi$-функцией.
+LLVM intermediate code is based on the Static Single Assignment (SSA) form.
+The main idea of constructing SSA form is to assign **unique** names to all assignment results.
+Virtually all programs contain branches and merge nodes.
+At merge nodes, we need to add a special form of assignment called a $\phi$-function.
 
-$\phi$-функция всегда исполняется на входе в базовый блок, и она имеет следующий вид: $x \gets \phi(x_1, x_2, \dots, x_n)$ где $n$ — это количество предшествующих узлов в графе потока управления.
-Семантика $\phi$-функций проста: выбирается значение источника $x_i$, соответствующее блоку $i$, из которого был осуществлен переход управления, и присваивается переменной $x$.
-Если управление переходит в блок от его $j$-го предшественника, то $x$ получает значение $x_j$.
-Ещё раз, все $\phi$-функции выполняются до выполнения обычных инструкций в этом узле.
+A $\phi$-function is always executed at the entry of a basic block, and it has the following form: $x \gets \phi(x_1, x_2, \dots, x_n)$ where $n$ is the number of predecessor nodes in the control flow graph.
+The semantics of $\phi$-functions is simple: the value of the source $x_i$, corresponding to the block $i$ from which the control flow came, is selected and assigned to the variable $x$.
+If control flows into the block from its $j$-th predecessor, then $x$ gets the value $x_j$.
+Once again, all $\phi$-functions are executed before the regular instructions in this node.
 
+So, at the entry to the `if.end` block, the register `%result.0` gets the value `%b` if the control flow passes through the `if.then` block, and the value `%a` if it does not.
+This results in a kind of ternary conditional operator instead of intensive stack manipulation.
 
-То есть, на входе в блок `if.end` регистр `%result.0` получает значение `%b`, если поток управления проходит через блок `if.then`, и значение `%a`, если не проходит.
-Получился такой своебразный тернарный условный оператор вместо интенсивной работы со стеком.
+Why are $\phi$-functions necessary?
+Look at the provided examples and note that in SSA form, each register is assigned a value **only once**.
+Every time we write an instruction like `%a = ...` in SSA, it's as if in C we were only allowed to use the assignment operator for initializing constant variables like `const int a = ...`.
+This does not mean that during the program execution, `a` will not hold different values.
+Each basic block can be considered a small function where we declare a local constant.
+By calling functions with different arguments, we get different constants `a`.
+This also means that we can work locally with the block and do not have to worry about the register being redefined somewhere down the graph.
+There is only one definition, and we build from it.
 
-Зачем нужны $\phi$-функции?
-Посмотрите на приведённые примеры и обратите внимание, что в SSA-форме каждый регистр получает значение **только один раз**.
-Каждый раз, когда мы в SSA пишем инструкцию вида `%a = ...`, это как если бы на Си нам разрешали бы использовать оператор присваивания только для инициализации постоянных переменных типа `const int a = ...`.
-Это не означает, что во время исполнения программы `a` не будет содержать разных значений.
-Каждый базовый блок можно рассматривать как маленькую функцию, в которой мы объявляем локальную константу.
-Вызывая функции с разными аргументами, мы получим разные константы `a`.
-Это же означает, что мы можем работать локально с блоком и не должны беспокоиться о том, что где-то вниз по графу регистр будет переопределён.
-Определение только одно, и от него мы и пляшем.
-
-На всякий случай, как можно представить цикл, в котором счётчик явно должен изменяться? А давайте посмотрим!
+Just in case, how can we represent a loop where the counter must explicitly change? Let's take a look!
 
 [![](mem2reg/loop.png)](mem2reg/loop.png)
 
-Я запустил clang и потом оптимизационный проход mem2reg на тривиальном коде счётчика.
-Кланг честно положил переменную `i` на стек, и досчитал до десяти.
-LLVM же при выносе переменных из памяти в регистры убрал начисто `alloca`/`load`/`store`, и добавил одну $\phi$-функцию на входе в блок `while.cond`.
-Если при исполнении программы мы заходим в этот блок из блока `entry`, тогда `%i.0` получит нулевое значение.
-Если же туда зайти из блока `while.body`, то `%i.0` получит значение `%inc`.
-Таким образом, все виртуальные регистры честно имеют только одну определяющую инструкцию, но их непосредственное значение зависит от того, каким путём мы до неё дошли.
+I ran clang and then the mem2reg optimization pass on trivial counter code.
+Clang placed the variable `i` on the stack and counted to ten.
+LLVM, when moving variables from memory to SSA registers, removed `alloca`/`load`/`store` entirely and added a $\phi$-function to `while.cond` block.
+If during program execution we enter this block from the `entry` block, then `%i.0` gets the initial value.
+If we enter it from the `while.body` block, then `%i.0` gets the value `%inc`.
+Thus, all virtual registers have only one defining instruction, but their immediate value depends on the path taken to reach it.
 
-Существует несколько способов для этого графа сделать вывод, что `ret` всегда возвращает 10,
-и что можно вообще выкинуть всё это барахло, заинлайнив вызов функции `int loop()` константой 10, но об этом мы поговорим когда-нибудь в другой раз.
+There are several ways to deduce for this graph that `ret` always returns 10,
+and that we can discard all this stuff by inlining the `int loop()` function call with the constant 10, but we will talk about this some other time.
 
-В принципе, эти рассуждения можно пытаться делать и на других промежуточных представлениях кода, но SSA-формы на данный момент обрели наибольшую популярность.
-И оптимизационный проход mem2reg, который выносит переменные из памяти в регистры SSA, играет в оптимизации ключевую роль.
-Разумеется, поскольку никакой ассемблер не имеет аналогов $\phi$-функций, рано или поздно нам придётся вызвать обратный проход reg2mem, заменив $\phi$-функции на `alloca`/`store`/`load`.
-Но между mem2reg и reg2mem будут другие оптимизационные проходы, в том числе и вывод информации о константах, а также многое-многое другое.
+In principle, these considerations can be attempted with other intermediate code representations, but SSA forms have gained the most popularity at the moment.
+And the mem2reg optimization pass, which moves variables from memory to SSA registers, plays a key role in optimization.
+Of course, since no assembly language has equivalents of $\phi$-functions, we will eventually have to invoke the reverse pass reg2mem, replacing $\phi$-functions with `alloca`/`store`/`load`.
+But between mem2reg and reg2mem there will be other optimization passes, including constant propagation and much more.
 
-## Давайте же уже писать код, или ненавидимые мной числа Фибоначчи
+## Let's write some code
 
-Я так часто встречал код вычисления чисел Фибоначчи, что у меня развилась идиосинкразия, и именно поэтому я провёл немало времени над графическими демками в качестве примеров.
-Однако же сейчас мы будем руками работать с промежуточным кодом, и мне нужно, чтобы он был хоть как-то осмысленен, но при этом предельно прост.
-Так что так и быть, давайте рассмотрим сишную функцию, вычисляющую числа Фибоначчи:
+I've encountered Fibonacci number calculation code so often that I've developed an aversion to it.
+This is one of the reasons why I spent a lot of time on *wend* graphical demos.
+However, now we will be working with intermediate code by hand, and I need it to be somewhat meaningful but extremely simple.
+So, let's consider a C function that calculates Fibonacci numbers:
 
 ??? example "fib.c"
     ```cpp linenums="1"
     --8<-- "mem2reg/fib.c"
     ```
 
-Если мы попросим кланг сгенерировать промежуточный код для неё, то получим такой граф потока управления:
+If we ask clang to generate intermediate code for it, we get this control flow graph:
 
 [![](mem2reg/fib_dot.png)](mem2reg/fib_dot.png)
 
-Давайте на некоторое время абстрагируемся от моего компилятора, и напишем независимый код.
-Какую структуру данных мы можем использовать для представления такого графа потока управления в памяти? Я набросал вот такой файл [ir.py](mem2reg/ir.py):
+Let's put my compiler aside for a while and write some independent code.
+What data structure can we use to represent such a control flow graph in memory? I sketched out [this file](mem2reg/ir.py):
 
 ??? example "ir.py"
     ```py linenums="1"
     --8<-- "mem2reg/ir.py"
     ```
 
-Это 55 строчек, при помощи которых я буду манипулировать промежуточным кодом.
-У меня есть граф потока управления `ControlFlowGraph`, в котором есть просто список базовых блоков `BasicBlock`.
-Каждый базовый блок - это просто список $\phi$-функций и обычных инструкций,
-а также список ссылок на предков и потомков данного блока, который изначально пуст, а потом заполняется (`compute_adjacency`), исходя из инструкций ветвления.
-Каждая инструкция - это довольно-таки произвольная строка и список имён регистров и констант, в ней участвующих.
+These 55 lines allow me to manipulate intermediate code.
+I have a class `ControlFlowGraph`, which is simply a list of objects `BasicBlock`.
+Each basic block is just a list of $\phi$-functions and regular instructions,
+as well as a list of links to the predecessors and successors of this block.
+Predecessors and successors are initially empty but are filled (`compute_adjacency()`) based on branching instructions.
+Each instruction is a fairly arbitrary string and a list of constants and register names involved in it.
 
-Я взял промежуточный код функции `int fib(int)`, сгенерированный клангом, и руками вколотил его в [мою программу](mem2reg/fib.py):
+I took the intermediate code of the `int fib(int)` function generated by clang and manually entered it into [my program](mem2reg/fib.py):
 
 ??? example "fib.py"
     ```py linenums="1" hl_lines="71-72"
     --8<-- "mem2reg/fib.py"
     ```
 
-Вывод этого питоновского скрипта совпадает с промежуточным кодом, сгенерированным клангом (ну, с точностью до служебных атрибутов, которые мне не нужны),
-и точно так же компилируется/отрисовывается при помощи llvm.
-Обратите внимание на закомментированные строчки 71-72.
-Задача сегодняшней статьи их раскомментировать ;)
+The output of this Python script matches the intermediate code generated by clang (well, up to some attributes that I don't need),
+and it compiles/draws the same way using llvm.
+Note the commented lines 71-72.
+Our job for today is to uncomment them ;)
 
-## Где расстанавливать $\phi$-функции?
+## Where to place $\phi$-functions?
 
-Мы отложили компилятор, и нарисовали 55+69 строчек питона, позволяющих манипулировать одним примером, вычисляющим числа Фибоначчи.
-В нём используются только локальные переменные, и нигде нет операции взятия адреса от них, поэтому мы можем смело выкинуть вообще все `alloca`.
+We have put aside the compiler and written 55+69 lines of Python to manipulate a single Fibonacci numbers example.
+It uses only local variables and nowhere takes their addresses, so we can safely discard all `alloca`.
 
-А затем нам нужно убрать все `store`/`load`, заменив их на $\phi$-функции в нужных местах.
-А где они, нужные места?
+Next, we need to remove all `store`/`load` instructions, replacing them with $\phi$-functions in the necessary places.
+And where are those necessary places?
 
 ??? hint
-    В принципе, есть довольно дубовый метод: на входе в каждый блок (ну, за исключением стартового) вставить по $\phi$-функции на каждую переменную.
-    Да-да, включая блоки, у которых только один предок!
+    In principle, there is a rather brute-force method: at the entry of **each block** (well, except for the entry block), insert a **$\phi$-function for each variable**.
+    Yes, even in blocks with only one predecessor!
 
-    Это называется максимальной SSA-формой, и такой подход обычно критикуют за то, что он создаёт слишком много избыточных $\phi$-функций,
-    что замедляет компиляцию (мне всё равно) и затрудняет оптимизацию.
-    С другой стороны, я сильно подозреваю, что обычный DCE (dead code elimination) проход уберёт мусор начисто.
-    Когда я дойду до DCE в tinyoptimizer, надо будет попробовать посчитать максимальную SSA форму, не исключено, что это будет проще и понятнее.
+    This is called the maximal SSA form, and this approach is usually criticized for creating too many redundant $\phi$-functions,
+    slowing down compilation (I don't care) and complicates optimization.
+    On the other hand, I strongly suspect that a regular DCE (dead code elimination) pass will clean up the junk completely.
+    When I get to DCE in tinyoptimizer, I should try to calculate the maximal SSA form, it might be simpler.
 
-    Не забываем про "premature optimization is the root of all evil"...
+    Remember "premature optimization is the root of all evil"...
 
+Let's start with a fairly obvious reasoning (here and below I am working with the last example): in the `if.then` block, there is a `store` instruction `i32 0, ptr %retval`,
+which writes the value 0 to the memory at the address `%retval`.
+Also, in the `return` block, there is an instruction `%9 = load i32, ptr %retval`, which obviously reads memory from the same address `%retval` into the register `%9`.
 
-Давайте начнём с довольно очевидного рассуждения (тут и далее я работаю с последним примером): вот у нас в блоке `if.then` есть инструкция store `i32 0, ptr %retval`,
-записывающая значение 0 в память по адресу `%retval`.
-А ещё в блоке return есть инструкция `%9 = load i32, ptr %retval`, которая очевидным образом читает память с того же адреса `%retval` в регистр `%9`.
+But we can reach the `return` block without passing through the `if.then` block! For each `store` instruction, we need to insert a $\phi$-function in the following case:
 
-Но ведь мы можем попасть в блок `return`, минуя блок `if.then`! Для каждой инструкции store нам понадобится вставить $\phi$-функцию в следующем случае:
+1. If there is a path from the entry point of the graph that passes through the block with the `store` and reaches the block with the `load`,
+2. And if there is another path from the entry point of the graph that reaches the block with the same `load` without passing through our `store`.
 
-1. Если существует путь из точки входа в граф, проходящий через блок со `store`, и достигает блока с `load`,
-2. А также если существует другой путь из точки входа в граф, достигающий блока с тем же `load`, но при этом не проходящий через наш `store`.
+It is quite obvious that somewhere these two paths converge before reaching the `load`, and at this merge point, we need a $\phi$-function for our variable `%retval`.
 
-Вполне очевидно, что где-то эти два пути сходятся вместе, прежде чем дойти до `load`, вот в этом месте слияния нам и понадобится  $\phi$-функция для нашей переменной `%retval`.
+The basic block where our two paths through the graph converge is one of the elements of the dominance frontier of the block containing the `store` instruction.
+And here we need a bit of technical vocabulary.
 
-Тот базовый блок, в котором сходятся наши два пути через граф, является одним из элементов границы доминирования блока, содержащего инструкцию `store`.
-И вот тут нам понадобится немножко технического вокабуляра.
+## Dominance Frontiers
+### Definition One
+Block `A` dominates block `B` if and only if every path from the start of the graph to block `B` goes through node `A`.
 
+It is quite obvious that every basic block dominates itself, and, for example,
+there are only two blocks that dominate the `return` block, since only `entry` and `return` appear on all possible paths, they are the dominators for `return`.
 
-## Границы доминирования
-### Определение первое
-Блок `A` доминирует над блоком `B` тогда и только тогда, когда любой путь из начала графа в блок `B` проходит через узел `A`.
-
-Вполне очевидным образом каждый базовый блок доминирует сам над собой, и, например,
-есть только два блока, которые доминируют над блоком `return`, поскольку только `entry` и сам `return` фигурируют во всех возможных путях, они и являются доминаторами для `return`.
-
-Попробуйте нарисовать граф на бумажке, и определите множество доминирующих блоков для каждого из узлов графа.
-На всякий случай, чтобы далеко не отматывать назад, повторю граф ещё раз:
+Try drawing the graph on paper and determine the set of dominating blocks for each node in the graph.
+Just in case, so you don't have to scroll back too far, here is the graph again:
 
 ![](mem2reg/dominators.png)
 
-Сверим часы, вот список доминаторов для каждого из блоков:
-
+Let's synchronize our watches, here is the list of dominators for each block:
 ```
 {
     entry:      {entry},
@@ -248,9 +249,9 @@ LLVM же при выносе переменных из памяти в реги
 }
 ```
 
-### Определение второе
-Блок `A` строго доминирует над блоком `B`, если `A` доминирует над `B`, но при этом ему не равен.
-Соответственно, вот множества строгих доминаторов для каждого из базовых блоков нашей программы:
+### Definition Two
+Block `A` strictly dominates block `B` if `A` dominates `B` but is not equal to it.
+Here are the sets of strict dominators for each basic block in our program:
 
 ```
 {
@@ -264,15 +265,15 @@ LLVM же при выносе переменных из памяти в реги
 }
 ```
 
-### Определение третье
-`A` является непосредственным доминатором `B`, если `A` строго доминирует над `B`, но не доминирует строго любой другой строгий доминатор `B`.
+### Definition Three
+`A` is the immediate dominator of `B` if `A` strictly dominates `B` but no other strict dominator of `B` strictly dominates `A`.
 
 WAIT, WHAT?
 
-Давайте на пальцах.
-У каждого узла есть набор строго его доминирующих, да? Ну, за исключением стартового узла.
-Так вот, возьмём ближайший из них и назовём непосредственным доминатором.
-Вот список непосредственных доминаторов для каждого из наших базовых блоков:
+Let's break it down.
+Each node has a set of strict dominators, right? Well, except for the start node.
+So, we take the closest one and call it the immediate dominator.
+Here is the list of immediate dominators for each of our basic blocks:
 
 ```
 {
@@ -286,30 +287,30 @@ WAIT, WHAT?
 }
 ```
 
-Эту же информацию можно отрисовать в форме дерева, которое называют деревом доминирования:
+This information can also be visualized in the form of a tree called a dominance tree:
 
 ![](mem2reg/dominance_tree.png)
 
-Обратите внимания, что рёбра дерева доминирования далеко не всегда являются рёбрами исходного графа.
+Note that the edges of the dominance tree are not necessarily the edges of the original graph.
 
-### Определение четвёртое
+### Definition Four
 
-Границей (фронтиром) доминирования узла `A` называется такое множество узлов `B`, что:
+The dominance frontier of node `A` is the set of nodes `B` such that:
 
-1. `A` доминирует хотя бы одного из их прешественников `B`.
-2. `A` не доминирует сам узел `B`.
+1. `A` dominates at least one of their predecessors.
+2. `A` does not strictly dominate the node `B` itself.
 
-Другими словами, граница доминирования узла `A` состоит из узлов, где доминирование `A` перестаёт доминировать: в эти узлы можно попасть как через `A`, так и альтернативными путями, не проходя через `A`.
+In other words, the dominance frontier of node `A` consists of nodes where the dominance of `A` ends: these nodes can be reached through both `A` and alternative paths that do not pass through `A`.
 
-Если узел в вашем графе потока управления имеет менее двух предшественников,
-то он не будет находиться в границе доминирования какого-либо узла, так как он не может быть точкой слияния конкурирующих определений.
-Концепция «границы доминирования» заключается в том, что это именно те узлы, где доминирование некоторого узла заканчивается.
-Можно также сказать, что к фронтиру относятся все узлы, в которые идут рёбра из поддерева доминирования.
+If a node in your control flow graph has fewer than two predecessors,
+it will not be in the dominance frontier of any node, as it cannot be a merge point of competing definitions.
+The concept of the "dominance frontier" is that these are precisely the nodes where the dominance of a node ends.
+You can also say that the frontier includes all nodes that have edges coming from the dominance subtree.
 
-Граница доминирования показывает места в CFG, где разные потоки управления сходятся.
-Узлы фронтира — это места, где могут встретиться разные версии одной и той же переменной, и поэтому там нужно вставлять  $\phi$-функции.
+The dominance frontier shows places in the CFG where different control flows converge.
+Frontier nodes are places where different versions of the same variable may meet, and therefore $\phi$-functions need to be inserted there.
 
-Сверим часы, вот для каждого узла набор узлов его фронтира:
+Let's synchronize our watches, here is the set of nodes in the dominance frontier for each node:
 
 ```
 {
@@ -323,64 +324,63 @@ WAIT, WHAT?
 }
 ```
 
-Вернёмся к нашей операции store внутри блока `if.then`.
-Блок `return` находится на границе доминирования `if.then`, так что в нём нужно вставить $\phi$-функцию.
-Вроде всё сходится.
-Кстати, обратите внимания, что `while.cond` находится в собственном фронтире.
-Это совершенно нормальная ситуация, беспокоиться не нужно.
-Но нужно заметить, что у нас есть `load` переменной `%i` в блоке `while.cond`, и к ней мы можем прийти как из блока `if.end`, так и из блока `while.body`.
-Так что там тоже понадобятся  $\phi$-функции.
+Let's return to our `store` operation inside the `if.then` block.
+The `return` block is in the dominance frontier of `if.then`, so we need to insert a $\phi$-function there.
+It all seems to match up.
+By the way, note that `while.cond` is in its own frontier.
+This is completely normal, no need to worry.
+But it should be noted that we have a `load` of the variable `%i` in the `while.cond` block, which we can reach either from the `if.end` block or from the `while.body` block.
+So we will need $\phi$-functions there as well.
 
-Окей, мы разобрались с определением границ доминирования, и можем их находить руками, но неплохо было бы это дело запрограммировать.
-Вот 43 строчки питона, которые позволяют найти фронтиры для каждого узла CFG.
+Okay, we have understood the definition of dominance frontiers and can find them manually, but it would be nice to program it.
+Here are 43 lines of Python that allow us to find the frontiers for each node in the CFG.
 
 ??? example "Optimizer"
     ```py linenums="1"
     --8<-- "mem2reg/optimizer.py::43"
     ```
 
-Я тут не изобретал ничего нового, взял самые дубовые (и заодно самые медленные), которые легко можно найти в той же самой википедии.
-Всё считается чётко по определениям, которые я привёл.
-Сначала считаются множества доминирования, потом из них выводится дерево доминирования, а из него выводятся фронтиры.
-
+I didn't invent anything new here, I took the simplest (and at the same time the slowest) methods, which can be easily found on Wikipedia.
+Everything is calculated exactly according to the definitions I have provided.
+First, the sets of dominators are calculated, then the dominance tree is derived from them, and the frontiers are derived from the tree.
 
 ## mem2reg
-Вооружившись терминологией, мы можем наконец чётко определить алгоритм размещения $\phi$-функций в нашем графе потока управления. Трепещите же!
+Armed with the terminology, we can finally clearly define the algorithm for placing $\phi$-functions in our control flow graph. Behold!
 
 ```
-для каждой переменной v
-  добавить в очередь все блоки, содержащего store v
-  пока очередь непуста
-    достать один блок b1
-    для каждого блока b2 на фронтире доминирования b1
-      если мы еще не вставляли фи-функцию для переменной v, то
-        вставить её
-        добавить блок b2 в очередь
+for each variable v
+  queue all blocks containing store v
+  while the queue is not empty
+    pop one block b1
+    for each block b2 in the dominance frontier of b1
+      if we haven't placed a $\phi$-function for variable v yet
+        insert it
+        add b2 to the queue
 ```
 
-Всё крайне просто, но есть один важный нюанс, про который нужно не забыть: вставка $\phi$-функции в какой-то мере сродни добавлению операции `store`:
-добавив  $\phi$-функцию в блок b2, мы обязаны и его поставить в очередь на обработку.
+It's all very simple, but there is one important nuance to remember: inserting a $\phi$-function is somewhat akin to adding a `store`:
+by adding a $\phi$-function to block `b2`, we must also put it in the queue  for processing.
 
-Обратите внимание, что на этом этапе мы добавляем  $\phi$-функции, но не заполняем её аргументы.
-Этим мы займёмся при удалении `load` и `store`.
-Давайте посмотрим на [полный код](mem2reg/optimizer.py) прохода mem2reg в моём исполнении:
+Note that at this stage we are adding $\phi$-functions, but not filling in their arguments.
+We will deal with this when removing `load` and `store`.
+Let's look at the [complete code](mem2reg/optimizer.py) for the mem2reg pass as I have implemented it:
 
 ??? example "mem2reg"
     ```py linenums="1"
     --8<-- "mem2reg/optimizer.py:44:"
     ```
 
-Вызывается он тривиально, нужно раскомментировать строчки 71-72 в файле [fib.py](mem2reg/fib.py).
+To call it, you need to uncomment lines 71-72 in the [fib.py](mem2reg/fib.py) file.
 
-Класс `mem2reg` наследуется от класса `Optimizer`, так что у меня есть полный доступ к функциям доминирования.
-Всю работу делает конструктор.
-Для начала он находит, какие переменные в `cfg` поддаются этой оптимизации при помощи.
-`remove_promotable_allocas()` - удаляет `alloca` локальных переменных, от которых не берётся адрес, то есть, убирает со стека все локальные переменные, недоступные для изменения другими функциями.
-Затем `place_phi()` вставляет  $\phi$-функции по вышеописанному алгоритму с фронтирами.
-Остаётся заполнить их аргументы, что и делает `remove_store_load()`.
+The `mem2reg` class inherits from the `Optimizer` class, so I have full access to dominance functions.
+The constructor does all the work.
+First, it finds which variables in the `cfg` are subject to this optimization using `remove_promotable_allocas()`.
+This function removes `alloca` of local variables from which no address is taken, i.e., it removes all local variables from the stack that are not accessible for modification by other functions.
+Then `place_phi()` inserts $\phi$-functions according to the above algorithm with frontiers.
+The remaining task is to fill their arguments, which is done by `remove_store_load()`.
 
-Давайте разберёмся с тем, как она работает, всё на том же примере с вычислением чисел Фибоначчи.
-После удаления `alloca` (в данном случае вообще все удалены) и расстановки  $\phi$-функций, мы получаем следующий промежуточный код:
+Let's see how it works, using the same Fibonacci numbers example.
+After removing `alloca` (in this case, all of them are removed) and placing $\phi$-functions, we get the following intermediate code:
 
 ??? example "$\phi$-node placement"
     ```llvm
@@ -436,11 +436,11 @@ WAIT, WHAT?
     }
     ```
 
-Я не привожу рисунка, поскольку llvm отказывается его рисовать :)
-Оно и понятно, код сломан: в первом же базовом блоке первый же регистр `%a` не определён, да и $\phi$-функции поставлены хоть и верно, но без аргументов не являются валидной инструкцией.
+I'm not providing a picture because llvm refuses to draw it :)
+It makes sense, the code is broken: in the first basic block, the register `%a` is not defined, and the $\phi$-functions, though correctly placed, are not valid instructions without arguments.
 
-Давайте пройдём по нашему графу в глубину, начнём, очевидно, со входной точки в программу.
-Итак, у нас есть блок `entry`:
+Let's do a depth-first search, starting, obviously, from the entry point of the program.
+So, we have the `entry` block:
 
 ```llvm
 entry:
@@ -454,10 +454,10 @@ entry:
         br i1 %cmp, label %if.then, label %if.end
 ```
 
-Пройдёмся поочерёдно по всем инструкциям, и удалим все `store` и `load`, но при этом посмотрим на их аргументы.
-Первая же инструкция сохраняет `%n` по адресу `%n.addr`, это означает, что любой `load` по этому адресу в этом блоке может быть заменён на `%n`, и в частности, `%0` тоже заменяется на `%n`.
-Так же запоминаем значения для `%a`, `%b`, `%i`, `%c`, и убирем их `store`.
-После обработки `entry` принимает следующий вид:
+We go through all the instructions sequentially, removing all `store` and `load` instructions while examining their arguments.
+The first instruction stores `%n` at the address `%n.addr`, meaning that any `load` from this address in this block can be replaced with `%n`, and in particular, `%0` is also replaced with `%n`.
+Similarly, we remember the values for `%a`, `%b`, `%i`, `%c`, and remove their `store`.
+After processing, `entry` looks like this:
 
 ```llvm
 entry:
@@ -465,7 +465,7 @@ entry:
         br i1 %cmp, label %if.then, label %if.end
 ```
 
-У `entry` два потомка - `if.then` и `if.end`. Поскольку у нас обход графа в глубину, сначала идём в `if.then`. Он имеет следующий вид:
+The `entry` block has two successors - `if.then` and `if.end`. Since we are doing a depth-first traversal, we first go to `if.then`. It looks like this:
 
 ```llvm
 if.then:
@@ -473,7 +473,7 @@ if.then:
         br label %return
 ```
 
-Удаляем `store`, запоминаем, что `%retval` - это `0`, идём в `return`. Он имеет следующий вид:
+We remove the `store`, remember that `%retval` is `0`, and go to `return`. It looks like this:
 
 ```llvm
 return:
@@ -485,10 +485,11 @@ return:
         %9 = load i32, ptr %retval
         ret i32 %9
 ```
-Пришло время начать заполнять  $\phi$-функции.
-Мы пришли из ветки `if.then`, поэтому вспоминаем, что `%retval` в этой ветке это `0`, `%a` это `0`, `%b` это `1`, `%i` это `1`, `%c` это `0`.
-Заполняем соответствующий аргумент  $\phi$-функций, удаляем `load`, заменяя `%9` на `%retval_return`.
-После обработки блок принимает следующий вид:
+
+It's time to start filling in the $\phi$-functions.
+We came from the `if.then` branch, so we remember that `%retval` in this branch is `0`, `%a` is `0`, `%b` is `1`, `%i` is `1`, and `%c` is `0`.
+We fill in the corresponding argument of the $\phi$-functions, remove the `load`, replacing `%9` with `%retval_return`.
+After processing, the block looks like this:
 
 ```llvm
 return:
@@ -500,23 +501,22 @@ return:
         ret i32 %retval_return
 ```
 
-Это терминальный блок, так что обход в глубину возвращается к обработке `if.end` (там нечего делать), а затем `while.cond` и так далее.
+This is a terminal block, so the depth-first traversal returns to `if.end` (nothing to do there), then `while.cond`, and so on.
 
-В итоге мой код сгенерирует вот такой граф потока управления:
+As a result, my code generates the following control flow graph:
 
 [![](mem2reg/fib3_dot.png)](mem2reg/fib3_dot.png)
 
-Давайте его сравним с тем, что сгенерировал llvm из кланговского вывода:
+Let's compare it with what llvm generated from clang's output:
 
 [![](mem2reg/fib2_dot.png)](mem2reg/fib2_dot.png)
 
+As you can see, llvm was a bit smarter: it noticed that `a`, `b`, `i`, `c` are not used in the `return` block and did not pass them through,
+and it also understood that `c` is overwritten in `while.body`, so it didn't pass it through `while.cond`.
+Otherwise, the result is identical, so I am quite satisfied with my toy compiler.
 
-Как видно, llvm оказался чуточку умнее: он заметил, что `a`,`b`,`i`,`c` не используются в блоке `return`, и не стал их пробрасывать,
-а также понял, что `c` переписывается в `while.body`, поэтому не стал его пробрасывать через `while.cond`.
-В остальном же результат просто идентичен, так что я вполне доволен моим игрушечным компилятором.
-
-Ну что, осталось склеить это дело с компилятором.
-Тесты проходят, ура!
+Well, it's time to integrate this with the compiler.
+All the tests pass, hooray!
 
 ```shell
 ssloy@periwinkle:~/tinyoptimizer$ make test
@@ -537,8 +537,8 @@ Testing test-programs/elementary/overload.wend... ok
 Testing test-programs/elementary/int-overflow.wend... ok
 ```
 
-Код компилятора [живёт тут](https://github.com/ssloy/tinyoptimizer/tree/1fc65c278c98ec0859ffffc1d7c828ffa93fbea4),
-а поиграть с mem2reg вручную, без остального компилятора, можно с файлами из этой статьи, даю ещё раз ссылки:
+The compiler code [lives here](https://github.com/ssloy/tinyoptimizer/tree/1fc65c278c98ec0859ffffc1d7c828ffa93fbea4),
+and you can play with mem2reg manually, without the rest of the compiler, using the files from this article. Here are the links again:
 
 * [ir.py](mem2reg/ir.py)
 * [optimizer.py](mem2reg/optimizer.py)
