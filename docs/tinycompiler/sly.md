@@ -1,176 +1,171 @@
 # SLY: lexer and parser
 ## Introduction
 
-Парсинг традиционно делится на два этапа: лексический и синтаксический анализ.
-Однако, по сути, оба являются разновидностями синтаксического анализа, просто на разных уровнях.
-Оба процесса принимают на вход последовательность символов и создают структуру более высокого уровня.
+Parsing is traditionally separated into two stages: lexical analysis and syntactic analysis.
+However, both are essentially varieties of syntactic analysis, just at different levels.
+Both processes take a sequence of characters as input and create a higher-level structure.
 
 [![](sly/parsing-primer.png)](sly/parsing-primer.png)
 
-Такое разделение полезно, поскольку работа лексера проще, чем работа парсера.
-Лексер преобразует исходный текст в плоский список токенов, таких как «числовой литерал», «строковый литерал», «идентификатор» или «оператор».
-Он выполняет распознавание ключевых слов, удаляет пробелы и прочие незначащие символы.
+This separation is useful because the lexer's job is simpler than the parser's job.
+The lexer transforms the source text into a flat list of tokens such as "numeric literal", "string literal", "identifier", or "operator".
+It performs keyword recognition, removes whitespace, and other insignificant symbols.
 
-Синтаксический анализатор выполняет более сложную задачу — он превращает поток лексем, созданный лексером, в дерево разбора, которое отражает структуру языка.
-Разделение этих двух процессов позволяет парсеру работать с более упорядоченным и осмысленным материалом, чем исходный текст.
+The parser performs a more complex task - it turns the stream of tokens created by the lexer into a parse tree, which reflects the structure of the language.
+Separating these two processes allows the parser to work with more orderly and meaningful material than the raw text.
 
-В сложных языках могут возникать циклы взаимодействия между лексером и парсером, но здесь мы на этом останавливаться не будем.
-Наша задача — построить синтаксическое дерево из исходного кода, используя внешний инструмент,
-которому задаются лексические правила и грамматика языка (это соответствует содержимому зелёной и оранжевой коробочек на рисунке).
-Давайте подробнее рассмотрим каждую из них.
+In complex languages, interaction cycles between the lexer and the parser may arise, but it is pretty out of scope for the compiler in a week-end.
+I chose to build a syntax tree from the source code using an external tool,
+which is provided with the lexical rules and grammar of the language (this corresponds to the contents of the green and orange boxes in the diagram).
+Let's take a closer look at each of them.
 
-## Лексический анализ
-Лексический анализ - это процесс преобразования потока символов в последовательность лексем (токенов).
-Токен представляет собой строку с заданным значением, которая описывает ряд связанных лексем.
-Лексема - это последовательность символов, которая образует лексическую единицу в грамматике языка.
-Интуитивно ее можно рассматривать как "слово" в человеческом языке.
-Чтобы понять эти определения, давайте рассмотрим таблицу ниже:
+??? hint "Spoiler alert"
+    It turned out that it is pretty easy to program a lexer/parser on my own, check two last chapters of this series.
+    However, relying on an external tool allows me to focus on semantic analysis, this is why I keep the description of DIY lexer and parser at the very end of the series.
 
 
+## Lexical Analysis
+Lexical analysis is the process of converting a stream of characters into a sequence of tokens.
+A token is a sequence of characters that forms a lexical unit in the grammar of a language.
+Intuitively, it can be thought of as a "word" in a human language.
+To understand these definitions, let's look at the table below:
 
-| Лексемы                    | Тип лексемы                        | Семантическое значение       |
+
+| Tokens                    | Token type                        | Semantic meaning       |
 |----------------------------|-----------------------------------|------------------------------|
-| if, while, fun, var, return, print | IF, WHILE, FUN, VAR, RETURN, PRINT | Зарезервированные слова     |
-| i tmp for23               | ID                                | Идентификатор               |
-| 13,27                     | INTVAL                            | Целочисленная константа     |
-| (,{,}                     | LPAREN, BEGIN, END               | Символы                      |
-| %, +, /, =                | MOD, PLUS, DIVIDE, ASSIGN        | Операторы                    |
+| if, while, fun, var, return, print | IF, WHILE, FUN, VAR, RETURN, PRINT | Keywords     |
+| i tmp for23               | ID                                | Identifier               |
+| 13,27                     | INTVAL                            | Integer constant     |
+| (,{,}                     | LPAREN, BEGIN, END               | Symbols                      |
+| %, +, /, =                | MOD, PLUS, DIVIDE, ASSIGN        | Operators                    |
 
-
-Таким образом, лексер должен принимать поток символов из исходного кода и выдавать последовательность лексем.
-Например, рассмотрим следующий исходный код:
+For example, consider the following source code:
 
 ```cpp
 a = 2;
 ```
 
-Наш лексер должен выдать следующую последовательность лексем:
+Our lexer should produce the following sequence of tokens:
 
 ```cpp
 ID(a) ASSIGN INTVAL(2) SEMICOLON
 ```
 
-Обратите внимание, что внутри лексем спрятаны данные о них: тип лексемы и непосредственно содержание, мы же не должны потерять ни a, ни 2.
-Мы просто разбили входной текст на слова, при этом присвоив каждому слову какой-то тип (например, в человеческом языке это может быть существительное, глагол).
+Note that the tokens contain information about themselves: the token type and its actual content, so we do not lose `a` or `2`.
+We simply broke the input text into words, assigning each word a type (for example, in a human language, it could be a noun, verb, etc.).
 
-Как же наш лексер может это сделать? Другими словами, как мы можем описать и распознать лексемы в языке программирования? Дайте-ка я процитирую коллегу Hadrien Titeux:
+How can our lexer do this? In other words, how can we describe and recognize lexemes in a programming language? Let me quote my colleague Hadrien Titeux:
 *"Parsing: what computer scientists solved 40 years ago, but you still can’t do it easily on your own."*
 
 ![](sly/lies.png)
 
+Tokens are described using regular expressions and recognized by finite automata.
+For example, the following regular expression can be used to identify a valid identifier: `[a-zA-Z_][a-zA-Z0-9_]*`.
+This means we can use alphanumeric characters and underscores.
+As usual, the first character cannot be a digit.
+And here we immediately run into
 
-Лексемы описываются с помощью регулярных выражений и распознаются конечными автоматами.
-Например, следующее регулярное выражение может использоваться для определения валидного идентификатора: `[a-zA-Z_][a-zA-Z0-9_]*`.
-То есть, можно использовать букво-цифры и подчёркивание.
-При этом первый символ не может быть цифрой, всё стандартно.
-И тут мы сразу же врезаемся в
-
-### Неоднозначности
-Что делать, если мы столкнемся со следующим потоком символов?
+### Ambiguities
+What if we face the following stream of characters?
 
 ```cpp
 inta=0;
 ```
 
-Это можно интерпретировать двояко, порождая разные потоки лексем:
+This can be interpreted in two ways, generating different streams of tokens:
 
 ```cpp
 int | a | = | 0 | ;   => TYPE(int) ID(a) ASSIGN INTVAL(0) SEMICOLON
 inta | = | 0 | ;     => ID(inta) ASSIGN INTVAL(0) SEMICOLON
 ```
-Как наш лексер может решить, какие правила использовать (`ID` или `TYPE`)? Интуитивно понятное решение - использовать то правило, которое соответствует большему количеству символов в исходном коде.
-В нашем случае будет использовано правило `ID`, потому что оно соответствует 4 символам (`inta`), в то время как правило `int` соответствует только 3 символам (`int`).
-Однако есть и другой случай неоднозначности, который может обмануть наш лексер:
+How can our lexer decide which rules to use (`ID` or `TYPE`)? The intuitive solution is to use the rule that matches the most characters in the source code.
+In our case, the `ID` rule will be used because it matches 4 characters (`inta`), while the `int` rule matches only 3 characters (`int`).
+However, there is another case of ambiguity that can trick our lexer:
 
 ```cpp
 int=0;
 ```
 
-Какой поток лексем соответствует этому исходному коду?
+Which token sequence corresponds to above source code?
 
 ```cpp
 TYPE(int) ASSIGN INTVAL(0) SEMICOLON
 ```
-или
+or
 ```cpp
 ID(int) ASSIGN INTVAL(0) SEMICOLON
 ```
-Обратите внимание, что даже если приведенный выше код синтаксически неверен, в данный момент мы занимаемся лексическим анализом, а не синтаксическим,
-поэтому даже не пытаемся проверять на этом этапе на синтаксические ошибки.
-Чтобы решить эту проблему, мы будем использовать приоритет правил, то есть указывать, что определенное правило должно быть применено,
-если два или более регулярных выражения совпадают с одинаковым количеством символов из строки.
-
+Note that even if the above code is syntactically incorrect, we are currently dealing with lexical analysis, not syntactic analysis,
+so we are not trying to check for syntactic errors at this stage.
+To solve this problem, we will use rule priority, that is, specify that a certain rule should be applied
+if two or more regular expressions match the same number of characters in the string.
 
 ## SLY: Lexer
 
-Для простоты (см.
-предыдущую картинку) я буду опираться на уже существующие инструменты для создания синтаксического дерева, а именно, на питоновскую библиотеку [SLY](https://github.com/dabeaz/sly).
-Она сама по себе всего на пару тысяч строк, так что можно было бы для разбора *wend* сделать всё с нуля, но, пожалуй, ни к чему это.
-Я свои лекции веду больше в область компиляции, а не в область формальных языков, так что позволю себе зависимость.
+For simplicity (see the previous picture), I am relying on existing tools for creating the syntax tree, namely the Python library [SLY](https://github.com/dabeaz/sly).
+This project is more focused on compilation rather than formal languages, so I'll allow myself this dependency for the moment.
 
-SLY предоставляет два отдельных класса Lexer и Parser.
-Класс Lexer используется для разбиения входного текста на набор лексем, заданных набором правил регулярных выражений.
-Класс Parser используется для распознавания синтаксиса языка, заданного в виде контекстно-свободной грамматики.
-Эти два класса используются вместе для создания синтаксического анализатора.
+SLY provides two separate classes: `Lexer` and `Parser`.
+The `Lexer` class is used to split the input text into a set of tokens defined by a set of regular expression rules.
+The `Parser` class is used to recognize the language syntax defined by a context-free grammar.
+These two classes are used together to create a syntax analyzer.
 
-Давайте начнём с лексера.
-Описание лексических правил тривиально, поэтому я приведу их для всего моего языка целиком, а не буду строить постепенно, начиная с калькуляторов выражений:
+Let's start with the lexer.
+The description of lexical rules is trivial, so I will provide them for my entire language at once, rather than building them gradually, starting with expression calculators:
 
 ??? example "WendLexer"
     ```py linenums="1"
     --8<-- "sly/lexer.py"
     ```
 
-Для начала (строки 4-6) надо определить все возможные типы лексем (бонусное чтение: [почему не возникает NameError?](https://medium.com/@danieldng/learning-some-metaclass-magic-from-sly-8cceea1df1a6)).
-Затем (строки 7-8) мы просим SLY игнорировать пробелы (мы же не в питоне, в конце-то концов!), и выкидывать до конца строки всё, что начинается с двух слешей.
-А затем просто даём список всех регулярок, соответствующих каждой лексеме.
+To begin with (lines 4-6), we need to define all possible types of tokens (bonus reading: [why doesn't NameError occur?](https://medium.com/@danieldng/learning-some-metaclass-magic-from-sly-8cceea1df1a6)).
+Then (lines 7-8), we ask SLY to ignore whitespace (we're not in Python, after all!), and discard everything from the double slashes to the end of the line.
+After that, we simply provide a list of all regular expressions corresponding to each token.
 
-Обратите внимание: порядок этих регулярок важен.
-В большой семье валенки одни, кто первый встал, того и сапоги.
-Давайте для примера посмотрим на лексемы `NOT` и `NOTEQ`.
-Нам необходимо правило `NOTEQ` обрабатывать раньше, нежели правило `NOT`, иначе последовательность символов `a != 0` разобъётся на лексемы `ID(a) NOT ASSIGN INTVAL(0)`, а не на требуемое `ID(a) NOTEQ INTVAL(0)`.
+Note: the order of these regular expressions is important: first come, first served.
+Let's look at the `NOT` and `NOTEQ` tokens as an example.
+We need to process the `NOTEQ` rule before the `NOT` rule, otherwise the sequence of characters `a != 0` will be split into tokens `ID(a) NOT ASSIGN INTVAL(0)`, instead of the required `ID(a) NOTEQ INTVAL(0)`.
 
-Второй важный момент - это то, что все зарезервированные слова wend являются валидными идентификаторами, и поскольку правило `ID` стоит самым первым, то таковыми и будут определены.
-Можно было бы завести на них отдельные правила, но SLY предлагает механизм переназначения лексем, который я и использую (строки 36-47).
+The second important point is that all reserved words in *wend* are valid identifiers, and since the `ID` rule comes first, they will be identified as such.
+We could create separate rules for them, but SLY offers a mechanism for reassigning tokens (lines 36-47).
 
-Собственно, и всё, больше ничего интересного в списке лексических правил нет.
-Сам по себе лексер берёт эти правила, и создаёт конечный автомат, который и обрабатывает весь поток символов.
+
+That's it, there's nothing else interesting in the list of lexical rules.
+The lexer itself takes these rules and creates a finite state machine that processes the entire stream of characters.
+
 
 ## SLY: Parser
 
-Задача синтаксического анализатора - получить поток лексем и проверить, что лексемы образуют допустимое выражение в соответствии со спецификацией языка исходного кода.
-Обычно это делается с помощью контекстно-свободной грамматики, которая рекурсивно определяет компоненты, из которых может состоять выражение, и порядок их появления.
+The parser's job is to take a stream of tokens and verify that the tokens form a valid expression according to the source language specification.
+This is often done using a context-free grammar, which recursively defines the components of a program.
 
-Таким образом, синтаксический анализатор должен определить, принимает ли грамматика языка заданный поток лексем, затем построить синтаксическое дерево и передать его остальным частям компилятора.
-Опять же, я не буду останавливаться на классификациях грамматик и алгоритмах обработки потока лексем, оставим для тех, кто хочет поговорить о теории формальных языков.
-Единственное, что нам нужно знать, что мы пользуемся [самым простым](https://ru.wikipedia.org/wiki/LALR(1)) парсером и для принятия решения о том, что мы должны делать с лексемой, мы не имеем права смотреть дальше, чем на один токен вперёд.
+Thus, the parser must determine whether the language grammar accepts the given stream of tokens, then build a syntax tree and pass it to the other parts of the compiler.
+Again, I will not dwell on the classifications of grammars and algorithms for processing the token stream, let's leave that for those who want to discuss the theory of formal languages.
+The only thing we need to know is that we use the [simplest](https://en.wikipedia.org/wiki/LALR_parser).
+Such a parser makes decisions based on one look-ahead token, without ever returning back.
 
-Грамматика моего языка крайне примитивная, и написание соответствующих правил для парсера не должно составить никакого труда.
-Давайте посмотрим на структуру кода, которого хватит для разбора выражения `x = 3+42*(s-t)` из картинки в начале статьи (та, что с оранжевой коробочкой):
+The grammar of my language is extremely primitive, and writing the corresponding rules for the parser should not be difficult.
+Let's look at the code structure, which is enough to parse the expression `x = 3+42*(s-t)` (check the orange box in the beginning of the article):
 
 ??? example "Assign statement parser"
     ```py linenums="1"
     --8<-- "sly/parser-assign.py"
     ```
 
-Мы наследуемся от класса `Parser`, и определяем грамматические правила.
-У нас есть два нетерминальных символа: `statement`, соответствующий инструкции, и `expr`, соответствующий выражению.
-Терминальных символов всего два: `INTVAL` и `ID`.
+We inherit from the `Parser` class and define grammatical rules.
+We have two non-terminal symbols: `statement`, corresponding to the instruction, and `expr`, corresponding to the expression.
+There are only two terminal symbols: `INTVAL` and `ID`.
 
-Если парсер увидит лексему `INTVAL` (строки 30-32), то он ничего дальше не смотрит, и создаёт объект (узел синтаксического дерева) класса `Integer`.
-Если он видит лексему `ID` (строки 26-28), то создаёт узел синтаксического дерева класса `Var`.
-Обратите внимание, что в обоих случаях вызывается функция `expr`, то есть, и целочисленная константа, и переменная у нас являются тривиальными выражениями.
-Аналогично обрабатываются потоки лексем типа `ID(s) MINUS ID(t)` - парсер выдаёт узел синтаксического дерева типа `ArithOp` с двумя потомками `ID`, которые были найдены рекурсией в парсере.
-Со скобками и другими арифметическими операциями, думаю, разберётесь :)
+If the parser sees the `INTVAL` token (lines 30-32), it doesn't look any further and creates an object (syntax tree node) of the `Integer` class.
+If it sees the `ID` token (lines 26-28), it creates a syntax tree node of the `Var` class.
+Note that in both cases, the `expr` function is called, meaning that both an integer constant and a variable are trivial expressions.
+Similarly, streams of tokens like `ID(s) MINUS ID(t)` are processed - the parser produces a syntax tree node of type `ArithOp` with two `ID` child nodes found by recursion in the parser.
+All the rest is pretty similar, the only thing to pay attention to is the operation priority set in lines 7-10.
 
-Единственное, на что следует обратить внимание, так это на приоритет операций, который я задал в строках 7-10.
+So far, I gave you one statement only (corresponding to the token sequence `ID ASSIGN expr SEMICOLON`).
+The appropriate grammatical rule is given in lines 12-14, which, when matching such a stream of tokens, creates a syntax tree node of the `Assign` class.
 
-Инструкция пока что у нас только одна, так что она может быть построена исключительно тогда, когда поток входных лексем имеет вид `ID ASSIGN expr SEMICOLON`,
-где `expr` - это последовательность лексем, которая соответствует арифметическому выражению.
-Надлежащее грамматическое правило и дано в строках 12-14, которые при соответствии такому потоку лексем создаёт узел синтаксического дерева класса `Assign`.
-
-Если вам понятен этот код, то вот полный набор грамматических правил для wend, больше там нет никаких тонкостей, разве что превращение унарной операции `-x` в бинарную операцию `0-x`:
-
+If you understand this code, here is the complete set of grammatical rules for wend, with no further subtleties, except for converting the unary operation `-x` into the binary operation `0-x`:
 
 ??? example "complete WendParser"
     ```py linenums="1"
@@ -179,41 +174,43 @@ SLY предоставляет два отдельных класса Lexer и P
 
 ## Testing time
 
-Соответствующий код доступен по [тегу v0.0.2](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.2) в репозитории, я больше не буду трогать ни парсер, ни лексер:
-у нас есть прекрасный инструмент, позволяющий автоматически создавать синтаксические деревья из файлов исходников на wend.
-Протестировать можно, просто запустив make test, и увидеть, что базовые тесты проходят, а вот на двух тестах компилятор ломается:
+The corresponding code is available under the [tag v0.0.2](https://github.com/ssloy/tinycompiler/releases/tag/v0.0.2) in the repository. I will no longer touch the parser or lexer:
+we have a great tool that allows us to automatically create syntax trees from source files in wend.
+You can test it by simply running `make test`, and see that the basic tests pass, but the compiler fails two tests:
 
 ![](sly/fails.png)
 
-Я напомню, что пока что компилятор - это просто pretty print надстройка над лексером и парсером, пока что я выдаю питоновский код на выход.
-Давайте поближе посмотрим на проваленные тесты, я даю бок-о-бок исходник wend и скомпилированный код на питоне:
+I remind you that the compiler is currently just a *pretty print* layer over the lexer and parser, and it outputs Python code.
+Let's take a closer look at the failed tests, showing the wend source code and the compiled Python code side by side:
 
 ![](sly/fail1.png)
 
-Питон очень мощный язык, он умеет сильно больше wend, и мой pretty print просто тупо повторяет структуру исходника.
-Единственное, чего не умеет питон - это из коробки перегружать функции, так что вполне очевидно, что ему не нравятся четыре разные функции main,
-он даже компилироваться отказывается (я говорю про компиляцию питоновским интерпретатором выхода моего компилятора).
+Python is a very powerful language, it can do much more than wend, and my *pretty print* just dumbly repeats the structure of the source code.
+The only thing Python can't do out of the box is function overloading. 
+Therefore, it is quite expected to dislike four different `main` functions,
+it even refuses to compile (I'm talking about the compilation by the Python interpreter of the output from my compiler).
 
-А вот тут несколько интереснее:
+But this one is a bit more interesting:
 
 ![](sly/fail2.png)
 
-Этот питоновский код прекрасно компилируется, но в итоге на экран выводится 0, в то время как ожидаемый вывод моего кода 3.
-И вот это - тема следующего разговора, а именно, области видимости переменных и таблицы символов.
-То есть, мы перейдём от лексического и синтаксического анализа к семантическому.
+This Python code runs nice, but it prints 0 to the screen, while the expected output of my code is 3.
+And this is the topic of our next discussion, namely, [variable scopes and symbol tables](symtable.md).
+In other words, we will move from lexical and syntactic analysis to semantic analysis.
 
-Но давайте закончим на позитивной ноте, вот програма на *wend*, позволяющая отобразить множество Мандельброта:
+But let's end on a positive note, here is a program in *wend* that allows you to display the Mandelbrot set:
 
 ??? example "Mandelbrot.wend"
     ```cpp linenums="1"
     --8<-- "sly/mandelbrot.wend"
     ```
 
-А вот ещё раз результат его работы:
+And here is the result of its execution:
+
 
 ![](sly/mandelbrot.png)
 
-Мы начинаем встречать код на *wend*, для которого было бы очень уж громоздко строить синтаксические деревья вручную, так что парсер - это хорошо!
+We are starting to encounter *wend* code for which it would be very cumbersome to build syntax trees manually, so having a parser is great!
 
 
 --8<-- "comments.html"
