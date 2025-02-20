@@ -28,6 +28,7 @@ I am not trying to invent yet another C++ killer, that is not the point.
 It supports nested functions and function overloading, a bare minimum for the first dive into compiler theory.
 
 By the way, I have spent a lot more time on writing test programs than on the compiler itself :)
+
 ## Graphics!
 It is so dull to compute Fibonacci numbers, so here are more eyecandy examples for the compiler, check [test-programs/gfx/*.wend](https://github.com/ssloy/tinycompiler/tree/main/test-programs/gfx) files.
 
@@ -35,13 +36,21 @@ It is so dull to compute Fibonacci numbers, so here are more eyecandy examples f
 <img src="home/mandelbrot.png" width="336">
 
 ### Zero-player breakout game
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="home/breakout.mp4" type="video/mp4"></source></video>
+-->
+![](home/breakout.gif)
 
 ### Fire
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="home/fire.mp4" type="video/mp4"></source></video>
+-->
+![](home/fire.gif)
 
 ### Sunset race
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="home/sunset-race.mp4" type="video/mp4"></source></video>
-
+-->
+![](home/sunset-race.gif)
 
 

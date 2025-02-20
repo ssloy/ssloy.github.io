@@ -19,7 +19,11 @@ For crying out loud! Since *wend* is pretty primitive, I need examples that are 
 Suddenly, remembered the old demoscene!
 Let us say, I want a bonfire animation.
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire6.mp4" type="video/mp4"></source></video>
+-->
+![](fire6.gif)
+
 
 It's not all that difficult.
 I can't run graphics mode, but my terminal supports the `\033[` escape sequence, so a single `print` instruction is enough to draw the fire!
@@ -41,7 +45,10 @@ First, I define the dimensions of my terminal (80x25), then define the 256-color
 Then, in the infinite `for(;;)` loop, I render the buffer, where I fill randomly selected pixels with white color.
 We obtain quite an expected result:
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire0.mp4" type="video/mp4"></source></video>
+-->
+![](fire0.gif)
 
 The white pixels will be sparks of flame.
 The sparks cool down pretty quickly while heating the surroundings.
@@ -64,7 +71,10 @@ Let us start with the vertical one (lines 60-62):
 A three-element ring buffer is all we need: no more copies of the screen buffer.
 The code gives the following animation (I slowed down the video a bit to make it clearer):
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire1.mp4" type="video/mp4"></source></video>
+-->
+![](fire1.gif)
 
 Let us add the horizontal motion blur (lines 63-64), thus making it a box blur:
 
@@ -72,7 +82,10 @@ Let us add the horizontal motion blur (lines 63-64), thus making it a box blur:
     ```cpp hl_lines="60-64" linenums="1"
     --8<-- "cursed-fire/fire2.c"
     ```
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire2.mp4" type="video/mp4"></source></video>
+-->
+![](fire2.gif)
 
 The heat from a single pixel quickly spreads out quickly, so it becomes nearly invisible in my palette.
 On the first iteration, the white pixel is surrounded by eight black pixels; on the second, all nine pixels have a value of 255/9 = 28, and so on:
@@ -94,7 +107,10 @@ Let us fix the code a bit to allow fire pixels to be generated on the bottom lin
     --8<-- "cursed-fire/fire3.c"
     ```
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire3.mp4" type="video/mp4"></source></video>
+-->
+![](fire3.gif)
 
 The air does not randomly ignite anymore, even if the animation becomes less interesting.
 In fact, we forgot about convection!
@@ -105,7 +121,10 @@ Let us just scroll the previous frame up one line at each step (lines 60-63):
     --8<-- "cursed-fire/fire4.c"
     ```
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire4.mp4" type="video/mp4"></source></video>
+-->
+![](fire4.gif)
 
 
 That looks much more like it!
@@ -117,7 +136,10 @@ Let us paint the ember bed a permanent color (and thus add heat) to the bottom l
     --8<-- "cursed-fire/fire5.c"
     ```
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire5.mp4" type="video/mp4"></source></video>
+-->
+![](fire5.gif)
 
 That's almost it, but we have too much heat, don't you think?
 Let us add a cooling effect as a final touch (lines 70-72):
@@ -127,8 +149,10 @@ Let us add a cooling effect as a final touch (lines 70-72):
     --8<-- "cursed-fire/fire6.c"
     ```
 
+<!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire6.mp4" type="video/mp4"></source></video>
-
+-->
+![](fire6.gif)
 
 Well, that's it, I am happy with the result.
 The mundane, non-cursed flame is lit.
