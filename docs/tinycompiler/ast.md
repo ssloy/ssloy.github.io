@@ -81,7 +81,7 @@ Having just two different types (`bool` and `int`) is sufficient to demonstrate 
 So what should I do if I want to work with real numbers?
 My 32-bit variables may be labeled as integers, but I can interpret them however I like.
 Let's say I want to store the number $\pi$ with an accuracy up to the fourth decimal place.
-Multiplying $\pi$ by $10^5$ results in 31415.9265(...).
+Multiplying $\pi$ by $10^4$ results in 31415.9265(...).
 Thus, I can write the following code:
 
 ```wend

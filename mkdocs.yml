@@ -22,6 +22,7 @@ markdown_extensions:
         base_path:
             - docs/
             - docs/strange/
+            - docs/tinyrenderer/
             - docs/tinycompiler/
             - docs/tinyoptimizer/
     - pymdownx.superfences
@@ -50,6 +51,9 @@ plugins: []
 #  - include-markdown
 
 nav:
+    - 'tinyrenderer':
+        - 'tinyrenderer/index.md'
+        - 'tinyrenderer/bresenham.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'

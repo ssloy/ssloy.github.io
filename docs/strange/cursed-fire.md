@@ -3,7 +3,7 @@
 ![](cursed-fire/define.png)
 
 Have you ever wondered whether it is possible to write fully functional code using only the `#define` directive in C?
-It's well-known that the C++ templates are Turing complete, developers even write [ray tracers](https://github.com/tcbrindle/raytracer.hpp) that do all evaluations at compile time (instead of runtime).
+It's well-known that the C++ `constexpr` and templates are Turing complete, developers even write ray tracers [[1](https://github.com/tcbrindle/raytracer.hpp), [2](https://github.com/phresnel/metatrace)] that do all evaluations at compile time (instead of runtime).
 What about the C preprocessor? As it turns out, the question is a bit more complex than one might think.
 Let us try to figure it out. There won't be any ray tracer, but you'll see quite a bit of cursed code.
 
@@ -22,7 +22,7 @@ Let us say, I want a bonfire animation.
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire6.mp4" type="video/mp4"></source></video>
 -->
-![](fire6.gif)
+![](cursed-fire/fire6.gif)
 
 
 It's not all that difficult.
@@ -48,7 +48,7 @@ We obtain quite an expected result:
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire0.mp4" type="video/mp4"></source></video>
 -->
-![](fire0.gif)
+![](cursed-fire/fire0.gif)
 
 The white pixels will be sparks of flame.
 The sparks cool down pretty quickly while heating the surroundings.
@@ -74,7 +74,7 @@ The code gives the following animation (I slowed down the video a bit to make it
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire1.mp4" type="video/mp4"></source></video>
 -->
-![](fire1.gif)
+![](cursed-fire/fire1.gif)
 
 Let us add the horizontal motion blur (lines 63-64), thus making it a box blur:
 
@@ -85,7 +85,7 @@ Let us add the horizontal motion blur (lines 63-64), thus making it a box blur:
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire2.mp4" type="video/mp4"></source></video>
 -->
-![](fire2.gif)
+![](cursed-fire/fire2.gif)
 
 The heat from a single pixel quickly spreads out quickly, so it becomes nearly invisible in my palette.
 On the first iteration, the white pixel is surrounded by eight black pixels; on the second, all nine pixels have a value of 255/9 = 28, and so on:
@@ -110,7 +110,7 @@ Let us fix the code a bit to allow fire pixels to be generated on the bottom lin
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire3.mp4" type="video/mp4"></source></video>
 -->
-![](fire3.gif)
+![](cursed-fire/fire3.gif)
 
 The air does not randomly ignite anymore, even if the animation becomes less interesting.
 In fact, we forgot about convection!
@@ -124,7 +124,7 @@ Let us just scroll the previous frame up one line at each step (lines 60-63):
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire4.mp4" type="video/mp4"></source></video>
 -->
-![](fire4.gif)
+![](cursed-fire/fire4.gif)
 
 
 That looks much more like it!
@@ -139,7 +139,7 @@ Let us paint the ember bed a permanent color (and thus add heat) to the bottom l
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire5.mp4" type="video/mp4"></source></video>
 -->
-![](fire5.gif)
+![](cursed-fire/fire5.gif)
 
 That's almost it, but we have too much heat, don't you think?
 Let us add a cooling effect as a final touch (lines 70-72):
@@ -152,7 +152,7 @@ Let us add a cooling effect as a final touch (lines 70-72):
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="fire6.mp4" type="video/mp4"></source></video>
 -->
-![](fire6.gif)
+![](cursed-fire/fire6.gif)
 
 Well, that's it, I am happy with the result.
 The mundane, non-cursed flame is lit.
