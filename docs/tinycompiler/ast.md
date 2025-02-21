@@ -55,12 +55,12 @@ In the early '80s, Hewlett-Packard advertised its legendary [HP-12C](https://en.
 
 ![](ast/no-equals-780x440.png)
 
-Let me play Captain Obvious for a second: the crossed-out `=` sign simultaneously represents the absence of that button on the calculator
+Let me play Captain Obvious for a second: the crossed-out `≠` sign simultaneously represents the absence of that button on the calculator
 and the idea that HP is unrivaled. It was a deliberate pun. And an inspired one.
-
+<!--
 Personally, I get a twisted pleasure wearing a T-shirt with this print in the 2020s, even though I hate being a walking billboard.
 But the number of angry comments from confused people makes up for any moral discomfort of advertising on my belly!
-
+-->
 Jokes aside, reverse Polish notation is simply a linear representation of an expression’s syntax tree — the core idea, the meaning.
 
 ## Test Subject
