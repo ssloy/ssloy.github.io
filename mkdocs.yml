@@ -45,15 +45,13 @@ extra_javascript:
 
 #repo_url: https://github.com/ssloy
 
+#use_directory_urls: false
 plugins: []
 
 #plugins:
 #  - include-markdown
 
 nav:
-    - 'tinyrenderer':
-        - 'tinyrenderer/index.md'
-        - 'tinyrenderer/bresenham.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
@@ -67,6 +65,9 @@ nav:
     - 'tinyoptimizer':
         - 'tinyoptimizer/index.md'
         - 'tinyoptimizer/mem2reg.md'
+#    - 'tinyrenderer':
+#        - 'tinyrenderer/index.md'
+#        - 'tinyrenderer/bresenham.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 

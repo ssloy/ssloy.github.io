@@ -30,4 +30,5 @@ dmitry.sokolov@univ-lorraine.fr<br/>
 ## [Cursed fire or `#define` black magic](strange/cursed-fire.md)
 [![](strange/cursed-fire/define-320.png)](strange/cursed-fire.md)
 
+[?](tinyrenderer/index.md)
 
