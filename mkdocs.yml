@@ -1,4 +1,5 @@
 site_name: Playing with code
+site_url: https://ssloy.github.io/
 theme:
     name: material
     custom_dir: mkdocs-material/material
