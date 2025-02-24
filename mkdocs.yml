@@ -51,9 +51,9 @@ plugins: []
 #  - include-markdown
 
 nav:
-#   - 'tinyrenderer':
-#       - 'tinyrenderer/index.md'
-#       - 'tinyrenderer/bresenham.md'
+    - 'tinyrenderer':
+        - 'tinyrenderer/index.md'
+        - 'tinyrenderer/bresenham.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
