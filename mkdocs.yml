@@ -23,7 +23,7 @@ markdown_extensions:
         base_path:
             - docs/
             - docs/strange/
-            - docs/tinyrenderer/
+            - docs/tinyrenderer.bak/
             - docs/tinycompiler/
             - docs/tinyoptimizer/
     - pymdownx.superfences
