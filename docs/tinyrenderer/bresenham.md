@@ -368,3 +368,4 @@ Here are two more renderings generated with my solution:
 
 Next, we will move on to filling triangles to create solid renders. Stay tuned!
 
+--8<-- "comments.html"
