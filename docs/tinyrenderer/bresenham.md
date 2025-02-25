@@ -177,12 +177,12 @@ I ran the unoptimized `line` ([you can find here](https://github.com/ssloy/tinyr
 ```shell
 ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
 
-real    0m4.904s
-user    0m4.903s
-sys     0m0.000s
+real    0m3.986s
+user    0m3.974s
+sys     0m0.009s
 ```
 
-So, on my machine it took 4.9 seconds to draw 16 millions lines with full compiler optimization settings `-O3` turned on.
+So, on my machine it took 3.99 seconds to draw 16 millions lines with full compiler optimization settings `-O3` turned on.
 
 Where can we optimize the code?
 I ran the profiler and I saw that the majority of time is spent in the  `framebuffer.set()` calls,
@@ -210,12 +210,12 @@ we can rewrite the previous code this way, the modifications are highlighted:
 ```shell
 ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
 
-real    0m3.301s
-user    0m3.300s
-sys     0m0.000s
+real    0m2.806s
+user    0m2.801s
+sys     0m0.004s
 ```
 
-Here we have drastic changes in performance: the running time dropped from 4.9 to 3.3 seconds.
+Here we have drastic changes in performance: the running time dropped from 3.99 to 2.8 seconds.
 Frankly, I was very surprized to see this improvement, as I'd expect for the optimizer to make this optimization on its own.
 However, while modern optimizing compilers may be the most complex and impressive creation of humanity in the field of software engineering,
 they are not magic, and they are certainly myopic.
@@ -237,51 +237,89 @@ Long story short, check [this code](https://github.com/ssloy/tinyrenderer/blob/d
     ```
 
 Once again, I highlighted the lines affected by the changes.
-This time the timings are not surpizing, we are doing more work, so the time increased from 3.3 to 4.16 seconds:
+This time the timings are not surpizing, we are doing more work, so the time increased from 2.8 to 3.7 seconds :
 
 ```shell
 ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
 
-real    0m4.160s
-user    0m4.160s
-sys     0m0.000s
+real    0m3.717s
+user    0m3.712s
+sys     0m0.004s
 ```
 
-### Round 3, final
+### Round 3, the final one
 
-Can we get rid of floating point computations entirely? Check the previous listing.
-We start with zero `error`, and we actually use the variable thrice: in lines 18, 19 and 21.
-Do we need fractions?
-It turns out, not at all. If we introduce an integer variable `ierror` that is equal by construction to `error * 2 * (bx-ax)`,
-we can eliminate all floating points.
+Can we eliminate floating-point computations entirely? Let’s examine the previous listing.
+
+We start with `error` initialized to zero, and we actually use this variable three times—in lines 18, 19, and 21.
+Do we need fractional values? Surprisingly, not at all.
+By introducing an integer variable `ierror`, defined as `error * 2 * (bx - ax)`, we can eliminate floating-point operations altogether.
 Check the [following code](https://github.com/ssloy/tinyrenderer/blob/477b3cd686ed16cb2f5b723d51ae4d0ec728fdc5/main.cpp):
 
 ??? example "Final optimization"
     ```cpp linenums="1" hl_lines="12 18-19 21"
     --8<-- "bresenham/bresenham4d.cpp"
     ```
-And again, I have highlighted the affected lines.
-It turs out that we converged pretty much exactly to the Bresenham's line drawing algorithm.
-Let us measure the performance!
+Once again, I have highlighted the affected lines.
+It turns out we have arrived at Bresenham’s line-drawing algorithm.
+Now, let’s measure the performance:
+
 
 ```shell
 ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
 
-real    0m3.469s
-user    0m3.469s
+real    0m3.573s
+user    0m3.572s
 sys     0m0.000s
 ```
 
-The time dropped from 4.16 seconds in the previous round (and from 4.9s in the non-optimized version) to 3.47 seconds in this one.
-However, it **increased** from 3.3 seconds in round 1!
-I attempted optimizations such as moving `2*(bx-ax)` out of the loop, but the compiler had already optimized it.
+The time dropped from 3.7 seconds in the previous round (and from 3.99 seconds in the non-optimized version) to 3.57 seconds in this one.
+However, it **increased** from 2.8 seconds in round 1!
+I attempted optimizations such as moving `2*(bx - ax)` out of the loop, but the compiler had already performed this optimization.
 
 In the past, floating-point operations were significantly more expensive than integer ones (or even entirely inaccessible).
 This is why Jack Elton Bresenham developed his all-integer rasterization algorithm in the 1960s.
+As seen in my experiments, integers can still be faster than floating-point computations (this round is more efficient than the previous one), but the performance gain is marginal.
 Today, integer operations are not always more efficient than floating-point calculations — it depends on the context.
+
 Nevertheless, mastering these techniques remains valuable.
 As mentioned earlier, this section serves mainly as a historical tribute to Professor Bresenham.
 His algorithm is elegant, and the discovery of all-integer rasterization was truly ingenious.
+
+### Round 4, postscriptum
+
+What is the real reason why the code from round 3 is slower than the code from round 1? We are performing integer computations, which are generally faster than floating-point ones.
+However, we introduced an `if` condition inside the critical loop, and that negatively impacts performance.
+
+On a typical x86 processor, instruction execution is divided into several stages.
+Different hardware components handle different stages, allowing multiple instructions to be processed simultaneously.
+This technique is called **pipelining**.
+However, when a branch occurs, the next instruction depends on the result of the previous one, preventing efficient pipelining.
+The processor either waits or predicts the outcome, potentially mispredicting and stalling the pipeline.
+
+The `if (steep)` condition does not significantly affect performance, as modern branch predictors handle it well — especially since the same branch is consistently taken inside the critical loop.
+However, `if (ierror > bx - ax)` is the performance killer.
+
+There are techniques to rewrite computations in a branchless form, but I applied trick so ugly, that I didn’t even commit it to the repository.
+Check lines 19-20:
+
+??? example "Ugly branchless rasterization"
+    ```cpp linenums="1" hl_lines="19-20"
+    --8<-- "bresenham/bresenham5.cpp"
+    ```
+As I said, the trick is ugly, I **always** increment `y` and `ierror`, but most of time by zero :)
+Let us measure the performance:
+
+```shell
+ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
+
+real    0m2.732s
+user    0m2.731s
+sys     0m0.000s
+```
+
+Yay, this code is the fastest!
+
 
 ## Homework: wireframe rendering
 

@@ -4,6 +4,7 @@ title: Home
 
 # Software rendering in 500 lines of bare C++
 
+## **Attention, work in progress. Here I publish a revamp for the [https://github.com/ssloy/tinyrenderer/wiki](https://github.com/ssloy/tinyrenderer/wiki) series. Check the project wiki for the lessons I did not treat yet.**
 In this series of articles, I aim to demonstrate how OpenGL, Vulkan, Metal, and DirectX work by writing a simplified clone from scratch.
 Surprisingly, many people struggle with the initial hurdle of learning a 3D graphics API.
 To help with this, I have prepared a short series of lectures, after which my students are able to produce quite capable renderers.
