@@ -155,9 +155,6 @@ While the previous code works well, there is still room for optimization.
 However, optimization must be approached with caution.
 The key consideration is the target platform: optimizing for a graphics card versus a CPU are entirely different challenges.
 Before and during any optimization, profiling is essential — there should be no optimization without measurement!
-As I write this in 2025 on my old laptop, the results continue to surprise me.
-
-
 
 ### Round 1
 
@@ -182,7 +179,7 @@ user    0m3.974s
 sys     0m0.009s
 ```
 
-So, on my machine it took 3.99 seconds to draw 16 millions lines with full compiler optimization settings `-O3` turned on.
+So, on my machine (Intel Xeon w3-2423 @ 3.1 Ghz) it took 3.99 seconds to draw 16 millions lines with full compiler optimization settings `-O3` turned on.
 
 Where can we optimize the code?
 I ran the profiler and I saw that the majority of time is spent in the  `framebuffer.set()` calls,

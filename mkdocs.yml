@@ -53,6 +53,7 @@ plugins: []
 #  - include-markdown
 
 nav:
+    - 'Home': 'index.md'
     - 'tinyrenderer':
         - 'tinyrenderer/index.md'
         - 'tinyrenderer/bresenham.md'
