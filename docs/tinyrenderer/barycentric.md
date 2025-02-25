@@ -49,6 +49,17 @@ These coordinates tell us how much of \( A \) and \( B \) contribute to the posi
 - If \( P \) is exactly on \( A \) or \( B \), one coordinate is **zero**.
 - If both coordinates are **between 0 and 1**, \( P \) is strictly inside the segment.
 
+
+```cpp
+void line(int ax, int ay, int bx, int by, TGAImage &framebuffer, TGAColor color) {
+    for (float t=0.; t<1.; t+=.01) {
+        int x = std::round( (1-t)*ax + t*bx );
+        int y = std::round( (1-t)*ay + t*by );
+        framebuffer.set(x, y, color);
+    }
+}
+```
+
 ## 2D barycentric coordinates
 
 In 1D we used two points to compute their barycenter. In 2D we'd need a triangle.
@@ -106,7 +117,7 @@ Similarly,
 The [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) allows to efficiently compute these areas:
 
 \[
-\text{Area}(ABC) = \frac{1}{2} \left| A_x B_y + B_x C_y + C_x A_y - (A_y B_x + B_y C_x + C_y A_x) \right|.
+\text{Area}(ABC) = \frac{1}{2} \left( A_x B_y + B_x C_y + C_x A_y - A_y B_x - B_y C_x - C_y A_x \right).
 \]
 
 The interpretation of the weights is very similar to the 1D case:
