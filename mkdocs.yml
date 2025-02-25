@@ -57,6 +57,8 @@ nav:
     - 'tinyrenderer':
         - 'tinyrenderer/index.md'
         - 'tinyrenderer/bresenham.md'
+        - 'tinyrenderer/rasterization.md'
+        - 'tinyrenderer/barycentric.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
