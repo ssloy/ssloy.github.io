@@ -4,6 +4,7 @@ title: Barycentric coordinates
 # Primer on barycentric coordinates
 
 ## 1D barycentric coordinates
+### A bit of math
 Now it is the time to recall the note I made on the barycentric coordinates when we rasterized segments.
 Just as regular coordinates give the position of a point with respect to a chosen basis,
 barycentric coordinates express a point's position relative to a given set of reference points.
@@ -41,24 +42,47 @@ Solving the system, we get following equations:
 \alpha = \frac{B - P}{B - A}, \quad \beta = 1-\alpha = \frac{P - A}{B - A}.
 \]
 
-These coordinates tell us how much of \( A \) and \( B \) contribute to the position of \( P \):
+### Example 1
+These weights tell us how much of \( A \) and \( B \) contribute to the position of \( P \).
+To take an example, let us imagine a one meter-long rod. Put 750g to the left end (point $A$), and 250g to the right end (point $B$).
+To make the rod balance on a triangle, we need to adapt the lengths of the levers.
+In this case, the rod is balanced if $P$ is 25cm from the left endpoint, and therefore, 75cm from the right.
+
+![](barycentric/1d.png)
+
+Note that we can have **negative weights**, meaning that they do not weigh down, but rather pull up.
+Let us sum up:
 
 - If \( P = A \), then \( \alpha = 1 \) and \( \beta = 0 \).
 - If \( P = B \), then \( \alpha = 0 \) and \( \beta = 1 \).
+- If both coordinates are **strictly between 0 and 1**, \( P \) is strictly inside the segment.
 - If \( P \) is outside \( [A, B] \), then one coordinate is **negative**.
-- If \( P \) is exactly on \( A \) or \( B \), one coordinate is **zero**.
-- If both coordinates are **between 0 and 1**, \( P \) is strictly inside the segment.
 
+### Example 2
 
-```cpp
+Recall our [second attempt](bresenham/#second-attempt-different-sampling-strategy) on rasterizing line segments?
+Here is the code:
+
+```cpp linenums="1"
 void line(int ax, int ay, int bx, int by, TGAImage &framebuffer, TGAColor color) {
-    for (float t=0.; t<1.; t+=.01) {
-        int x = std::round( (1-t)*ax + t*bx );
-        int y = std::round( (1-t)*ay + t*by );
+    for (int x=ax; x<=bx; x++) {
+        float t = (x-ax) / static_cast<float>(bx-ax);
+        int y = std::round( (1-t) * ay + t * by );
         framebuffer.set(x, y, color);
     }
 }
 ```
+
+If we call `line(17, 4, 43, 59, framebuffer, white)`, we obtain the following image:
+
+![](barycentric/line.png)
+
+Let us take a closer look to what is happening. We iterate (line 2) through the interval $x\in[a_x, b_x]$.
+For each value $x$ we determine (line 3) its barycentric coordinates $(1-t, t)$ with respect to the interval $[a_x, b_x]$.
+Finally, using these barycentric coordinates with respect to **another** interval $[a_y, b_y]$, we compute interpolated value of $y$.
+Therefore, in this approach $y$ is a **linear interpolation** over the segment $[a_x, b_x]$ between two samples $a_y$ and $b_y$.
+
+The ability to interpolate various things over a given domain is an extremely powerful tool, remember it, we will make a heavy use of it.
 
 ## 2D barycentric coordinates
 
@@ -126,6 +150,65 @@ The interpretation of the weights is very similar to the 1D case:
 - If any coordinate is **negative**, \( P \) is **outside** the triangle.
 - If one coordinate is exactly **zero**, \( P \) lies **on an edge**.
 - If two coordinates are **zero**, \( P \) is exactly on a vertex.
+
+### Example 1
+![](barycentric/2d_b.png)
+
+$$
+\text{Area}(ABC)=
+\frac12
+\begin{vmatrix}
+0  &12 &0\\
+16 &0  &0\\
+1  &1  &1
+\end{vmatrix} = 96,
+\quad
+\text{Area}(PBC)=
+\frac12
+\begin{vmatrix}
+ 3  &12 &0\\
+- 4 &0  &0\\
+ 1  &1  &1 
+\end{vmatrix} = 24
+$$
+
+$$
+\text{Area}(PCA)=
+\frac12
+\begin{vmatrix}
+ 3  &0 & 0  \\
+- 4 &0 &- 16\\
+ 1  &1 & 1
+\end{vmatrix} = 24,
+\quad
+\text{Area}(PAB)=
+\frac12
+\begin{vmatrix}
+ 3  & 0   &12\\
+- 4 &- 16 &0 \\
+ 1  & 1   &1
+\end{vmatrix} = 48
+$$
+
+$$
+\alpha=\frac14,\quad \beta=\frac14,\quad\gamma=\frac12
+$$
+
+
+
+![](barycentric/2d.png)
+
+### Example 2
+
+??? example "Linear interpolation over a triangle"
+    ```cpp linenums="1" hl_lines="22 37"
+    --8<-- "barycentric/triangle.cpp"
+    ```
+
+
+![](barycentric/triangle.png)
+
+## Homework assignment
 
 Barycentric coordinates are fundamental in rasterization because they allow efficient interpolation of attributes such as colors, depth values, and texture coordinates across triangles in 3D rendering.
 
