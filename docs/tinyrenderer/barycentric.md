@@ -60,7 +60,7 @@ Let us sum up:
 
 ### Example 2
 
-Recall our [second attempt](bresenham/#second-attempt-different-sampling-strategy) on rasterizing line segments?
+Recall our [second attempt](../bresenham/#second-attempt-different-sampling-strategy) on rasterizing line segments?
 Here is the code:
 
 ```cpp linenums="1"
@@ -111,7 +111,10 @@ $$
 \end{array}\right.
 $$
 
-For a better readability (optional), we can rewrite the same equation in the matrix form:
+How can we solve the system?
+
+### A bit of matrix calculus (optional)
+For a better readability, we can rewrite the same equation in the matrix form:
 
 $$
 \begin{pmatrix}
@@ -121,11 +124,91 @@ $$
 \end{pmatrix}
 \begin{pmatrix}\alpha \\ \beta \\ \gamma\end{pmatrix}
 =
-\begin{pmatrix}P.x \\ P.y \\ 1\end{pmatrix}
+\begin{pmatrix}P_x \\ P_y \\ 1\end{pmatrix}
 $$
 
-It turns out that the matrix on the left has a very particular form.
-Its determinant is equal to twice the **signed area** of the triangle $ABC$.
+Then we have:
+
+$$
+\begin{align*}
+\begin{pmatrix}\alpha \\ \beta \\ \gamma\end{pmatrix}
+&=
+\begin{pmatrix}
+    A_x & B_x & C_x\\
+    A_y & B_y & C_y\\
+    1 & 1 & 1
+\end{pmatrix}^{-1}
+\begin{pmatrix}P_x \\ P_y \\ 1\end{pmatrix}\\
+&=
+\frac{
+\small
+\text{adj}
+\begin{pmatrix}
+    A_x & B_x & C_x\\
+    A_y & B_y & C_y\\
+    1 & 1 & 1
+\end{pmatrix}
+\begin{pmatrix}P_x \\ P_y \\ 1\end{pmatrix}
+}{\small
+\begin{vmatrix}
+    A_x & B_x & C_x\\
+    A_y & B_y & C_y\\
+    1 & 1 & 1
+\end{vmatrix}
+}
+\\
+&=
+\frac{\small
+\begin{pmatrix}
+B_y - C_y & C_x - B_x &  B_x C_y - B_y C_x\\
+C_y - A_y & A_x - C_x &  A_y C_x - A_x C_y\\
+A_y - B_y & B_x - A_x &  A_x B_y - A_y B_x
+\end{pmatrix}
+\begin{pmatrix}P_x \\ P_y \\ 1\end{pmatrix}
+}{\small
+\begin{vmatrix}
+    A_x & B_x & C_x\\
+    A_y & B_y & C_y\\
+    1 & 1 & 1
+\end{vmatrix}
+}\\
+&=
+\frac{\small
+\begin{pmatrix}
+\begin{vmatrix}
+    P_x & B_x & C_x\\
+    P_y & B_y & C_y\\
+    1 & 1 & 1
+\end{vmatrix}
+&
+\begin{vmatrix}
+    P_x & C_x & A_x\\
+    P_y & C_y & A_y\\
+    1 & 1 & 1
+\end{vmatrix}
+&
+\begin{vmatrix}
+    P_x & A_x & B_x\\
+    P_y & A_y & B_y\\
+    1 & 1 & 1
+\end{vmatrix}
+\end{pmatrix}^\top
+}{\small
+\begin{vmatrix}
+    A_x & B_x & C_x\\
+    A_y & B_y & C_y\\
+    1 & 1 & 1
+\end{vmatrix}
+}
+\end{align*}
+$$
+
+It turns out that to find the weights $\alpha, \beta, \gamma$, we need to compute
+determinants of four matrices that of a very particular form.
+These determinants give twice the **signed area** of the triangle formed by the points in the matrices.
+
+### Practical computation
+
 Then the coordinate \( \alpha \) is given by the ratio of the sub-triangle \( PBC \) to the total triangle \( ABC \):
 
 \[
@@ -143,6 +226,9 @@ The [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) allows to
 \[
 \text{Area}(ABC) = \frac{1}{2} \left( A_x B_y + B_x C_y + C_x A_y - A_y B_x - B_y C_x - C_y A_x \right).
 \]
+
+In fact, it is just the above determinants written explicitly.
+Please, do pay attention that the order of point matters, as the formula gives the **signed** area.
 
 The interpretation of the weights is very similar to the 1D case:
 
