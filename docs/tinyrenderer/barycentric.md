@@ -224,7 +224,7 @@ Similarly,
 The [shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) allows to efficiently compute these areas:
 
 \[
-\text{Area}(ABC) = \frac{1}{2} \left( A_x B_y + B_x C_y + C_x A_y - A_y B_x - B_y C_x - C_y A_x \right).
+\text{Area}(ABC) = \frac{1}{2} \left( \small(B_y-A_y)(B_x+A_x) + (C_y-B_y)(C_x+B_x) + (A_y-C_y)(A_x+C_x) \right).
 \]
 
 In fact, it is just the above determinants written explicitly.
