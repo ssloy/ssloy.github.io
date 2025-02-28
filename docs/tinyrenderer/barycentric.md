@@ -45,7 +45,7 @@ Solving the system, we get following equations:
 ### Example 1
 These weights tell us how much of \( A \) and \( B \) contribute to the position of \( P \).
 To take an example, let us imagine a one meter-long rod. Put 750g to the left end (point $A$), and 250g to the right end (point $B$).
-To make the rod balance on a triangle, we need to adapt the lengths of the levers.
+To make the rod balance on a needle, we need to adapt the lengths of the levers.
 In this case, the rod is balanced if $P$ is 25cm from the left endpoint, and therefore, 75cm from the right.
 
 ![](barycentric/1d.png)
@@ -238,23 +238,29 @@ The interpretation of the weights is very similar to the 1D case:
 - If two coordinates are **zero**, \( P \) is exactly on a vertex.
 
 ### Example 1
+Let me illustrate all this with the following example:
+
 ![](barycentric/2d_b.png)
+
+Here I took a [Pythagorean triangle](https://en.wikipedia.org/wiki/Pythagorean_triple) with sides 12:16:20.
+I chose points $A, B, C$ to have coordinates $(16, 0), (0, 12), (0,0)$, respectively.
+Then I took point $P = (4,3)$.
 
 $$
 \text{Area}(ABC)=
 \frac12
 \begin{vmatrix}
-0  &12 &0\\
-16 &0  &0\\
-1  &1  &1
+16 & 0  &0\\
+0  & 12 &0\\
+1  & 1  &1
 \end{vmatrix} = 96,
 \quad
 \text{Area}(PBC)=
 \frac12
 \begin{vmatrix}
- 3  &12 &0\\
-- 4 &0  &0\\
- 1  &1  &1 
+ 4 & 0  &0\\
+ 3 & 12 &0\\
+ 1 & 1  &1
 \end{vmatrix} = 24
 $$
 
@@ -262,39 +268,60 @@ $$
 \text{Area}(PCA)=
 \frac12
 \begin{vmatrix}
- 3  &0 & 0  \\
-- 4 &0 &- 16\\
- 1  &1 & 1
+ 4 & 0 & 16\\
+ 3 & 0 & 0 \\
+ 1 & 1 & 1
 \end{vmatrix} = 24,
 \quad
 \text{Area}(PAB)=
 \frac12
 \begin{vmatrix}
- 3  & 0   &12\\
-- 4 &- 16 &0 \\
- 1  & 1   &1
+ 4 & 16 & 0\\
+ 3 & 0  & 12 \\
+ 1 & 1  &1
 \end{vmatrix} = 48
 $$
 
+By dividing these areas, we obtain the barycentric coordinates:
 $$
 \alpha=\frac14,\quad \beta=\frac14,\quad\gamma=\frac12
 $$
 
+Note that we can compute $\text{Area}(PCA)$ more easily.
+We know that the area of the triangle is half of the base (16/2) multiplied by its height (3).
+Therefore, $\text{Area}(PCA)$ is constant for every position of the point $P$ that does not affect the height.
+The green dashed line indicates possible positions of $P$ for $\beta=\frac14$.
+The isoline $\alpha=\frac14$ is red and $\gamma=\frac12$ is blue. Naturally, they meet in the only possible point $\alpha+\beta+\gamma = 1$.
 
+Practice makes perfect, I am not afraid of repetition: the point $P$ is the barycenter of triangle $ABC$ with weights $\alpha, \beta, \gamma$ appied to the vertices:
 
 ![](barycentric/2d.png)
 
 ### Example 2
 
+As I have already mentioned, barycentric coordinates are fundamental in rasterization because they allow efficient interpolation of attributes such as colors,
+depth values, and texture coordinates across triangles in 3D rendering.
+Let me a little bit modify the triangle rasterization function we made in the [previous lesson](../rasterization/).
+
 ??? example "Linear interpolation over a triangle"
-    ```cpp linenums="1" hl_lines="22 37"
+    ```cpp linenums="1" hl_lines="23 37"
     --8<-- "barycentric/triangle.cpp"
     ```
-
+In addition to the triangle vertices, I pass to the function three integers `az`, `bz`, `cz`, and I interpret them as colors of the vertices in a grayscale rasterization.
+Then for each pixel with coordinates `alpha`,`beta`,`gamma`, I interpolate its color as the weighed sum `z = alpha * az + beta * bz + gamma * cz`,
+obtaining the following image:
 
 ![](barycentric/triangle.png)
 
 ## Homework assignment
 
-Barycentric coordinates are fundamental in rasterization because they allow efficient interpolation of attributes such as colors, depth values, and texture coordinates across triangles in 3D rendering.
+Play around with the code, for example, draw full-colored triangles instead of grayscale:
 
+![](barycentric/rgb.png)
+
+Or draw a "wireframe" triangle without using `line(...)` function:
+
+![](barycentric/fatwire.png)
+
+
+--8<-- "comments.html"

@@ -185,3 +185,6 @@ Pause here for a moment and try to draw filled triangles.
 
 ![](rasterization/no-back-face-culling.png)
 ![](rasterization/back-face-culling.png)
+
+
+--8<-- "comments.html"

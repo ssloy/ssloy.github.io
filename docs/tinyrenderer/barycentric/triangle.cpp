@@ -19,9 +19,9 @@ void triangle(int ax, int ay, int az, int bx, int by, int bz, int cx, int cy, in
             double alpha = signed_triangle_area(x, y, bx, by, cx, cy) / total_area;
             double beta  = signed_triangle_area(x, y, cx, cy, ax, ay) / total_area;
             double gamma = signed_triangle_area(x, y, ax, ay, bx, by) / total_area;
-            unsigned char z = static_cast<unsigned char>(alpha * az + beta * bz + gamma * cz);
             if (alpha<0 || beta<0 || gamma<0) continue; // negative barycentric coordinate => the pixel is outside the triangle
-            framebuffer.set(x, y, {z, z, z, 255});
+            unsigned char z = static_cast<unsigned char>(alpha * az + beta * bz + gamma * cz);
+            framebuffer.set(x, y, {z});
         }
     }
 }
