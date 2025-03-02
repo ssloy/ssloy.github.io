@@ -373,22 +373,22 @@ Imagine that we have a 2D polygon $ABCDE$ that we want to draw on a 1D line defi
 ![backface culling illustration](rasterization/culling.png)
 
 We need to draw 5 segments, namely, $AB$, $BC$, $CD$, $DE$, and $EA$.
-However, we can be quite certain that we can safely discard segments $AB$ and $CD$ since they are facing back and not front.
+However, we can be quite certain that we can safely discard segments $AB$, $CD$ and $EA$ since they are facing back and not front.
 
 The order in which segments are stored in memory can be arbitrary, but an important aspect is that there is consistency in how the endpoints are stored for each segment.
 To decide whether a segment is facing front or back, we can simply compute the sign of its length once projected onto the screen.
-For now, our projection is orthogonal (we are ignoring the $x$ coordinate), so the problem reduces to comparing the $y$ coordinates of the segment’s endpoints.
+For now, our projection is orthogonal (we are ignoring the $y$ coordinate), so the problem reduces to comparing the $x$ coordinates of the segment’s endpoints.
 
 If a segment extends from point $A$ to point $B$, its projected length on the screen is given by:
 
-\[ L = B_y - A_y \]
+\[ L_{AB} = B_x - A_x \]
 
-- If $L > 0$, the segment is front-facing and should be drawn.
-- If $L < 0$, the segment is back-facing and can be culled.
+- If $L_{AB} > 0$, the segment is front-facing and should be drawn.
+- If $L_{AB} < 0$, the segment is back-facing and can be culled.
 
 For example, in the case of segment $AB$:
 
-\[ B_y < A_y \Rightarrow B_y - A_y < 0 \]
+\[ B_x < A_x \Rightarrow L_{AB} < 0 \]
 
 Since the projected length is negative, we can discard segment $AB$.
 By applying this simple test to each segment, we can efficiently determine which edges should be drawn and which can be ignored,
@@ -397,9 +397,9 @@ optimizing the rendering process and avoiding unnecessary computations for back-
 Back to our 3D rendering of the head, the line of code we have added checks the signed area of the triangle to be drawn.
 If it is negative, the triangle can be discarded.
 Note that this is a conservative test that does not prevent all rendering errors.
-In our 2D example, nothing prevents segment $BC$ from being drawn over $DE$, since they are both front-facing.
+In our 2D example, nothing prevents segment $DE$ from being drawn over $BC$, since they are both front-facing.
 This is exactly why the rendering of the head is not perfect: we have eliminated all back-facing triangles,
-but some front-facing triangles inside the mouth were drawn over the lips. We will correct this artifact later.
+but some front-facing triangles inside the mouth were drawn over the lips. We will correct this artefact later.
 
 
 ## Next time
