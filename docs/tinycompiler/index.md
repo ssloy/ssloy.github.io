@@ -35,6 +35,9 @@ It is so dull to compute Fibonacci numbers, so here are more eyecandy examples f
 ### Mandelbrot set
 <img src="home/mandelbrot.png" width="336">
 
+### Ray tracer
+![](home/raytracer.png)
+
 ### Zero-player breakout game
 <!--
 <video width="320" autoplay="" loop="" muted="" controls=""><source src="home/breakout.mp4" type="video/mp4"></source></video>
