@@ -26,7 +26,6 @@ void triangle(int ax, int ay, int az, int bx, int by, int bz, int cx, int cy, in
     }
 }
 
-
 int main(int argc, char** argv) {
     constexpr int width  = 64;
     constexpr int height = 64;

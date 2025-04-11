@@ -60,7 +60,7 @@ Let us sum up:
 
 ### Example 2
 
-Recall our [second attempt](../bresenham/#second-attempt-different-sampling-strategy) on rasterizing line segments?
+Recall our [second attempt](bresenham.md#second-attempt-different-sampling-strategy) on rasterizing line segments?
 Here is the code:
 
 ```cpp linenums="1"
@@ -301,10 +301,10 @@ Practice makes perfect, I am not afraid of repetition: the point $P$ is the bary
 
 As I have already mentioned, barycentric coordinates are fundamental in rasterization because they allow efficient interpolation of attributes such as colors,
 depth values, and texture coordinates across triangles in 3D rendering.
-Let me a little bit modify the triangle rasterization function we made in the [previous lesson](../rasterization/).
+Let me modify a little bit the triangle rasterization function we made in the [previous lesson](rasterization.md).
 
 ??? example "Linear interpolation over a triangle"
-    ```cpp linenums="1" hl_lines="23 37"
+    ```cpp linenums="1" hl_lines="23 36"
     --8<-- "barycentric/triangle.cpp"
     ```
 In addition to the triangle vertices, I pass to the function three integers `az`, `bz`, `cz`, and I interpret them as colors of the vertices in a grayscale rasterization.

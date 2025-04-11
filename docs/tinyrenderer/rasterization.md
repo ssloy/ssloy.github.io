@@ -300,7 +300,7 @@ As always, I follow closely the one-commit-per-tutorial-image rule, so you can f
 
 ## Putting all together + back-face culling
 
-Let us recall the wireframe [rendering we made](../bresenham/#my-solution) last time.
+Let us recall the wireframe [rendering we made](bresenham.md#my-solution) last time.
 We looped over the triangles, projected the triangles to the screen and made 3 calls to the `line()` function.
 We can replace the the 3 calls by a single call to our brand new `triangle()`:
 
@@ -368,7 +368,7 @@ And while not being perfect, the result improves drastically:
 ![](rasterization/back-face-culling.png)
 
 What happened? Let us reduce the number of dimensions and make a 1D rendering of a 2D scene.
-Imagine that we have a 2D polygon $ABCDE$ that we want to draw on a 1D line defined by the $y$-axis of our coordinate system:
+Imagine that we have a 2D polygon $ABCDE$ that we want to draw on a 1D line defined by the $x$-axis of our coordinate system:
 
 ![backface culling illustration](rasterization/culling.png)
 
@@ -403,8 +403,8 @@ but some front-facing triangles inside the mouth were drawn over the lips. We wi
 
 
 ## Next time
-Next time, I propose spending a little more time on [barycentric coordinates](../barycentric/), as I will make heavy use of them later on.
-Then, we can tackle the [removal of hidden faces](../z-buffer/).
+Next time, I propose spending a little more time on [barycentric coordinates](barycentric.md), as I will make heavy use of them later on.
+Then, we can tackle the [removal of hidden faces](z-buffer.md).
 
 --8<-- "comments.html"
 
