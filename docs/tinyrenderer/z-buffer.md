@@ -113,5 +113,19 @@ And here is the result. You can see that the demon’s right paw is lighter than
 As usual, you can find the complete code [here](https://github.com/ssloy/tinyrenderer/commit/f1dd24ec9418922fcfa3d6e7ab13ffc8c1c18577).
 In this second edition of the tutorial, I’ll postpone the shading of the model a bit. First, we will dive into some mathematics necessary for camera handling.
 
+## Homework assignment
+
+Right now there is a very rudimentrary implementation of `vec3` class in the repository:
+
+??? example "Rudimentary vec3 class"
+    ```cpp linenums="1"
+    --8<-- "z-buffer/geometry.h"
+    ```
+
+For the moment `vec3` is only used to store triplets of `double`, but very soon we will need to add and subtract vectors, compute dot products and so on.
+So, here is a homework assignment: implement `vec2`, `vec3` and `vec4` classes with basic vector operations.
+Moreover, we will need small matrices (up to 4x4 maximum) and basic operations (mainly, multiplication, transposition and inversion).
+It is handy to be able to invert any square matrix, but 3x3 inversion may suffice if you do not wish implement a generic inversion.
+
 --8<-- "comments.html"
 

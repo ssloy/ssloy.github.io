@@ -60,6 +60,7 @@ nav:
         - 'tinyrenderer/rasterization.md'
         - 'tinyrenderer/barycentric.md'
         - 'tinyrenderer/z-buffer.md'
+#        - 'tinyrenderer/camera.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
