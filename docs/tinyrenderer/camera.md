@@ -1,45 +1,22 @@
 ---
-title: Camera handling
+title: Better camera
 ---
 
-# Camera handling
-
-## Rotating the camera
-
-[![](camera/head-front.png)](camera/head-front.png)
-
-[![](camera/head-rot.png)](camera/head-rot.png)
-
-## Central projection
-
-![](camera/persp-a.svg)
-
-![](camera/persp-b.svg)
-
-![](camera/persp-c.svg)
-
-
-[![](camera/head-persp.png)](camera/head-persp.png)
-
-## Exercise: find the bug
-
-[![](camera/diablo-bug.png)](camera/diablo-bug.png)
+# Better camera handling
 
 
 ## Change of basis in 3D space
 
-In Euclidean space, coordinates can be given by a point (the origin) and a basis. What does it mean that point P has coordinates (x,y,z) in the frame (O, i,j,k)? It means that the vector OP can be expressed as follows:
-
-
+In Euclidean space, coordinates can be given by a point (the origin) and a basis. What does it mean that point $P$ has coordinates $(x,y,z)$ in the frame $(O, \vec i,\vec j,\vec k)$?
+It means that the vector $\overrightarrow{OP}$ can be expressed as follows:
 
 $$
 \overrightarrow{OP} = \vec{i}x + \vec{j}y + \vec{k}z = \begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix}\begin{bmatrix}x \\ y \\ z\end{bmatrix}
 $$
 
-Now image that we have another frame (O', i',j',k'). How do we transform coordinates given in one frame to another? First of all let us note that since (i,j,k) and (i',j',k') are bases of 3D, there exists a (non degenerate) matrix M such that:
-
-
-
+Now image that we have another frame $(O', \vec i',\vec j',\vec k')$.
+How do we transform coordinates given in one frame to another?
+First of all let us note that since $(\vec i,\vec j,\vec k)$ and $(\vec i', \vec j',\vec k')$ are bases of 3D, there exists a (non degenerate) matrix $M$ such that:
 
 $$
 \begin{bmatrix}\vec{i'} & \vec{j'} & \vec{k'}\end{bmatrix} =
@@ -86,6 +63,19 @@ $$
 
 
 ## Let us create our own gluLookAt
+
+Camera is defined via view parameters $\text{eye}$, $\text{center}$ and $\overrightarrow{\text{up}}$, measured in world space.
+It is located at  $\text{eye}$, pointing at $\text{center}$, with upward orientation towards $\overrightarrow{\text{up}}$.
+In camera space, the camera is located at the axis $\vec{k}$, pointing at the origin, and vector $\overrightarrow{\text{up}}$ is vertical.
+
+
+In 3D graphics, we position the camera onto the world space by specifying three view parameters: EYE, AT and UP, in world space.
+
+The point EYE (ex, ey, ez) defines the location of the camera.
+The vector AT (ax, ay, az) denotes the direction where the camera is aiming at, usually at the center of the world or an object.
+The vector UP (ux, uy, uz) denotes the upward orientation of the camera roughly. UP is typically coincided with the y-axis of the world space. UP is roughly orthogonal to AT, but not necessary. As UP and AT define a plane, we can construct an orthogonal vector to AT in the camera space.
+
+
 
 OpenGL and, as a consequence, our tiny renderer are able to draw scenes only with the camera located on the z-axis. If we want to move the camera, no problem, we can move all the scene, leaving the camera immobile.
 
