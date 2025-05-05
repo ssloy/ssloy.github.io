@@ -81,6 +81,8 @@ Here is the resulting image ([see commit](https://github.com/ssloy/tinyrenderer/
 
 [![](camera-naive/head-persp.png)](camera-naive/head-persp.png)
 
+Personally I find it much more convincing than the previous one made with an orthographic projection.
+
 If this is unclear, consider the following 2D example.
 Suppose we have a polygon with vertices:
 $(2,0)$, $(0,2)$, $(-2, 2)$, $(-2,-2)$, and $(2,-2)$:

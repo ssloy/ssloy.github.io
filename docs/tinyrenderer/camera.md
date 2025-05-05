@@ -4,6 +4,21 @@ title: Better camera
 
 # Better camera handling
 
+In the previous chapter we have chained three different transformations to the 3D object to simulate a camera:
+
+```cpp
+auto [ax, ay, az] = project(persp(rot(model.vert(i, 0))));
+auto [bx, by, bz] = project(persp(rot(model.vert(i, 1))));
+auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
+```
+
+All three transformations are encoded by very different functions, let us see if we can unify the treatment.
+
+## Affine transformations
+
+Affine transformations are fundamental in computer graphics because they provide a structured, efficient, and mathematically consistent way to manipulate objects in a 2D or 3D space.
+
+
 
 ## Change of basis in 3D space
 
