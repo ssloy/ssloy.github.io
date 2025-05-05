@@ -13,10 +13,51 @@ auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
 All three transformations are encoded by very different functions, let us see if we can unify the treatment.
+Essentially we want to position, orient, and size objects in a scene,
+and it turns out that affine transformations cover translation, rotation, and scaling, so let us focus on those.
 
-## Affine transformations
+## A primer on affine transformations
 
-Affine transformations are fundamental in computer graphics because they provide a structured, efficient, and mathematically consistent way to manipulate objects in a 2D or 3D space.
+Formally, in $\mathbb R^n$, an affine transformation $T$ has form $T(\vec x)=A\vec x+\vec b$,
+where $\vec x$ is a vector (or a point), $A$ is a $n\times n$ representing a linear transformation (like rotation, scaling, or shear),
+and $\vec b$ is a translation vector.
+
+Note affine transformations are more general than linear
+
+, that linear transformation is a special case of an affine transformation where $\vec b = \vec 0$.
+It always maps the origin to the origin, since $A \vec 0 = \vec 0$. But in graphics, we often need to move (translate) things - hence affine transformations are more general and more useful.
+Thus, a transformation like rotation or scaling in 3D can be represented with a $3\times 3$ matrix, and a 3D vector captures the translation.
+
+It turns out that with a small trick we can express all transformations (including translation) by a single matrix:
+
+This matrix captures the entire transformation and is easy to store and manipulate.
+
+$$
+\begin{bmatrix}
+T(\vec{x}) \\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+A & \vec{b} \\
+\vec{0}^\top & 1
+\end{bmatrix}
+\begin{bmatrix}
+\vec{x} \\
+1
+\end{bmatrix}
+$$
+
+
+
+
+###  Homogeneous Coordinates
+
+In computer graphics, we **extend affine transformations into matrix form** using **homogeneous coordinates**, allowing all transformations (including translation) to be expressed as a single matrix:
+
+This is why we often use 3×3 matrices in 2D and 4×4 matrices in 3D graphics.
+
+
 
 
 
