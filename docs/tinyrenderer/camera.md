@@ -4,7 +4,7 @@ title: Better camera
 
 # Better camera handling
 
-In the previous chapter we have chained three different transformations to the 3D object to simulate a camera:
+In the [previous chapter](camera-naive.md) we have chained three different transformations to the 3D object to simulate a camera:
 
 ```cpp
 auto [ax, ay, az] = project(persp(rot(model.vert(i, 0))));
@@ -13,10 +13,56 @@ auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
 All three transformations are encoded by very different functions, let us see if we can unify the treatment.
-Essentially we want to position, orient, and size objects in a scene,
-and it turns out that affine transformations cover translation, rotation, and scaling, so let us focus on those.
+Essentially we want to position, orient, and size objects in a scene.
+Let us review two classes of transformations that will allow us to do that.
 
-## A primer on affine transformations
+## Linear transformations
+
+In computer graphics, everything you see - models, characters, cameras - is made of **points and vectors**.
+To animate, move, rotate, or resize them, we apply linear and affine transformations to their coordinates.
+
+A linear transformation is a mathematical way to reshape space using just multiplication — no bending, no shifting.
+In 1D, this is easy to imagine: multiplying a number by 2 stretches the space, and multiplying by -1 flips it.
+For example, the transformation $x \mapsto 2x$ doubles $x$, and $x \mapsto -x$ reflects it across zero.
+
+In 2D or 3D the same idea applies, but now we multiply a **vector** by a **matrix** instead of a single number.
+This matrix controls how space is scaled, rotated, or sheared.
+
+Formally, in $\mathbb R^n$, a linear transformation can be written as $\vec x \mapsto A\vec x$,
+where $\vec x$ is a vector (or a point), and $A$ is a $n\times n$ matrix.
+
+In 2D $A$ has for entries: $A = \begin{bmatrix}a&b\\c&d\end{bmatrix}$, so any 2D point $\begin{bmatrix}x\\y\end{bmatrix}$ is mapped to $\begin{bmatrix}ax+by\\cx+dy\end{bmatrix}$, since
+$\begin{bmatrix}a&b\\c&d\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix} = \begin{bmatrix}ax+by\\cx+dy\end{bmatrix}.$
+
+Let us see few examples.
+
+* **Identity:** The simplest 2D transformation is the identity:
+
+$$
+\begin{bmatrix}1&0\\0&1\end{bmatrix}
+\begin{bmatrix}x\\y\end{bmatrix} = \begin{bmatrix}x\\y\end{bmatrix}
+$$
+
+![](camera/identity.png)
+
+* **Scaling:**
+
+![](camera/scaling.png)
+
+![](camera/rotation.png)
+
+![](camera/shear.png)
+
+For example:
+
+* A **2D rotation matrix** spins points around the origin.
+* A **scaling matrix** stretches objects wider or taller.
+* A **shear matrix** slants shapes like melting jello.
+
+These transformations are called *linear* because they preserve straight lines and the origin.
+
+
+## Affine transformations
 
 Formally, in $\mathbb R^n$, an affine transformation $T$ has form $T(\vec x)=A\vec x+\vec b$,
 where $\vec x$ is a vector (or a point), $A$ is a $n\times n$ representing a linear transformation (like rotation, scaling, or shear),
