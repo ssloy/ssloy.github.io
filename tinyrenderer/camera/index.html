@@ -1,0 +1,1105 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/tinyrenderer/camera/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Better camera - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2afb09e1.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#better-camera-handling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Better camera
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    tinyrenderer
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            tinyrenderer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bresenham’s line drawing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Triangle rasterization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Barycentric coordinates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Hidden faces removal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Naive camera handling
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    tinycompiler
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            tinycompiler
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Abstract syntax trees
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLY: lexer and parser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Symbol tables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Displays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Assembly generation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIY lexer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DIY parser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Afterword
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    tinyoptimizer
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            tinyoptimizer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    mem2reg
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    strange things
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            strange things
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cursed fire or #define black magic
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#linear-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linear transformations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#affine-transformations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Affine transformations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Affine transformations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homogeneous-coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Homogeneous Coordinates
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-of-basis-in-3d-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      Change of basis in 3D space
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#let-us-create-our-own-glulookat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Let us create our own gluLookAt
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewport" class="md-nav__link">
+    <span class="md-ellipsis">
+      Viewport
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="better-camera-handling">Better camera handling</h1>
+<p>In the <a href="../camera-naive/">previous chapter</a> we have chained three different transformations to the 3D object to simulate a camera:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">ay</span><span class="p">,</span><span class="w"> </span><span class="n">az</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">(</span><span class="n">persp</span><span class="p">(</span><span class="n">rot</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">))));</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">bx</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="p">,</span><span class="w"> </span><span class="n">bz</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">(</span><span class="n">persp</span><span class="p">(</span><span class="n">rot</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">))));</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">cx</span><span class="p">,</span><span class="w"> </span><span class="n">cy</span><span class="p">,</span><span class="w"> </span><span class="n">cz</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">project</span><span class="p">(</span><span class="n">persp</span><span class="p">(</span><span class="n">rot</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">))));</span>
+</span></code></pre></div>
+<p>All three transformations are encoded by very different functions, let us see if we can unify the treatment.
+Essentially we want to position, orient, and size objects in a scene.
+Let us review two classes of transformations that will allow us to do that.</p>
+<h2 id="linear-transformations">Linear transformations</h2>
+<p>In computer graphics, everything you see - models, characters, cameras - is made of <strong>points and vectors</strong>.
+To animate, move, rotate, or resize them, we apply linear and affine transformations to their coordinates.</p>
+<p>A linear transformation is a mathematical way to reshape space using just multiplication — no bending, no shifting.
+In 1D, this is easy to imagine: multiplying a number by 2 stretches the space, and multiplying by -1 flips it.
+For example, the transformation <span class="arithmatex">\(x \mapsto 2x\)</span> doubles <span class="arithmatex">\(x\)</span>, and <span class="arithmatex">\(x \mapsto -x\)</span> reflects it across zero.</p>
+<p>In 2D or 3D the same idea applies, but now we multiply a <strong>vector</strong> by a <strong>matrix</strong> instead of a single number.
+This matrix controls how space is scaled, rotated, or sheared.</p>
+<p>Formally, in <span class="arithmatex">\(\mathbb R^n\)</span>, a linear transformation can be written as <span class="arithmatex">\(\vec x \mapsto A\vec x\)</span>,
+where <span class="arithmatex">\(\vec x\)</span> is a vector (or a point), and <span class="arithmatex">\(A\)</span> is a <span class="arithmatex">\(n\times n\)</span> matrix.</p>
+<p>In 2D <span class="arithmatex">\(A\)</span> has for entries: <span class="arithmatex">\(A = \begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}\)</span>, so any 2D point <span class="arithmatex">\(\begin{bmatrix}x\\y\end{bmatrix}\)</span> is mapped to <span class="arithmatex">\(\begin{bmatrix}ax+by\\cx+dy\end{bmatrix}\)</span>, since
+<span class="arithmatex">\(\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix} = \begin{bmatrix}ax+by\\cx+dy\end{bmatrix}.\)</span></p>
+<p>Let us see few examples.</p>
+<ul>
+<li><strong>Identity:</strong> The simplest 2D transformation is the identity:</li>
+</ul>
+<div class="arithmatex">\[
+\begin{bmatrix}1&amp;0\\0&amp;1\end{bmatrix}
+\begin{bmatrix}x\\y\end{bmatrix} = \begin{bmatrix}x\\y\end{bmatrix}
+\]</div>
+<p><img alt="" src="identity.png" /></p>
+<ul>
+<li><strong>Scaling:</strong></li>
+</ul>
+<p><img alt="" src="scaling.png" /></p>
+<p><img alt="" src="rotation.png" /></p>
+<p><img alt="" src="shear.png" /></p>
+<p>For example:</p>
+<ul>
+<li>A <strong>2D rotation matrix</strong> spins points around the origin.</li>
+<li>A <strong>scaling matrix</strong> stretches objects wider or taller.</li>
+<li>A <strong>shear matrix</strong> slants shapes like melting jello.</li>
+</ul>
+<p>These transformations are called <em>linear</em> because they preserve straight lines and the origin.</p>
+<h2 id="affine-transformations">Affine transformations</h2>
+<p>Formally, in <span class="arithmatex">\(\mathbb R^n\)</span>, an affine transformation <span class="arithmatex">\(T\)</span> has form <span class="arithmatex">\(T(\vec x)=A\vec x+\vec b\)</span>,
+where <span class="arithmatex">\(\vec x\)</span> is a vector (or a point), <span class="arithmatex">\(A\)</span> is a <span class="arithmatex">\(n\times n\)</span> representing a linear transformation (like rotation, scaling, or shear),
+and <span class="arithmatex">\(\vec b\)</span> is a translation vector.</p>
+<p>Note affine transformations are more general than linear</p>
+<p>, that linear transformation is a special case of an affine transformation where <span class="arithmatex">\(\vec b = \vec 0\)</span>.
+It always maps the origin to the origin, since <span class="arithmatex">\(A \vec 0 = \vec 0\)</span>. But in graphics, we often need to move (translate) things - hence affine transformations are more general and more useful.
+Thus, a transformation like rotation or scaling in 3D can be represented with a <span class="arithmatex">\(3\times 3\)</span> matrix, and a 3D vector captures the translation.</p>
+<p>It turns out that with a small trick we can express all transformations (including translation) by a single matrix:</p>
+<p>This matrix captures the entire transformation and is easy to store and manipulate.</p>
+<div class="arithmatex">\[
+\begin{bmatrix}
+T(\vec{x}) \\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+A &amp; \vec{b} \\
+\vec{0}^\top &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+\vec{x} \\
+1
+\end{bmatrix}
+\]</div>
+<h3 id="homogeneous-coordinates">Homogeneous Coordinates</h3>
+<p>In computer graphics, we <strong>extend affine transformations into matrix form</strong> using <strong>homogeneous coordinates</strong>, allowing all transformations (including translation) to be expressed as a single matrix:</p>
+<p>This is why we often use 3×3 matrices in 2D and 4×4 matrices in 3D graphics.</p>
+<h2 id="change-of-basis-in-3d-space">Change of basis in 3D space</h2>
+<p>In Euclidean space, coordinates can be given by a point (the origin) and a basis. What does it mean that point <span class="arithmatex">\(P\)</span> has coordinates <span class="arithmatex">\((x,y,z)\)</span> in the frame <span class="arithmatex">\((O, \vec i,\vec j,\vec k)\)</span>?
+It means that the vector <span class="arithmatex">\(\overrightarrow{OP}\)</span> can be expressed as follows:</p>
+<div class="arithmatex">\[
+\overrightarrow{OP} = \vec{i}x + \vec{j}y + \vec{k}z = \begin{bmatrix}\vec{i} &amp; \vec{j} &amp; \vec{k}\end{bmatrix}\begin{bmatrix}x \\ y \\ z\end{bmatrix}
+\]</div>
+<p>Now image that we have another frame <span class="arithmatex">\((O', \vec i',\vec j',\vec k')\)</span>.
+How do we transform coordinates given in one frame to another?
+First of all let us note that since <span class="arithmatex">\((\vec i,\vec j,\vec k)\)</span> and <span class="arithmatex">\((\vec i', \vec j',\vec k')\)</span> are bases of 3D, there exists a (non degenerate) matrix <span class="arithmatex">\(M\)</span> such that:</p>
+<div class="arithmatex">\[
+\begin{bmatrix}\vec{i'} &amp; \vec{j'} &amp; \vec{k'}\end{bmatrix} =
+\begin{bmatrix}\vec{i} &amp; \vec{j} &amp; \vec{k}\end{bmatrix} \times M
+\]</div>
+<p>Let us draw an illustration:</p>
+<p><img alt="" src="basis_change.svg" /></p>
+<p>Then let us re-express the vector OP:</p>
+<div class="arithmatex">\[
+\overrightarrow{OP} = \overrightarrow{OO'} + \overrightarrow{O'P} = 
+\begin{bmatrix}\vec{i} &amp; \vec{j} &amp; \vec{k}\end{bmatrix}
+\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
+\begin{bmatrix}\vec{i'} &amp; \vec{j'} &amp; \vec{k'}\end{bmatrix} 
+\begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} 
+\]</div>
+<p>Now let us substitute (i',j',k') in the right part with the change of basis matrix:</p>
+<div class="arithmatex">\[
+\overrightarrow{OP} =
+\begin{bmatrix}\vec{i} &amp; \vec{j} &amp; \vec{k}\end{bmatrix}\left(
+\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
+ M \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} \right)
+\]</div>
+<p>And it gives us the formula to transform coordinates from one frame to another:</p>
+<div class="arithmatex">\[
+ \begin{bmatrix}x \\ y \\ z\end{bmatrix} = 
+\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
+ M \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} 
+ \qquad\Rightarrow\qquad
+ \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix}  =
+M^{-1}\left( \begin{bmatrix}x \\ y \\ z\end{bmatrix} - \begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix}\right)
+\]</div>
+<h2 id="let-us-create-our-own-glulookat">Let us create our own gluLookAt</h2>
+<p>Camera is defined via view parameters <span class="arithmatex">\(\text{eye}\)</span>, <span class="arithmatex">\(\text{center}\)</span> and <span class="arithmatex">\(\overrightarrow{\text{up}}\)</span>, measured in world space.
+It is located at  <span class="arithmatex">\(\text{eye}\)</span>, pointing at <span class="arithmatex">\(\text{center}\)</span>, with upward orientation towards <span class="arithmatex">\(\overrightarrow{\text{up}}\)</span>.
+In camera space, the camera is located at the axis <span class="arithmatex">\(\vec{k}\)</span>, pointing at the origin, and vector <span class="arithmatex">\(\overrightarrow{\text{up}}\)</span> is vertical.</p>
+<p>In 3D graphics, we position the camera onto the world space by specifying three view parameters: EYE, AT and UP, in world space.</p>
+<p>The point EYE (ex, ey, ez) defines the location of the camera.
+The vector AT (ax, ay, az) denotes the direction where the camera is aiming at, usually at the center of the world or an object.
+The vector UP (ux, uy, uz) denotes the upward orientation of the camera roughly. UP is typically coincided with the y-axis of the world space. UP is roughly orthogonal to AT, but not necessary. As UP and AT define a plane, we can construct an orthogonal vector to AT in the camera space.</p>
+<p>OpenGL and, as a consequence, our tiny renderer are able to draw scenes only with the camera located on the z-axis. If we want to move the camera, no problem, we can move all the scene, leaving the camera immobile.</p>
+<p>Let us put the problem this way: we want to draw a scene with a camera situated in point e (eye), the camera should be pointed to the point c (center) in such way that a given vector u (up) is to be vertical in the final render.</p>
+<p>Here is an illustration:</p>
+<p><img alt="" src="glulookat.svg" /></p>
+<p>It means that we want to do the rendering in the frame (c, x',y',z'). But then our model is given in the frame (O, x,y,z)... No problem, all we need is to compute the transformation of the coordinates. Here is a C++ code computing the necessary 4x4 matrix ModelView:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">lookat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vec3</span><span class="w"> </span><span class="n">eye</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vec3</span><span class="w"> </span><span class="n">center</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vec3</span><span class="w"> </span><span class="n">up</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">vec3</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalized</span><span class="p">(</span><span class="n">center</span><span class="o">-</span><span class="n">eye</span><span class="p">);</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">vec3</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalized</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">up</span><span class="p">,</span><span class="n">z</span><span class="p">));</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">vec3</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normalized</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">));</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">ModelView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">{{{</span><span class="n">x</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">.</span><span class="n">z</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">y</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">y</span><span class="p">.</span><span class="n">z</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="n">z</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">.</span><span class="n">z</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">}}}</span><span class="w"> </span><span class="o">*</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">                </span><span class="n">mat</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">{{{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">eye</span><span class="p">.</span><span class="n">x</span><span class="p">},</span><span class="w">  </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">eye</span><span class="p">.</span><span class="n">y</span><span class="p">},</span><span class="w">  </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="n">eye</span><span class="p">.</span><span class="n">z</span><span class="p">},</span><span class="w">  </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">}}};</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Note that z' is given by the vector ce (do not forget to normalize it, it helps later). How do we compute x'? Simply by a cross product between u and z'. Then we compute y', such that it is orthogonal to already calculated x' and z' (let me remind you that in our problem settings ce and u are not necessarily orthogonal). The very last step is a translation of the origin to the point of viewer e and our transformation matrix is ready. Now it suffices to get any point with coordinates (x,y,z,1) in the model frame, multiply it by the matrix ModelView and we get the coordinates in the camera frame! By the way, the name ModelView comes from OpenGL terminology.</p>
+<h2 id="viewport">Viewport</h2>
+<div class="arithmatex">\[
+\begin{bmatrix}\frac{w}{2}&amp;0&amp;0&amp;x+\frac{w}{2} \\ 0&amp;\frac{h}{2}&amp;0&amp;y+\frac{h}{2}\\ 0&amp;0&amp;\frac{d}{2}&amp;\frac{d}{2}\\ 0 &amp;0 &amp;0&amp;1\end{bmatrix}
+\]</div>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">viewport</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">Viewport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{{</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="o">/</span><span class="mf">2.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="o">/</span><span class="mf">2.</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">}}};</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">projection</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">Projection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">-1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">-1</span><span class="o">/</span><span class="n">f</span><span class="p">,</span><span class="mi">0</span><span class="p">}}};</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
