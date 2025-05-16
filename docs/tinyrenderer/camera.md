@@ -4,7 +4,7 @@ title: Better camera
 
 # Better camera handling
 
-In the [previous chapter](camera-naive.md) we have chained three different transformations to the 3D object to simulate a camera:
+In the [previous chapter](camera-naive.md) we have chained three different transformations to the 3D object in order to simulate a camera:
 
 ```cpp
 auto [ax, ay, az] = project(persp(rot(model.vert(i, 0))));
@@ -13,8 +13,14 @@ auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
 All three transformations are encoded by very different functions, let us see if we can unify the treatment.
-Essentially we want to position, orient, and size objects in a scene.
+The idea is to ensure the **composability**: in the above code each 3D vertex is transformed three times.
+If we could find the way to pre-compose the transformations and transform the data array just one time, it would allow us to
+avoid re-computing intermediate results, resulting in faster batch processing of geometry.
+
+Essentially we want to position, orient, and size objects in a scene, and multiple such transformations can be combined into a single one.
 Let us review two classes of transformations that will allow us to do that.
+
+-----------
 
 ## Linear transformations
 
@@ -27,7 +33,6 @@ For example, the transformation $x \mapsto 2x$ doubles $x$, and $x \mapsto -x$ r
 
 In 2D or 3D the same idea applies, but now we multiply a **vector** by a **matrix** instead of a single number.
 This matrix controls how space is scaled, rotated, or sheared.
-
 Formally, in $\mathbb R^n$, a linear transformation can be written as $\vec x \mapsto A\vec x$,
 where $\vec x$ is a vector (or a point), and $A$ is a $n\times n$ matrix.
 
@@ -36,47 +41,114 @@ $\begin{bmatrix}a&b\\c&d\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix} = \begin{b
 
 Let us see few examples.
 
-* **Identity:** The simplest 2D transformation is the identity:
+-----------
+
+### Identity
+The simplest 2D transformation is the identity:
 
 $$
 \begin{bmatrix}1&0\\0&1\end{bmatrix}
 \begin{bmatrix}x\\y\end{bmatrix} = \begin{bmatrix}x\\y\end{bmatrix}
 $$
 
+Here is an illustration: I took a colored 2D plane (an image), and applied the identity transformation to every point of the plane.
+Without any surprise the image is unchanged.
+
 ![](camera/identity.png)
 
-* **Scaling:**
+-----------
+
+### Scaling
+
+A scaling matrix stretches objects wider or taller.
+For example, $\begin{bmatrix} 2 & 0 \\ 0 & 1/2 \end{bmatrix}$ stretches the x-axis by 2 and squishes the y-axis by $1/2$.
+In fact, this matrix performs simple 1D multiplication to the coordinates independently one from another.
+
 
 ![](camera/scaling.png)
 
+-----------
+
+### Rotation
+
+A 2D rotation matrix $\begin{bmatrix} \cos\theta & -\sin\theta \\  \sin\theta & \cos\theta  \end{bmatrix}$ rotates a point counterclockwise by angle $\theta$ around the orgin.
+If we take $\theta = 90°$, the matrix becomes $\begin{bmatrix} 0 & -1 \\  1 & 0 \end{bmatrix}$,
+so any 2D point $\begin{bmatrix}x\\y\end{bmatrix}$ is mapped to $\begin{bmatrix}-y\\x\end{bmatrix}$, as it can be seen in this illustration:
+
+
 ![](camera/rotation.png)
+
+-----------
+
+### Shear
+
+A shear matrix slants shapes like melting jello.
+For example, $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$
+  slants shapes horizontally, like tilting a rectangle into a parallelogram.
+
 
 ![](camera/shear.png)
 
-For example:
+-----------
 
-* A **2D rotation matrix** spins points around the origin.
-* A **scaling matrix** stretches objects wider or taller.
-* A **shear matrix** slants shapes like melting jello.
+These transformations are called linear because they preserve straight lines and keep the origin fixed.
+Linear transformations have compact representation: a transformation like rotation or scaling in 3D can be represented with a small square matrix.
+Moreover, we have the composability we were looking for. 
+Suppose we have three different transformations $A_1, A_2$ and $A_3$ to be chained on every vertex $\vec x_i$ of the scene (i.e. to compute $A_3 \times A_2 \times A_1 \times \vec x_i$).
+Note that the multiplication is associative, i.e. $A_3 \times (A_2 \times (A_1 \times \vec x_i)) = ((A_3 \times A_2) \times A_1) \times \vec x_i$,
+therefore, we can precompute $A = A_3\times A_2 \times A_1$ and apply the matrix $A$ directly to the vertices by computing the product $A\times \vec x_i$.
 
-These transformations are called *linear* because they preserve straight lines and the origin.
 
+
+-----------
 
 ## Affine transformations
 
+Note that linear transformations always map the origin to the origin, since $A \vec 0 = \vec 0$.
+But in graphics, we often need to move (translate) things - hence affine transformations are more general and more useful.
+
+
 Formally, in $\mathbb R^n$, an affine transformation $T$ has form $T(\vec x)=A\vec x+\vec b$,
-where $\vec x$ is a vector (or a point), $A$ is a $n\times n$ representing a linear transformation (like rotation, scaling, or shear),
+where $\vec x$ is a vector (or a point), $A$ is a $n\times n$ matrix representing a linear transformation (like rotation, scaling or shear),
 and $\vec b$ is a translation vector.
 
-Note affine transformations are more general than linear
+In 2D it looks like this:
 
-, that linear transformation is a special case of an affine transformation where $\vec b = \vec 0$.
-It always maps the origin to the origin, since $A \vec 0 = \vec 0$. But in graphics, we often need to move (translate) things - hence affine transformations are more general and more useful.
-Thus, a transformation like rotation or scaling in 3D can be represented with a $3\times 3$ matrix, and a 3D vector captures the translation.
+$$
+\begin{bmatrix}x\\y\end{bmatrix} \quad \mapsto \quad \begin{bmatrix}a&b\\c&d\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix} + \begin{bmatrix}e\\f\end{bmatrix} = \begin{bmatrix}ax+by+e\\cx+dy+f\end{bmatrix}
+$$
 
-It turns out that with a small trick we can express all transformations (including translation) by a single matrix:
 
-This matrix captures the entire transformation and is easy to store and manipulate.
+This expression is really cool.
+We can rotate, scale, shear and translate.
+However, let us recall that we are interested in composing multiple transformations. 
+Here is what a composition of two transformations looks like (remember, we need to compose dozens of those):
+
+<!--
+
+$$
+\vec x \mapsto
+A_2
+\left(A_1 \vec x + \vec b_1\right)
++\vec b_2
+$$
+
+-->
+
+$$
+\begin{bmatrix}x\\y\end{bmatrix} \quad \mapsto \quad \begin{bmatrix}a_2&b_2\\c_2&d_2\end{bmatrix}
+\left(\begin{bmatrix}a_1&b_1\\c_1&d_1\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix} + \begin{bmatrix}e_1\\f_1\end{bmatrix}\right)
++\begin{bmatrix}e_2\\f_2\end{bmatrix}
+$$
+
+It is starting to look ugly even for a single composition, add more and things get even worse.
+
+
+-----------
+
+##  Homogeneous Coordinates
+Okay, now it is the time for the black magic. Imagine that I add one column and one row to our transformation matrix (thus making it 3x3 for a 2D transformation and 4x4 for 3D) and append one coordinate always equal to 1 to our vector to be transformed:
+
 
 $$
 \begin{bmatrix}
@@ -95,14 +167,62 @@ A & \vec{b} \\
 $$
 
 
+Let us write it down explicitly for 2D:
 
+$$
+\begin{bmatrix}a&b&e\\c&d&f\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix} = \begin{bmatrix}ax+by+e\\cx+dy+f\\1\end{bmatrix}
+$$
 
-###  Homogeneous Coordinates
+This matrix captures the entire transformation and is easy to store and manipulate.
+If we multiply this matrix and the vector augmented by 1 we get another vector with 1 in the last component, but the other two components have exactly the shape we would like! Magic.
 
-In computer graphics, we **extend affine transformations into matrix form** using **homogeneous coordinates**, allowing all transformations (including translation) to be expressed as a single matrix:
+In fact, the idea is really simple. Translations are not linear in the 2D space. So we embed our 2D into 3D space (by simply adding 1 for the 3rd component).
+It means that our 2D space is the plane $z=1$ in the 3D space. Then we perform a linear 3D transformation and project the result onto our 2D physical plane. 
+How do we project 3D back onto the 2D plane? Simply by dividing by the third component:
 
+$$
+\begin{bmatrix}x\\ y\\ z\end{bmatrix} \quad \mapsto \quad \begin{bmatrix}x/z \\ y/z\end{bmatrix}
+$$
+
+In the above example the 3rd component is always 1 independently from $A$ and $\vec b$, but very soon we will meet other cases.
+In fact, we have just used **homogeneous coordinates**.
+They are called *homogeneous* because of the way they use ratios of coordinates that remain consistent under scaling - a key idea from projective geometry.
+
+In the process I described, a point $(x, y)$ in Cartesian coordinates becomes $(x, y, 1)$ in homogeneous coordinates.
+More generally, a 2D point $(x, y)$ is represented as:
+
+$$
+(x, y) \quad \mapsto \quad (wx, wy, w)
+$$
+
+where $w \ne 0$, and the point in Cartesian coordinates is recovered by:
+
+$$
+\left(\frac{wx}{w}, \frac{wy}{w}\right) = (x, y)
+$$
+
+So any scalar multiple of $(x, y, 1)$ — like $(2x, 2y, 2)$, or $(5x, 5y, 5)$ — represents the same point in the plane. That's the essence of homogeneity different triples represent the same point because they are all scalar multiples.
+
+In computer graphics, we extend affine transformations into matrix form using homogeneous coordinates allowing all transformations (including translation) to be expressed as a single matrix.
 This is why we often use 3×3 matrices in 2D and 4×4 matrices in 3D graphics.
+While being strange at the first sight, the approach is very straightforward, and it offers two serious advantages:
 
+1. **Translation becomes matrix multiplication.**
+   Affine transformations (like translation) are not linear in Cartesian coordinates but are linear in homogeneous coordinates, thus allowing for the composability we were looking for.
+2. **Enables perspective projection.**
+   Homogeneous coordinates naturally handle perspective division, which is key for realistic rendering of 3D scenes (we will revisit it shortly).
+   Therefore, all camera handling (rotation, scaling, translation, projection) can be done within the same consistent framework.
+
+
+## Chain of coordinate transformations
+
+So, let us sum up.
+Our models (characters, for example) are created in their own local frame (**object coordinates**).
+They are placed into a scene expressed in **world coordinates**.
+The transformation from one to another is made with matrix **Model**.
+Then, we want to express it in the camera frame (**eye coordinates**), the transformation is called **View**.
+Then, we deform the scene to create a perspective deformation with **Projection** matrix, this matrix transforms the scene to so-called clip coordinates.
+Finally, we draw the scene, and the matrix transforming clip coordinates to the screen coordinates is called Viewport.
 
 
 
