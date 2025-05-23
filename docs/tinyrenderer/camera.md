@@ -249,7 +249,7 @@ Basically, we want to compute `Viewport`, `Perspective` and `ModelView` $4\times
 mat<4,4> ModelView, Viewport, Perspective;
 ```
 
-## Viewport
+### Viewport
 
 The easiest one is the viewport transform that scales the scene to the size of the screen. Last time it was defined as follows:
 
@@ -264,11 +264,22 @@ std::tuple<int,int,int> project(vec3 v) { // First of all, (x,y) is an orthogona
 In fact, it is a by-hand computation of the following matrix multiplication:
 
 $$
-\begin{bmatrix}\frac{w}{2}&0&0&\frac{w}{2} \\ 0&\frac{h}{2}&0&\frac{h}{2}\\ 0&0&\frac{255}{2}&\frac{255}{2}\\ 0 &0 &0&1\end{bmatrix}
+\begin{bmatrix}\frac{\text{width}}{2}&0&0&\frac{\text{height}}{2} \\ 0&\frac{\text{height}}{2}&0&\frac{\text{height}}{2}\\ 0&0&\frac{255}{2}&\frac{255}{2}\\ 0 &0 &0&1\end{bmatrix}
 \begin{bmatrix}v_x \\ v_y \\ v_z \\ 1\end{bmatrix}
 $$
 
-Once again, this function maps $[-1..1]$ range in the clip coordinates (re-check the transformation chain in the beginning of this chaper) to the entire screen
+Once again, this function maps $[-1..1]$ range in clip coordinates (re-check the transformation chain in the beginning of this chaper) to the entire screen.
+In addition to that, it maps $[-1..1]$ range of $z$ coordinates to $[0..255]$ that I used for debugging of the $z$-buffer.
+For the rest of the series I'll use following viewport matrix:
+
+$$
+\begin{bmatrix}\frac{w}{2}&0&0&x+\frac{w}{2} \\ 0&\frac{h}{2}&0&y+\frac{h}{2}\\ 0&0&1&0\\ 0 &0 &0&1\end{bmatrix}
+$$
+
+I do not need anymore to re-map $z$-values to grayscale colors, so I leave it them as is.
+In addition to that, $[-1..1] \times [-1..1]$ range in clip coordinates is not mapped to the entire screen anymore,
+but rather to a window described by its top left corner $(x,y)$ and $(w,h)$ being the size of the window.
+In my code, I setup the $4\times 4$ `Viewport` matrix with the following function:
 
 ```cpp
 void viewport(const int x, const int y, const int w, const int h) {
@@ -276,6 +287,39 @@ void viewport(const int x, const int y, const int w, const int h) {
 }
 ```
 
+### Perspective deformation
+
+In the last chapter we saw that we can decompose a central projection into a perspective deformation of the space followed by an orthographic projection.
+For a camera located at $(0, 0, f)$ on the $z$-axis the perspective deformation can be computed as follows:
+
+```cpp
+vec3 persp(vec3 v) {
+    constexpr double f = 3.;
+    return v / (1-v.z/f);
+}
+```
+
+This computation may be formulated in a matrix way in homogeneous coordinates.
+For a 3D point $(v_x, v_y, v_z)$, we embed it into 4D by adding 1 as the last coordinate: $(v_x, v_y, v_z, 1)$.
+Next, we multiply it with the perspective matrix, getting again a 4D point.
+Finally, we re-project (do not confond with the projection to the screen) the result to 3D by dividing by the last coordinate.
+Here is the computation flow for the above function:
+
+$$
+\begin{bmatrix}v_x \\ v_y \\ v_z \end{bmatrix} \quad \mapsto \quad
+\begin{bmatrix}1&0&0& \\ 0&1&0&0\\ 0&0&1&0\\ 0 &0 &-\frac{1}{f}&1\end{bmatrix}
+\begin{bmatrix}v_x \\ v_y \\ v_z \\ 1\end{bmatrix}=
+\begin{bmatrix}v_x \\ v_y \\ v_z \\ 1-\frac{v_z}{f}\end{bmatrix}
+\quad \mapsto \quad \frac{1}{ 1-\frac{v_z}{f}}\begin{bmatrix}v_x \\ v_y \\ v_z \end{bmatrix}
+$$
+
+So, I setup the $4\times 4$ `Perspective` matrix located at the $z$-axis with focal distance $f$ using the following function:
+
+```cpp
+void perspective(const double f) {
+    Perspective = {{{1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0, -1/f,1}}};
+}
+```
 
 
 ## Chain of coordinate transformations
@@ -387,12 +431,6 @@ void lookat(const vec3 eye, const vec3 center, const vec3 up) {
 Note that z' is given by the vector ce (do not forget to normalize it, it helps later). How do we compute x'? Simply by a cross product between u and z'. Then we compute y', such that it is orthogonal to already calculated x' and z' (let me remind you that in our problem settings ce and u are not necessarily orthogonal). The very last step is a translation of the origin to the point of viewer e and our transformation matrix is ready. Now it suffices to get any point with coordinates (x,y,z,1) in the model frame, multiply it by the matrix ModelView and we get the coordinates in the camera frame! By the way, the name ModelView comes from OpenGL terminology.
 
 
-
-```cpp
-void perspective(const double f) {
-    Perspective = {{{1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0, -1/f,1}}};
-}
-```
 
 ??? example "Camera handling"
     ```cpp linenums="1" hl_lines="7 26-27 59-61 72"
