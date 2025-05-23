@@ -4,6 +4,8 @@ title: Better camera
 
 # Better camera handling
 
+## Chain of coordinate transformations
+
 In the [previous chapter](camera-naive.md) we have chained three different transformations to the 3D object in order to simulate a camera:
 
 ```cpp
@@ -12,7 +14,24 @@ auto [bx, by, bz] = project(persp(rot(model.vert(i, 1))));
 auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
-All three transformations are encoded by very different functions, let us see if we can unify the treatment.
+Such a chain of transformations is a perfectly normal phenomenon, and usually the chain is even a bit longer.
+Typically,
+
+1. Objects (characters, for example) are modelled in their own local frame (object coordinates).
+2. Then they are placed into a scene (world coordinates).
+3. Next, we want to express the scene in the camera frame (eye coordinates).
+4. Then, we [deform the scene](camera-naive.md) to create a perspective deformation (clip coordinates).
+5. Finally, to draw the scene on the screen, we transform clip coordinates to the screen coordinates.
+
+In total, we have 5 coordinate frames with 4 transformations between them.
+If we read a 3D vertex `v` from the .obj file, then to draw it on the screen it undergoes the following chain of transformations:
+
+```
+Viewport(Perspective(View(Model(v)))).
+
+```
+
+In the above code we have three transformations (I have skipped `Model`) encoded by very different functions, let us see if we can unify the treatment.
 The idea is to ensure the **composability**: in the above code each 3D vertex is transformed three times.
 If we could find the way to pre-compose the transformations and transform the data array just one time, it would allow us to
 avoid re-computing intermediate results, resulting in faster batch processing of geometry.
@@ -213,6 +232,51 @@ While being strange at the first sight, the approach is very straightforward, an
    Homogeneous coordinates naturally handle perspective division, which is key for realistic rendering of 3D scenes (we will revisit it shortly).
    Therefore, all camera handling (rotation, scaling, translation, projection) can be done within the same consistent framework.
 
+## Putting it all together
+
+Recall that in the [previous chapter](camera-naive.md) we have chained three different transformations `project`, `persp` and `rot`:
+
+```cpp
+auto [ax, ay, az] = project(persp(rot(model.vert(i, 0))));
+auto [bx, by, bz] = project(persp(rot(model.vert(i, 1))));
+auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
+```
+
+Let us review them one at a time and see how we can replace it with a matrix version.
+Basically, we want to compute `Viewport`, `Perspective` and `ModelView` $4\times 4$ matrices.
+
+```cpp
+mat<4,4> ModelView, Viewport, Perspective;
+```
+
+## Viewport
+
+The easiest one is the viewport transform that scales the scene to the size of the screen. Last time it was defined as follows:
+
+```cpp
+std::tuple<int,int,int> project(vec3 v) { // First of all, (x,y) is an orthogonal projection of the vector (x,y,z).
+    return { (v.x + 1.) *  width/2,       // Second, since the input models are scaled to have fit in the [-1,1]^3 world coordinates,
+             (v.y + 1.) * height/2,       // we want to shift the vector (x,y) and then scale it to span the entire screen.
+             (v.z + 1.) *   255./2 };
+}
+```
+
+In fact, it is a by-hand computation of the following matrix multiplication:
+
+$$
+\begin{bmatrix}\frac{w}{2}&0&0&\frac{w}{2} \\ 0&\frac{h}{2}&0&\frac{h}{2}\\ 0&0&\frac{255}{2}&\frac{255}{2}\\ 0 &0 &0&1\end{bmatrix}
+\begin{bmatrix}v_x \\ v_y \\ v_z \\ 1\end{bmatrix}
+$$
+
+Once again, this function maps $[-1..1]$ range in the clip coordinates (re-check the transformation chain in the beginning of this chaper) to the entire screen
+
+```cpp
+void viewport(const int x, const int y, const int w, const int h) {
+    Viewport = {{{w/2., 0, 0, x+w/2.}, {0, h/2., 0, y+h/2.}, {0,0,1,0}, {0,0,0,1}}};
+}
+```
+
+
 
 ## Chain of coordinate transformations
 
@@ -312,35 +376,28 @@ It means that we want to do the rendering in the frame (c, x',y',z'). But then o
 
 ```cpp
 void lookat(const vec3 eye, const vec3 center, const vec3 up) {
-    vec3 z = normalized(center-eye);
-    vec3 x = normalized(cross(up,z));
-    vec3 y = normalized(cross(z, x));
-    ModelView = mat<4,4>{{{x.x,x.y,x.z,0}, {y.x,y.y,y.z,0}, {z.x,z.y,z.z,0}, {0,0,0,1}}} *
-                mat<4,4>{{{1,0,0,-eye.x},  {0,1,0,-eye.y},  {0,0,1,-eye.z},  {0,0,0,1}}};
+    vec3 k = normalized(eye-center);
+    vec3 i = normalized(cross(up,k));
+    vec3 j = normalized(cross(k, i));
+    ModelView = mat<4,4>{{{i.x,i.y,i.z,0}, {j.x,j.y,j.z,0}, {k.x,k.y,k.z,0}, {0,0,0,1}}} *
+                mat<4,4>{{{1,0,0,-center.x}, {0,1,0,-center.y}, {0,0,1,-center.z}, {0,0,0,1}}};
 }
 ```
 
 Note that z' is given by the vector ce (do not forget to normalize it, it helps later). How do we compute x'? Simply by a cross product between u and z'. Then we compute y', such that it is orthogonal to already calculated x' and z' (let me remind you that in our problem settings ce and u are not necessarily orthogonal). The very last step is a translation of the origin to the point of viewer e and our transformation matrix is ready. Now it suffices to get any point with coordinates (x,y,z,1) in the model frame, multiply it by the matrix ModelView and we get the coordinates in the camera frame! By the way, the name ModelView comes from OpenGL terminology.
 
 
-## Viewport
-
-$$
-\begin{bmatrix}\frac{w}{2}&0&0&x+\frac{w}{2} \\ 0&\frac{h}{2}&0&y+\frac{h}{2}\\ 0&0&\frac{d}{2}&\frac{d}{2}\\ 0 &0 &0&1\end{bmatrix}
-$$
-
 
 ```cpp
-void viewport(const int x, const int y, const int w, const int h) {
-    Viewport = {{{w/2., 0, 0, x+w/2.}, {0, h/2., 0, y+h/2.}, {0,0,1,0}, {0,0,0,1}}};
+void perspective(const double f) {
+    Perspective = {{{1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0, -1/f,1}}};
 }
 ```
 
-```cpp
-void projection(const double f) {
-    Projection = {{{1,0,0,0}, {0,-1,0,0}, {0,0,1,0}, {0,0,-1/f,0}}};
-}
-```
+??? example "Camera handling"
+    ```cpp linenums="1" hl_lines="7 26-27 59-61 72"
+    --8<-- "camera/main.cpp"
+    ```
 
 
 
