@@ -6,7 +6,7 @@ title: Better camera
 
 ## Chain of coordinate transformations
 
-In the [previous chapter](camera-naive.md) we have chained three different transformations to the 3D object in order to simulate a camera:
+In the [previous chapter](camera-naive.md), we chained three different transformations to the 3D object to simulate a camera:
 
 ```cpp
 auto [ax, ay, az] = project(persp(rot(model.vert(i, 0))));
@@ -14,30 +14,26 @@ auto [bx, by, bz] = project(persp(rot(model.vert(i, 1))));
 auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
-Such a chain of transformations is a perfectly normal phenomenon, and usually the chain is even a bit longer.
-Typically,
+Such a transformation chain is standard practice, and usually, it's even longer. Typically:
 
-1. Objects (characters, for example) are modelled in their own local frame (object coordinates).
-2. Then they are placed into a scene (world coordinates).
-3. Next, we want to express the scene in the camera frame (eye coordinates).
-4. Then, we [deform the scene](camera-naive.md) to create a perspective deformation (clip coordinates).
-5. Finally, to draw the scene on the screen, we transform clip coordinates to the screen coordinates.
 
-In total, we have 5 coordinate frames with 4 transformations between them.
-If we read a 3D vertex `v` from the .obj file, then to draw it on the screen it undergoes the following chain of transformations:
+1. Objects (e.g., characters) are modeled in their own local frame (object coordinates).
+2. They're then placed into a scene (world coordinates).
+3. The scene is expressed in the camera frame (eye coordinates).
+4. We [deform the scene](camera-naive.md) to apply a perspective transformation (clip coordinates).
+5. Finally, to render on screen, we convert clip coordinates to screen coordinates.
+
+In total, we use five coordinate systems connected by four transformations. When a 3D vertex `v` is read from a `.obj` file, the rendering pipeline applies this transformation chain:
 
 ```
 Viewport(Perspective(View(Model(v)))).
 
 ```
 
-In the above code we have three transformations (I have skipped `Model`) encoded by very different functions, let us see if we can unify the treatment.
-The idea is to ensure the **composability**: in the above code each 3D vertex is transformed three times.
-If we could find the way to pre-compose the transformations and transform the data array just one time, it would allow us to
-avoid re-computing intermediate results, resulting in faster batch processing of geometry.
+In the code above, we see three transformations (with `Model` omitted) handled by different functions. Our goal is to unify and compose them. Instead of applying three separate transformations to each vertex, we aim to pre-compose them into one, allowing for faster batch processing of geometry.
 
-Essentially we want to position, orient, and size objects in a scene, and multiple such transformations can be combined into a single one.
-Let us review two classes of transformations that will allow us to do that.
+Ultimately, we want to position, orient, and scale objects in a scene using composable transformations. Let’s examine two classes of transformations that support this goal.
+
 
 -----------
 
@@ -232,6 +228,8 @@ While being strange at the first sight, the approach is very straightforward, an
    Homogeneous coordinates naturally handle perspective division, which is key for realistic rendering of 3D scenes (we will revisit it shortly).
    Therefore, all camera handling (rotation, scaling, translation, projection) can be done within the same consistent framework.
 
+-----------
+
 ## Putting it all together
 
 Recall that in the [previous chapter](camera-naive.md) we have chained three different transformations `project`, `persp` and `rot`:
@@ -243,7 +241,7 @@ auto [cx, cy, cz] = project(persp(rot(model.vert(i, 2))));
 ```
 
 Let us review them one at a time and see how we can replace it with a matrix version.
-Basically, we want to compute `Viewport`, `Perspective` and `ModelView` $4\times 4$ matrices.
+Basically, we want to compute three $4\times 4$ matrices `Viewport`, `Perspective` and `ModelView`:
 
 ```cpp
 mat<4,4> ModelView, Viewport, Perspective;
@@ -290,7 +288,7 @@ void viewport(const int x, const int y, const int w, const int h) {
 ### Perspective deformation
 
 In the last chapter we saw that we can decompose a central projection into a perspective deformation of the space followed by an orthographic projection.
-For a camera located at $(0, 0, f)$ on the $z$-axis the perspective deformation can be computed as follows:
+For a camera with focal length $f$ located on the $z$-axis, the perspective deformation can be computed as follows:
 
 ```cpp
 vec3 persp(vec3 v) {
@@ -321,22 +319,51 @@ void perspective(const double f) {
 }
 ```
 
+### ModelView
 
-## Chain of coordinate transformations
+In the last chapter I have simply rotated the scene to simulate a camera movement.
+Let us check a more handy way to describe a camera, inspired by [gluLookAt](https://registry.khronos.org/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml) function from the OpenGL Utility Library.
+GLU proposes to position the camera onto the world space by specifying three view parameters, two 3D points ($\text{eye}$ and $\text{center}$) and one 3D vector ($\overrightarrow{\text{up}}$),
+all three measured in world space.
 
-So, let us sum up.
-Our models (characters, for example) are created in their own local frame (**object coordinates**).
-They are placed into a scene expressed in **world coordinates**.
-The transformation from one to another is made with matrix **Model**.
-Then, we want to express it in the camera frame (**eye coordinates**), the transformation is called **View**.
-Then, we deform the scene to create a perspective deformation with **Projection** matrix, this matrix transforms the scene to so-called clip coordinates.
-Finally, we draw the scene, and the matrix transforming clip coordinates to the screen coordinates is called Viewport.
+* The point $\text{eye}$  defines the location of the camera.
+* The point $\text{center}$ denotes the direction where the camera is aiming at, usually at the center of the world or an object.
+* The vector $\overrightarrow{\text{up}}$ denotes roughly the upward orientation of the camera.
+
+Here is an illustration:
+
+![](camera/glulookat.svg)
+
+It means that we want to do the rendering in the frame $(\text{center}, \vec l, \vec m, \vec n)$,
+where $\vec l, \vec m$ and $\vec n$ are computed from the parameters $\text{eye}, \text{center}$ and $\overrightarrow{\text{up}}$.
+
+#### Build the camera frame
+
+Let us see how to compute three basis vectors $(\vec l, \vec m, \vec n)$, and then we will see how to compose the transformation matrix.
+First of all, our perspective deformation supposes that the eye lies on the $\vec n$ axis, therefore we can define $\vec n$ as:
+
+$$
+\vec n := \frac{\text{eye} - \text{center}}{||\text{eye} - \text{center}||}.
+$$
+
+Then, we want vector $\vec{\text{up}}$ vertical in the final projection. It means that $\vec l$ must be orthogonal to the plane spanned by $\vec{\text{up}}$ and $\vec n$.
+Therefore, we can compute $\vec l$ by a cross product between $\vec{\text{up}}$ and $\vec n$:
+
+$$
+\vec l := \frac{\vec{\text{up}} \times \vec n}{||\vec{\text{up}} \times \vec n||}.
+$$
 
 
+And then recover $\vec m$ such that it is orthogonal to already calculated $\vec l$ and $\vec n$ (recall that in our problem settings $\text{center} - \text{eye}$ and $\vec{\text{up}}$  are not necessarily orthogonal):
+
+$$
+\vec m := \frac{\vec{n} \times \vec l}{||\vec{n} \times \vec l||}.
+$$
 
 
-## Change of basis in 3D space
+#### Change of basis in 3D space
 
+Now we have computed the camera frame, we need a way to transform coordinates from the world frame to the camera frame.
 In Euclidean space, coordinates can be given by a point (the origin) and a basis. What does it mean that point $P$ has coordinates $(x,y,z)$ in the frame $(O, \vec i,\vec j,\vec k)$?
 It means that the vector $\overrightarrow{OP}$ can be expressed as follows:
 
@@ -344,12 +371,12 @@ $$
 \overrightarrow{OP} = \vec{i}x + \vec{j}y + \vec{k}z = \begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix}\begin{bmatrix}x \\ y \\ z\end{bmatrix}
 $$
 
-Now image that we have another frame $(O', \vec i',\vec j',\vec k')$.
+Now imagine that we have another frame $(C, \vec l,\vec m,\vec n)$.
 How do we transform coordinates given in one frame to another?
-First of all let us note that since $(\vec i,\vec j,\vec k)$ and $(\vec i', \vec j',\vec k')$ are bases of 3D, there exists a (non degenerate) matrix $M$ such that:
+First of all let us note that since $(\vec i,\vec j,\vec k)$ and $(\vec l, \vec m,\vec n)$ are bases of 3D, there exists a (non degenerate) matrix $M$ such that:
 
 $$
-\begin{bmatrix}\vec{i'} & \vec{j'} & \vec{k'}\end{bmatrix} =
+\begin{bmatrix}\vec{l} & \vec{m} & \vec{n}\end{bmatrix} =
 \begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix} \times M
 $$
 
@@ -361,83 +388,117 @@ Let us draw an illustration:
 Then let us re-express the vector OP:
 
 $$
-\overrightarrow{OP} = \overrightarrow{OO'} + \overrightarrow{O'P} = 
+\overrightarrow{OP} = \overrightarrow{OC} + \overrightarrow{CP} = 
 \begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix}
-\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
-\begin{bmatrix}\vec{i'} & \vec{j'} & \vec{k'}\end{bmatrix} 
-\begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} 
+\begin{bmatrix}C_x \\ C_y \\ C_z\end{bmatrix} + 
+\begin{bmatrix}\vec{l} & \vec{m} & \vec{n}\end{bmatrix} 
+\begin{bmatrix}x' \\ y' \\ z'\end{bmatrix},
 $$
 
-Now let us substitute (i',j',k') in the right part with the change of basis matrix:
+where $(x', y', z')$ are the coordinates of the point $P$ in the frame $(C, \vec l,\vec m,\vec n)$,
+and $(C_x, C_y, C_Z)$ are the coordinates of the point $C$ in the frame $(O, \vec i,\vec j,\vec k)$.
 
+Now let us substitute $(\vec l,\vec m,\vec n)$ in the right part with the change of basis matrix:
 
 $$
 \overrightarrow{OP} =
 \begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix}\left(
-\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
+\begin{bmatrix}C_x \\ C_y \\ C_z\end{bmatrix} + 
  M \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} \right)
 $$
 
 And it gives us the formula to transform coordinates from one frame to another:
 
-
-
 $$
  \begin{bmatrix}x \\ y \\ z\end{bmatrix} = 
-\begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix} + 
+\begin{bmatrix}C_x \\ C_y \\ C_z\end{bmatrix} + 
  M \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix} 
  \qquad\Rightarrow\qquad
  \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix}  =
-M^{-1}\left( \begin{bmatrix}x \\ y \\ z\end{bmatrix} - \begin{bmatrix}O'_x \\ O'_y \\ O'_z\end{bmatrix}\right)
+M^{-1}\left( \begin{bmatrix}x \\ y \\ z\end{bmatrix} - \begin{bmatrix}C_x \\ C_y \\ C_z\end{bmatrix}\right)
 $$
 
 
-## Let us create our own gluLookAt
+#### The matrix
 
-Camera is defined via view parameters $\text{eye}$, $\text{center}$ and $\overrightarrow{\text{up}}$, measured in world space.
-It is located at  $\text{eye}$, pointing at $\text{center}$, with upward orientation towards $\overrightarrow{\text{up}}$.
-In camera space, the camera is located at the axis $\vec{k}$, pointing at the origin, and vector $\overrightarrow{\text{up}}$ is vertical.
+So, we have two major equations to consider:
+
+$$
+\begin{bmatrix}\vec{l} & \vec{m} & \vec{n}\end{bmatrix} =
+\begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix} \times M
+$$
+
+and
+
+$$
+ \begin{bmatrix}x' \\ y' \\ z'\end{bmatrix}  =
+M^{-1}\left( \begin{bmatrix}x \\ y \\ z\end{bmatrix} - \begin{bmatrix}C_x \\ C_y \\ C_z\end{bmatrix}\right).
+$$
+
+The first one will give us a way to compute the matrix $M$, while the second one shows how to recompute coordinates in the camera frame.
+
+In our case, the basis $(\vec i, \vec j, \vec k)$ is the global world basis, therefore $\begin{bmatrix}\vec{i} & \vec{j} & \vec{k}\end{bmatrix}$ is the $3\times 3$ identity matrix,
+so the $3\times 3$ basis change matrix $M$ can be found as
+
+$$
+M = \begin{bmatrix}\vec{l}_x & \vec{m}_x & \vec{n}_x \\ \vec{l}_y & \vec{m}_y & \vec{n}_y \\ \vec{l}_z & \vec{m}_z & \vec{n}_z \end{bmatrix}.
+$$
+
+The matrix $M$ is orthonormal, therefore, to compute $M^{-1}$, it suffices to transpose it:
+
+$$
+M^{-1} = M^\top = \begin{bmatrix}\vec{l}_x & \vec{l}_y & \vec{l}_z \\ \vec{m}_x & \vec{m}_y & \vec{m}_z \\ \vec{n}_x & \vec{n}_y & \vec{n}_z \end{bmatrix}.
+$$
 
 
-In 3D graphics, we position the camera onto the world space by specifying three view parameters: EYE, AT and UP, in world space.
+The very last step is to handle the translation. Let us write it explicitly the transformation to the camera frame in the homogeneous coordinates:
 
-The point EYE (ex, ey, ez) defines the location of the camera.
-The vector AT (ax, ay, az) denotes the direction where the camera is aiming at, usually at the center of the world or an object.
-The vector UP (ux, uy, uz) denotes the upward orientation of the camera roughly. UP is typically coincided with the y-axis of the world space. UP is roughly orthogonal to AT, but not necessary. As UP and AT define a plane, we can construct an orthogonal vector to AT in the camera space.
+$$
+ \begin{bmatrix}x' \\ y' \\ z' \\ 1\end{bmatrix}  =
+\underbrace{\begin{bmatrix}\vec{l}_x & \vec{l}_y & \vec{l}_z & 0\\ \vec{m}_x & \vec{m}_y & \vec{m}_z & 0 \\ \vec{n}_x & \vec{n}_y & \vec{n}_z & 0 \\ 0 & 0 & 0 & 1\end{bmatrix}
+\begin{bmatrix}1 & 0 & 0 & -C_x\\ 0 & 1 & 0 & -C_y \\ 0 & 0 & 1 & -C_z \\ 0 & 0 & 0 & 1\end{bmatrix}}_{\text{ModelView}}
+ \begin{bmatrix}x \\ y \\ z \\ 1\end{bmatrix}.
+$$
 
-
-
-OpenGL and, as a consequence, our tiny renderer are able to draw scenes only with the camera located on the z-axis. If we want to move the camera, no problem, we can move all the scene, leaving the camera immobile.
-
-Let us put the problem this way: we want to draw a scene with a camera situated in point e (eye), the camera should be pointed to the point c (center) in such way that a given vector u (up) is to be vertical in the final render.
-
-Here is an illustration:
-
-![](camera/glulookat.svg)
-
-It means that we want to do the rendering in the frame (c, x',y',z'). But then our model is given in the frame (O, x,y,z)... No problem, all we need is to compute the transformation of the coordinates. Here is a C++ code computing the necessary 4x4 matrix ModelView:
+Now it suffices to get any point with coordinates `(x,y,z,1)` in the model frame, multiply it by the matrix `ModelView` and we get the coordinates in the camera frame!
+Long story short, here is the code that sets up the `ModelView` matrix:
 
 
-```cpp
+```cpp linenums="1"
 void lookat(const vec3 eye, const vec3 center, const vec3 up) {
-    vec3 k = normalized(eye-center);
-    vec3 i = normalized(cross(up,k));
-    vec3 j = normalized(cross(k, i));
-    ModelView = mat<4,4>{{{i.x,i.y,i.z,0}, {j.x,j.y,j.z,0}, {k.x,k.y,k.z,0}, {0,0,0,1}}} *
+    vec3 n = normalized(eye-center);
+    vec3 l = normalized(cross(up,n));
+    vec3 m = normalized(cross(n, l));
+    ModelView = mat<4,4>{{{l.x,l.y,l.z,0}, {m.x,m.y,m.z,0}, {n.x,n.y,n.z,0}, {0,0,0,1}}} *
                 mat<4,4>{{{1,0,0,-center.x}, {0,1,0,-center.y}, {0,0,1,-center.z}, {0,0,0,1}}};
 }
 ```
 
-Note that z' is given by the vector ce (do not forget to normalize it, it helps later). How do we compute x'? Simply by a cross product between u and z'. Then we compute y', such that it is orthogonal to already calculated x' and z' (let me remind you that in our problem settings ce and u are not necessarily orthogonal). The very last step is a translation of the origin to the point of viewer e and our transformation matrix is ready. Now it suffices to get any point with coordinates (x,y,z,1) in the model frame, multiply it by the matrix ModelView and we get the coordinates in the camera frame! By the way, the name ModelView comes from OpenGL terminology.
+Lines 3-5 compute the basis vectors, and lines 6-7 compose the change of basis matrix with the appropriate translation.
 
+### The final code
 
+Here is the revision handles all the chain of coordinate transformations explicitly ([check the commit](https://github.com/ssloy/tinyrenderer/tree/592ab4d89af9cb71517cdb6fc6dc882a463a4b65)):
 
 ??? example "Camera handling"
     ```cpp linenums="1" hl_lines="7 26-27 59-61 72"
     --8<-- "camera/main.cpp"
     ```
 
+In line 7 I have declared three global $4\times 4$ matrices, they are initialized in lines 59-61.
+In line 72 I compute clip coordinates for every vertex of the scene, the perspective division is performed in line 26, and finally the screen coordinates are computed in line 27.
+The rest of the code follows pretty much the same pattern as in the last chapter.
 
+Here is the image produced:
+
+![](camera/framebuffer.png)
+
+
+## Next time
+
+This chapter was dense — take your time to digest it. The hardest part is behind us. Next, we’ll start discussing shading.
+
+Stay tuned!
 
 --8<-- "comments.html"
 

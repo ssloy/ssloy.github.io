@@ -61,6 +61,7 @@ nav:
         - 'tinyrenderer/barycentric.md'
         - 'tinyrenderer/z-buffer.md'
         - 'tinyrenderer/camera-naive.md'
+        - 'tinyrenderer/camera.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
