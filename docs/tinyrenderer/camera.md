@@ -262,7 +262,7 @@ std::tuple<int,int,int> project(vec3 v) { // First of all, (x,y) is an orthogona
 In fact, it is a by-hand computation of the following matrix multiplication:
 
 $$
-\begin{bmatrix}\frac{\text{width}}{2}&0&0&\frac{\text{height}}{2} \\ 0&\frac{\text{height}}{2}&0&\frac{\text{height}}{2}\\ 0&0&\frac{255}{2}&\frac{255}{2}\\ 0 &0 &0&1\end{bmatrix}
+\begin{bmatrix}\frac{\text{width}}{2}&0&0&\frac{\text{width}}{2} \\ 0&\frac{\text{height}}{2}&0&\frac{\text{height}}{2}\\ 0&0&\frac{255}{2}&\frac{255}{2}\\ 0 &0 &0&1\end{bmatrix}
 \begin{bmatrix}v_x \\ v_y \\ v_z \\ 1\end{bmatrix}
 $$
 
