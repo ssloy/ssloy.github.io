@@ -92,12 +92,13 @@ Now that we have a depth buffer, a single line will suffice to eliminate all the
 for each triangle t:
     for each pixel p that t covers:
         compute its depth z
-        if depth buffer at p > z:
+        if depth buffer at p < z:
             update the depth buffer with z
             paint the pixel
 ```
 
-Our depth buffer allows us to track the depth of each pixel we paint. If, for some triangle `t`, the depth of some pixel `p` is greater than the one we have already painted, we can safely discard it. Otherwise, we paint the pixel and update the depth buffer. So, at the expense of keeping a rather small buffer, we can keep the track of the frontmost surface being drawn.
+Our depth buffer allows us to track the depth of each pixel we paint. If, for some triangle `t`, the depth of some pixel `p` is inferior to the one we have already painted, we can safely discard it.
+Otherwise, we paint the pixel and update the depth buffer. So, at the expense of keeping a rather small buffer, we can keep the track of the frontmost surface being drawn.
 
 Here is the update to the previous code - check line 30:
 
