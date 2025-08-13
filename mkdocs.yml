@@ -62,6 +62,7 @@ nav:
         - 'tinyrenderer/z-buffer.md'
         - 'tinyrenderer/camera-naive.md'
         - 'tinyrenderer/camera.md'
+        - 'tinyrenderer/shading.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
