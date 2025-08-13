@@ -161,3 +161,7 @@ Normally you need to tweak the fragment shader only.
 For reference, [here is my attempt](https://github.com/ssloy/tinyrenderer/commit/27f4fd811aa3a62e478910e195abb9c6c6318f97).
 
 
+## Next time
+
+Next time we will talk about textures and normal mapping. Stay tuned!
+
