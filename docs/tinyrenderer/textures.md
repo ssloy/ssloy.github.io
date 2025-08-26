@@ -4,10 +4,10 @@ title: More data!
 
 # More data!
 
-Let us continue talking about shading. How can we add more realism to our renders?
-I do not want yet to do any additional math, I just want to stop ignoring the data we already have.
-So, I stick with the Phong reflection model we [have implemented](textures.md) in the previous chapter.
-The goal for today is to make the following progression without really modifying the shader:
+Let us continue our discussion about shading. How can we add more realism to our renders?
+At this stage, I don’t want to introduce additional mathematics — instead, I want us to stop ignoring the data that is already available to us. We will continue to use the Phong reflection model that we [implemented earlier](textures.md).
+
+Our goal today is to gradually improve the realism of our renderings without making major changes to the shader itself:
 
 [![](textures/teaser.jpg)](textures/teaser.jpg)
 
@@ -15,45 +15,44 @@ The goal for today is to make the following progression without really modifying
 
 ### Curved geometry
 
-In Phong reflection model, if we fix the light direction and the camera, the estimate of light intensity depends only on the normal vector to the surface.
-Since last time we have drawn a collection of (flat) triangles, the normal vector is constant per triangle, thus producing a very faceted look.
-How can we produce smoother renderings?
-The answer is to get more data.
-Naively, we could define a really fine mesh, where each triangle would be smaller than a pixel on the screen,
-but it is very costly, it would be better to find a cheaper way.
+In the Phong reflection model, if the light direction and camera are fixed, the estimated light intensity depends only on the normal vector at the surface. In our previous implementation, the surface was composed of flat triangles, meaning each triangle had a single constant normal vector. The result was a very faceted look.
 
-Do you recall the exercise of [drawing straight line segments](bresenham.md)?
-Given two points $P_0$ and $P_1$, we can define the point $P(t)$ as follows:
+So, how can we achieve smoother renderings? The answer: provide more data.
+
+One naïve approach would be to define an extremely fine mesh, so fine that each triangle is smaller than a pixel on screen. While this would produce smooth results, it is computationally very expensive. A cheaper, smarter method is preferable.
+
+Do you recall the exercise on [drawing straight line segments](bresenham.md)? Given two points $P_0$ and $P_1$, we can interpolate between them:
+
 
 $$
 P(t)= (1-t)\ P_0 + t\ P_1
 $$
 
-Then we can vary the parameter $t$ between 0 and 1, thus sweeping the segment.
-Here is a python implementation for those who want to re-test it:
+We vary the parameter $t$ between 0 and 1, thus sweeping the segment.
+Here is a small Python implementation for those who want to experiment again:
 
 ??? example "straight.py"
     ```py linenums="1" hl_lines="5"
     --8<-- "textures/straight.py"
     ```
 
-And the expected output:
+Expected output:
 
 ![](textures/straight.png)
 
-In fact, this approach is nothing else as the [linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation) between two known points $P_0$ and $P_1$.
-The word "linear" means that $P(t)$ is a linear function of $t$, i.e. it is a polynomial of order 1.
-But what happens if we increase the order of the interpolating polynomial?
+
+This process is simply [linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation) between $P_0$ and $P_1$. “Linear” means that $P(t)$ is a polynomial of order 1.
+
+But what if we use a higher-order polynomial? 
 For example, we can redefine $P(t)$ as follows:
 
 $$
 P(t)= (1-t)^3\ P_0 + 3(1-t)^2 t\ P_1 + 3(1-t) t^2\ P_2 + t^3\ P_3
 $$
 
-Here I have fixed four control points $P_0$, $P_1$, $P_2$ and $P_3$. The point $P(t)$ is a cubic function of the parameter $t$.
-Just as before, we can vary the parameter $t$ between 0 and 1, and evaluate $P(t)$ for every $t$.
-Here is a python implementation and the corresponding illustration:
+Here we have four control points $P_0, P_1, P_2, P_3$. Now $P(t)$ is a cubic function of $t$. As $t$ varies from 0 to 1, the point sweeps out a curve, not a straight line. This is the principle of [Bézier curves](https://en.wikipedia.org/wiki/B%C3%A9zier_curve), widely used in [computer-aided design](https://en.wikipedia.org/wiki/Computer-aided_design).
 
+Python implementation and visualization:
 
 ??? example "bezier.py"
     ```py linenums="1" hl_lines="8"
@@ -62,87 +61,81 @@ Here is a python implementation and the corresponding illustration:
 
 ![](textures/bezier.png)
 
-Since it is a cubic function, naturally $P(t)$ sweeps a curve and not a straight line segment anymore.
-This interpolation approach is known as [Bézier curves](https://en.wikipedia.org/wiki/B%C3%A9zier_curve),
-it is a traditional way to define curved geometry, widely used in [computer-aided design](https://en.wikipedia.org/wiki/Computer-aided_design).
+Another way to define the same curve is by specifying endpoint normal vectors instead of adding extra control points:
 
-Let us check another way to define exactly the same curve.
-Instead of adding two more control points, we can specify normal vectors at the endpoints:
+
 
 ![](textures/hermite.png)
 
-Forumated this way, this curve is called [cubic Hermite spline](https://en.wikipedia.org/wiki/Cubic_Hermite_spline) (1).
-The exact formulas are not that important for this course, but here you can find the python snippet drawing the curve:
+This is known as a [cubic Hermite spline](https://en.wikipedia.org/wiki/Cubic_Hermite_spline) (1). Here is a python code:
 { .annotate }
 
-1. Traditional Hermite interpolation uses tangent vectors instead of normals, but you get the idea.
+1. Traditional Hermite interpolation uses tangent vectors instead of normals, but the idea is similar.
+
 
 ??? example "hermite.py"
     ```py linenums="1" hl_lines="8"
     --8<-- "textures/hermite.py"
     ```
 
-Back to the task at hand, it is possible to define curved triangles if in addition to the vertices we specify normal vectors to each vertex:
+Back to our task: it is possible to define curved triangles if, in addition to vertex positions, we specify normal vectors at each vertex:
+
 
 ![](textures/curved-triangle.png)
 
-Fortunately, artists give us the data.
-Up until now, we were interested by the lines starting by `v ` and by `f ` in the [wavefront obj](https://en.wikipedia.org/wiki/Wavefront_.obj_file) file format.
-Now we will also read lines starting with `vn `.
-Lines starting with `vn ` define vectors in 3D space.
-Each line contains three numbers representing the $x$, $y$ and $z$ components of a vector.
-Example:
+
+Fortunately, artists already provide this data. Until now, we only considered lines starting with `v ` and `f ` in the [Wavefront OBJ format](https://en.wikipedia.org/wiki/Wavefront_.obj_file). Now, we must also consider `vn ` lines, which define 3D normal vectors:
 ```
 vn 0 1 0
 ```
-This means there is a vector aligned with $y$ coordinate.
+This represents a vector aligned with the $y$-axis.
+`f ` lines (faces) now include references to both vertex and normal indices:
 
-Lines starting with `f ` define faces, which are polygons connecting the vertices and vectors.
-Example:
 ```
 f 6/4/1 3/5/3 7/6/5
 ```
-Now we are interested in the first and the last number after each space.
-Those are indices of the vertex in the `v ` array that we have read before and of the vector from the `vn ` array.
-Thus, this line says that vertices 6, 3 and 7 form a triangle.
-The normal vectors at these vertices are given by vectors 1, 3 and 5.
-Recall that in .obj files indices start from 1, so we need to decrement these indices when using C++ arrays.
-I'll cover the resting `vt ` lines and the correponding index in the `f ` lines a bit later.
+Here, the first and last numbers of each slash-separated triplet correspond to vertex indices (from `v `) and normal indices (from `vn `). For example, this face uses vertices 6, 3, and 7, with normals 1, 3, and 5. Remember: OBJ indices start from 1, so you must subtract 1 when working with C++ arrays.
 
-If you parse `v `, `vn ` and `f ` lines, the data you get can be visualized as follows:
+We’ll handle the remaining `vt ` texture coordinate lines later.
+
+Parsing `v`, `vn`, and `f` gives us data like this:
+
 
 ![](textures/normals.png)
 
 There are vertices connected into triangles, and there are vectors specified per vertex.
 
-### Cheating
+### A practical shortcut
 
-We have all in hand to render curved geometry, but I have promised that we won't do any additional math, and drawing Bézier (Hermite) triangles is not that cheap.
-It is doable, but definitely expensive. Let us cheat!
-We will leave the rasterization as is, i.e. each fragment $P$ will be a linear interpolation between vertices $P_0, P_1, P_2$ of a triangle:
+While defining true curved geometry is possible, it’s expensive. Instead, let’s “cheat.” During rasterization, each fragment $P$ is already computed as a barycentric interpolation of triangle vertices:
 
 $$
-P = \alpha_0 P_0 + \alpha_1 P_1 + \alpha_2 P_2,
+P = \alpha_0 P_0 + \alpha_1 P_1 + \alpha_2 P_2.
 $$
 
-where $\alpha_i$ are the barycentric coordinates of $P$ w.r.t. $P_0, P_1, P_2$.
-Now, instead of computing the normal vector as $\vec n:=\overrightarrow{P_0P_1}\times\overrightarrow{P_0P_2}$, we can define it as $\vec n := \alpha_0 \vec{n_0} + \alpha_1 \vec{n_1} + \alpha_2 \vec{n_2}$,
-and use this vector to compute the shading:
+Instead of computing the normal as $\vec{n} = \overrightarrow{P_0P_1} \times \overrightarrow{P_0P_2}$, we interpolate the vertex normals:
+
+$$
+\vec{n} = \alpha_0 \vec{n_0} + \alpha_1 \vec{n_1} + \alpha_2 \vec{n_2}.
+$$
+
+This gives varying shading across the triangle surface:
+
 
 ![](textures/interpolated-normal.png)
 
-The triangle won't be curved, but the shading will vary across the triangle. Since usually the curvature of the triangles is pretty low, this simple computational hack is enough to produce visually plausible results.
+The geometry remains flat, but the varying shading tricks the eye into perceiving smoothness.
+Since usually the curvature of the triangles is pretty low, this simple computational hack is enough to produce visually plausible results.
 
-## Homework 1: smooth shading
+### Homework 1: smooth shading
 
-I want you to do exactly this. Parse normal vectors, and modify a couple lines in the shader to use those.
-Normally, very faceted look will disappear producing nice and smooth surfaces:
+Parse per-vertex normals and update your shader to use them. The faceted look will disappear, and you’ll obtain smooth surfaces:
 
 ![](textures/phong.png)
 
-Once again, the triangles are still flat (you can see it in the outline), but the shading tricks the eye to believe that the surface is smooth.
-[Here is my implementation](https://github.com/ssloy/tinyrenderer/commit/e42447a9bf2a64f4a33bcb755f9ff54d8787420b) for reference, but once again, do not rely on it.
-Check it after you have tried to implement yours.
+
+Although the triangles are still flat (noticeable at the silhouette), the shading convinces the eye otherwise. [Here is my implementation](https://github.com/ssloy/tinyrenderer/commit/e42447a9bf2a64f4a33bcb755f9ff54d8787420b) for reference, but try implementing it yourself first.
+
 
 ??? bug "Normal vector transformation caveat"
     If you have implemented the [camera model](camera.md), then the vertices are transformed by the `ModelView` matrix.
@@ -230,16 +223,9 @@ Check it after you have tried to implement yours.
 
 ## Textures
 
-So, by specifying additional data (normal vector per vertex), we were able to improve our renderings.
-We can add more details if we find a way to specify more normal vectors.
-Fortunately, there is a way to do so.
-The idea is to store data in images and not just ASCII files.
+By introducing per-vertex normals, we improved shading realism. But can we add even more detail? Yes: by storing additional information in textures.
 
-Let us attack the last thing we did not parse in the [.obj files](https://en.wikipedia.org/wiki/Wavefront_.obj_file): namely, `vt ` lines.
-Just as `v ` lines give us a number of 3D points, `vt ` lines provide a number of 2D points.
-Then `f ` lines allow to assemble these 2D and 3D vertices to form triangles.
-Therefore, for each triangle we will have its 3D geometry **and** its 2D geometry.
-They live in completely separate spaces, but one thing we know for sure: we have a 3D mesh consisting of the same number of triangles as a 2D mesh:
+OBJ files also contain `vt ` lines, which define 2D coordinates (the *UV space*). Each face (`f ` line) links 3D vertices with 2D texture coordinates. Thus, for every triangle, we now have both its 3D geometry and a 2D mapping:
 
 ![](textures/textures.png)
 
@@ -253,32 +239,35 @@ $$
     U := \alpha_0 U_0 + \alpha_1 U_1 + \alpha_2 U_2.
 $$
 
-This techique is called UV mapping.
-Traditionally it is used to decide the color of the fragment $P$ by quering the color from some texture at the coordinate $U$:
+This process is called [UV mapping](https://en.wikipedia.org/wiki/UV_mapping). Traditionally, it is used to assign fragment colors by sampling an image at $U$:
 
 ![](textures/uv.jpg)
 
-Once upon a time we used textures to store color information, but nowadays it is much more general.
-Normal vectors in 3D space have 3 components, right? A texture in general has three color channels...
-We can encode vectors as colors!
-It suffices to make a transformation between $[-1, 1]$ and $[0\dots 255]$.
+Originally, textures stored only colors. Nowadays, they are used much more generally. For example, since a 3D normal vector has three components and a texture has three channels, we can encode normals inside images — a technique known as normal mapping.
+
+To do this, we remap color channels from  $[0\dots 255]$ into $[-1,1]$ vector components.
+
+
 
 
 <!-- ![](textures/uv-map.jpg) -->
 
-## Homework 2: normal mapping
+### Homework 2: normal mapping
 
 For each model, I have prepared files with `_nm.tga` suffix (ignore `_nm_tangent.tga` files for a moment).
-Interpret these textures as normal maps, and use these normals to add a lot more details to the renders:
+Sample normals from these maps and use them in shading to create highly detailed surfaces:
 
 ![](textures/normalmap.jpg)
 
+Note that with this approach, we entirely throw away the vertex normals coming from the `vn ` lines in the .obj.
+Do not worry, they will be useful for tangent space normal mapping.
+
 !!! bug "Color channel caveat"
-    Recall that `TGAColor` structure encodes the channels in the BGRA order.
+    We need to map RGB channels is mapped to $xyz$ coordinates, but recall that `TGAColor` structure encodes the channels in the BGRA order.
 
 For reference, [here is my commit](https://github.com/ssloy/tinyrenderer/commit/f68629a190055e702493bcfa7d7f91427b2be722).
 
-## Homework 3: more textures!
+### Homework 3: more textures!
 
 I have ignored colors for as long as I could, but this time it would be unreasonable to avoid them.
 You can load colors from the textures with `_diff.tga` suffix.
@@ -287,6 +276,10 @@ there are incadecence textures (`_glow.tga` suffix), there are [subsurface scatt
 Here I used diffuse color + specular textures, try to reproduce the image:
 
 ![](textures/colors.jpg)
+
+---
+
+That concludes this chapter. With just a bit of additional data (per-vertex normals and few textures) we can dramatically increase realism without fundamentally changing our rendering pipeline.
 
 --8<-- "comments.html"
 
