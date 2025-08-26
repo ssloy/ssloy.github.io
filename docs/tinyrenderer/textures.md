@@ -217,7 +217,7 @@ Although the triangles are still flat (noticeable at the silhouette), the shadin
     You can check [this line of code](https://github.com/ssloy/tinyrenderer/blob/e42447a9bf2a64f4a33bcb755f9ff54d8787420b/main.cpp#L20).
 
     As I have said, pretty often all this is not necessary, and we can simply transform normals by $M$. If $M$ is orthogonal (for example, it is a simple rotation),
-    then $M^{-1} = M^top$, and therefore $M = M^{-\top}$.
+    then $M^{-1} = M^\top$, and therefore $M = M^{-\top}$.
     However, if your `ModelView` matrix contains some shearing or uneven scaling, then you need to correctly transform your normals.
 
 
