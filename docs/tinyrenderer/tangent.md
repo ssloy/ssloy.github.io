@@ -4,57 +4,58 @@ title: Tangent space
 
 # Tangent space normal mapping
 
-## Global vs tangent space
+## Global vs. tangent space
 
 Let us talk more about normal mapping.
 It is a technique in computer graphics where a texture (the normal map) stores per-pixel normals, allowing fine surface detail to be simulated without increasing mesh complexity.
-Last time we have used files with `_nm.tga` suffix, whereas my repository also containes textures with `_nm_tangent.tga` suffix.
-The first one is the global space normal map, and the latter is the tangent space normal map.
-Here they are side-by-side for the Diablo model:
+
+Previously, we used files with the `_nm.tga` suffix, whereas the repository also contains textures with the `_nm_tangent.tga` suffix.
+The first one is a global-space normal map, while the latter is a tangent-space normal map.
+Here they are side by side for the Diablo model:
+
 
 ![](tangent/diablo-nm.jpg)
 
-Last time we have used the texture on the left, its RGB values directly encode world-space normals.
-There is a problem though.
-If  an artist reuses UVs (rotates/mirrors/overlaps flattened mesh so multiple surface parts sample the same texels), those different 3D patches generally require different global normals at the same texel.
-One color cannot be “two different vectors at once,” so the result is wrong unless you forbid overlaps/rotations and keep a unique, non-mirrored unwrap — very restrictive and memory-heavy.
+Last time we used the texture on the left, where each RGB value directly encodes a world-space normal.
+There is a problem, though:
+if an artist reuses UVs (rotates, mirrors, or overlaps the flattened mesh so that multiple surface parts have the same texels), then different 3D patches will generally require different global normals at the same texel.
+One color cannot represent “two different directions at once,” so the result is wrong unless you forbid overlaps/rotations and enforce a unique, non-mirrored UV unwrap — very restrictive and memory-hungry.
 
-We have this problem with the Diablo model. For example, its arms, its legs and even both halves of the tail are superposed in the texture map.
+This problem arises in the Diablo model. For example, its arms, legs, and even both halves of the tail are superposed in the texture map.
 Here is an illustration:
 
 [![](tangent/diablo-tangent.jpg)](tangent/diablo-tangent.jpg)
 
-Check the left image. The light comes from the right, so the right Diablo's hip is badly shaded, we need to fix that.
-The solution would be to use the tangent-space normal map.
-Here, each texel encodes a normal relative to the **local basis** that moves on the surface.
+Check the left image: the light comes from the right, so the right side of Diablo's hip is badly shaded — something we need to fix.
+The solution is to use the tangent-space normal map.
+Here, each texel encodes a normal **relative to the local basis** that moves along the surface.
 
 To illustrate what I mean by the local basis, I mapped a regular grid to the model:
 
 ![](tangent/head-tbn.jpg)
 
-In addition to that, I have shown in green smooth normals.
-At each point of the surface, we can define a local, per-fragment basis made from the vectors parallel to the red, blue and green lines.
-Because normals stored in tangent-space texture are **relative** to the moving frame, the same texel works well for superposed patches.
-
+In addition, I have drawn smooth normals in green. At each point of the surface, we can define a **local, per-fragment basis** made of the tangent, bitangent, and normal vectors (aligned with the red, blue, and green lines of the grid).
+Because normals stored in tangent-space textures are relative to this moving frame, the same texel works correctly even for superposed or mirrored patches.
 
 In short, global-space normal maps tie each texel to a single fixed direction, which breaks when UVs are reused.
-Tangent-space maps are expressed in local frame that lives on the surface, so the same texture region can drive multiple differently oriented surface parts correctly.
+Tangent-space normal maps are expressed in a local frame that follows the surface, so the same texture region can drive multiple differently oriented surface parts correctly.
 
-Here's a quick question for you: why tangent-space normal textures are dominantly blue?
+
+Here's a quick question for you: why are tangent-space normal textures dominantly blue?
 
 ??? question "Spoiler Alert!"
-    Imagine a normal map for a sphere.
-    If it is expressed in the global space, normals will span every possible orientation, so a rainbow texture is to be expected.
-    On the other hand, if we express it in the tangent space, one single $(0,0,1)$ vector corresponding to the blue color,
-    since the orientation is already captured by the moving frame.
+    Imagine a normal map for a perfect sphere.
+
+    - In global space, normals span every possible orientation, so the texture looks like a rainbow of directions.
+    - In tangent space, however, the normal is always the same vector $(0,0,1)$, which corresponds to a bluish color.
+    The variation in shading comes from the moving local basis, not from the texel colors themselves.
 
 ## Computing the tangent frame
 
-As I said, for each fragment, we need to compute a basis made whose vectors are aligned with the red and blue lines of the regular grid.
-Let us see how to do that.
+As we saw, for each fragment we need to compute a basis whose tangent and bitangent vectors are aligned with the red and blue lines of the UV grid.
+Consider a triangle with 3D vertices $P_0, P_1, P_2$ in global space and corresponding 2D UV coordinates $U_0, U_1, U_2$.
 
-Let us consider a triangle with 3D vertices $P_0, P_1, P_2$ in the global space and corresponding 2D vertices $U_0, U_1, U_2$ in the UV-space.
-Let us define edge vectors of the triangles:
+Define the edge vectors:
 
 $$
 \begin{array}{ll}
@@ -65,7 +66,7 @@ $$
 \end{array}
 $$
 
-Then the UV-map can be represented by a $2\times 3$ matrix $M$:
+Then the UV mapping can be described by a $2 \times 3$ matrix $M$:
 
 $$
 M \times \underbrace{\begin{pmatrix} \vec{e_0} & \vec{e_1} \end{pmatrix}}_{3\times 2~\text{matrix}} = \underbrace{\begin{pmatrix} \vec{u_0} & \vec{u_1} \end{pmatrix}}_{2\times 2~\text{matrix}}
@@ -84,7 +85,8 @@ U &:= \begin{pmatrix} \vec{u_0} & \vec{u_1} \end{pmatrix}
 \end{array}
 $$
 
-So we have $M \times E = U$. We need to find the tangent vector $\vec t$ and the bitangent vector $\vec b$ such they are transformed to $(1,0)$ and $(0,1)$ vectors under the action of $M$:
+So we have $M \times E = U$.
+We want to find the tangent vector $\vec{t}$ and the bitangent vector $\vec{b}$ such that they map to the unit UV axes:
 
 $$
 \begin{array}{ll}
@@ -95,9 +97,8 @@ $$
 
 Or, equivalently, $M \times \begin{pmatrix}\vec t & \vec b\end{pmatrix} = \begin{pmatrix}1 & 0 \\ 0 & 1 \end{pmatrix}$.
 Recall that $M\times E = U$, therefore, $M\times E \times U^{-1} =  \begin{pmatrix}1 & 0 \\ 0 & 1 \end{pmatrix}$.
-Do you where is it going?
 
-We can find $\vec t$ and $\vec b$ as simply as follows:
+From this, we conclude:
 
 $$
 \begin{array}{ll}
@@ -105,16 +106,17 @@ $$
 \end{array}
 $$
 
-Add the interpolated normal $\vec n$ and you are done, you have the tangent space basis.
 
+Finally, add the interpolated normal $\vec{n}$, and you have constructed the full tangent-space basis $\begin{pmatrix}\vec t & \vec b & \vec n\end{pmatrix}$.
 
 ## Homework
 
-Implement tangent space normal mapping.
+Implement tangent-space normal mapping.
 As usual, I provide [my code](https://github.com/ssloy/tinyrenderer/commit/32a4faac0a56498e78808a14840a9114440cb194) for reference.
 
+---
 
-
+Next time we will talk about global illumination.
 
 --8<-- "comments.html"
 

@@ -58,6 +58,7 @@ nav:
         - 'tinyrenderer/camera.md'
         - 'tinyrenderer/shading.md'
         - 'tinyrenderer/textures.md'
+        - 'tinyrenderer/tangent.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
