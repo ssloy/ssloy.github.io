@@ -59,6 +59,8 @@ nav:
         - 'tinyrenderer/shading.md'
         - 'tinyrenderer/textures.md'
         - 'tinyrenderer/tangent.md'
+        - 'tinyrenderer/shadow.md'
+        - 'tinyrenderer/ssao.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
