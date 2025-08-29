@@ -1,7 +1,3 @@
----
-title: Triangle rasterization
----
-
 # Triangle rasterization
 
 Let me remind you: this series of articles is designed to encourage you to write your own code from scratch.

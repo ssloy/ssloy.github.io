@@ -1,7 +1,3 @@
----
-title: Shading
----
-
 # Shading
 
 ## The rendering pipeline

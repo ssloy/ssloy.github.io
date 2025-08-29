@@ -1,7 +1,3 @@
----
-title: Shadow mapping
----
-
 # Shadow mapping
 
 ## Introduction
