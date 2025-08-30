@@ -147,6 +147,7 @@ The input is a simple $128 \times 128$ image of a solid white square on a black 
 
 Experiment with non-photorealistic rendering (NPR).
 By stepping away from strict realism, we gain a deeper understanding of the visual pipeline and discover how even small changes in shading rules can produce strikingly different effects.
+My implementation of a toon shader is [available here](https://github.com/ssloy/tinyrenderer/tree/toon).
 
 Exploring NPR is not only enjoyable, it also broadens our perspective as graphics practitioners, and it leaves plenty of room for creativity and invention.
 
