@@ -67,6 +67,16 @@ It produces the 64x64 image `framebuffer.tga`, here I scaled it for better reada
 
 ![](bresenham/bresenham0.png)
 
+## Compilation
+
+```sh
+git clone https://github.com/ssloy/tinyrenderer.git &&
+cd tinyrenderer &&
+cmake -Bbuild &&
+cmake --build build -j &&
+build/tinyrenderer obj/diablo3_pose/diablo3_pose.obj obj/floor.obj
+```
+The rendered image is saved to `framebuffer.tga`.
 
 ## Teaser: few examples made with the renderer
 
@@ -77,3 +87,4 @@ It produces the 64x64 image `framebuffer.tga`, here I scaled it for better reada
 ![](home/boggie.png)
 
 ![](home/diablo-ssao.png)
+
