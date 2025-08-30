@@ -62,6 +62,7 @@ nav:
         - 'tinyrenderer/shadow.md'
         - 'tinyrenderer/ssao.md'
         - 'tinyrenderer/toon.md'
+        - 'tinyrenderer/afterword.md'
     - 'tinycompiler':
         - 'tinycompiler/index.md'
         - 'tinycompiler/ast.md'
