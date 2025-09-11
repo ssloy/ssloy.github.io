@@ -145,6 +145,10 @@ Even a simple addition of two numbers kills efficiency.
 
 Moreover, pure log encoding cannot represent integers exactly, except powers of two. Floating‑point formats fix this: they preserve all integers up to a certain size exactly (e.g., all integers up to $2^{24}$ fit in a `float32`). This property is essential in many algorithms (array indexing, loop counters, geometry).
 
+??? tip "Fun fact"
+    There are “[logarithmic number systems](https://en.wikipedia.org/wiki/Logarithmic_number_system)” (LNS), used in niche areas like DSP (digital signal processing) and deep learning accelerators. They are great for multiplication/division (turns into add/subtract), but bad for addition. Hardware designs typically combine both worlds.
+
+
 ### Floating point numbers
 
 The idea of floating‑point is to mimic the logarithmic distribution while retaining efficient arithmetic.
@@ -163,6 +167,7 @@ Let us plot all $8$ values $2^e$ and in addition one more value $2^{2^{n_e-1}}$ 
 
 Python snippet:
 ```py
+n_e = 3
 anchors = []
 for e in range(-2**(n_e-1), 2**(n_e-1)+1):
     anchors.append(2**e)
@@ -173,6 +178,8 @@ Within each interval, we evenly place 16 numbers. Thus we have $8 \times 16 = 12
 
 Here is a bit of python that generates all the numbers:
 ```py
+n_m = 7 - n_e
+numbers = []
 for i in range(len(anchors)-1): # for each interval
     for m in range(2**n_m):     # populate it with 2**n_m numbers
         v = anchors[i] + m/2**n_m * (anchors[i+1]-anchors[i])
@@ -194,7 +201,7 @@ for e in range(-2**(n_e-1)+1, 2**(n_e-1)+1):
     anchors.append(2**e)
 ```
 
-The first interval is now special — its values are called **subnormals** (a term we will revisit later).
+The first interval is now special — its values are called [**subnormals**](https://en.wikipedia.org/wiki/Subnormal_number) (a term we will revisit later).
 
 Here are our 128 floats:
 
@@ -205,5 +212,6 @@ As for arithmetic efficiency — that is the focus of this tutorial: how to mani
 
 Next time we will talk about printing the decimal value of a float.
 Surprisingly enough, this problem is far from being trivial.
+It is actually one of the hardest parts of floating-point support in a language runtime.
 Stay tuned!
 
