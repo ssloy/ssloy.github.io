@@ -70,6 +70,7 @@ class Fx11_7:  # 11-bit number with 4 bits in the integer part and 7 in the frac
             offset += 1
 
     def __str__(self):
+        print(self.number)
         string = ''
         carry = 0
         for position in range(9): # loop from the least significant digit to the most significant
@@ -154,3 +155,23 @@ print(float2str2(-np.pi ))
 10000000 = 128
 00011000000000000000001 = 786433
 '''
+
+for i in range(128):
+    print(i, Float7(i))
+
+
+digits = [
+    [5,0,0,0,0,0,0,0,0,0,0], # constant array, 11 powers of 2 in base 10
+    [2,5,0,0,0,0,0,0,0,0,0],
+    [1,2,5,0,0,0,0,0,0,0,0],
+    [8,6,2,5,0,0,0,0,0,0,0],
+    [7,5,1,2,5,0,0,0,0,0,0],
+    [0,1,3,6,2,5,0,0,0,0,0],
+    [0,0,0,0,1,2,5,0,0,0,0], # the decimal dot is here
+    [0,0,0,0,0,0,0,1,2,4,8],
+    [0,0,0,0,0,0,0,0,0,0,0]  # zero padding to avoid extra logic
+]
+
+for l in list(map(list, zip(*digits))):
+    print(list(reversed(l)))
+
