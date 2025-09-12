@@ -21,18 +21,18 @@ numbers = []
 for e in range(-2**(n_e-1), 2**(n_e-1)):
     for m in range(2**n_m):
         if e == -2**(n_e-1):
-            v = (0 + m/2**n_m) * 2**(e+1)
+            e += 1
         else:
-            v = (1 + m/2**n_m) * 2**e
+            m += 2**n_m
+        v = m * 2**(e-n_m)
         numbers.append(v)
 
 print(numbers)
 
-a, b = -2**(n_e-1)+1-n_m, 2**(n_e-1)-1
-print(a,b)
-
-for e in range(a,b+1):
-    print(2**e)
+#a, b = -2**(n_e-1)+1-n_m, 2**(n_e-1)-1
+#print(a,b)
+#for e in range(a,b+1):
+#    print(2**e)
 
 class Float7:
     def __init__(self, uint7):
@@ -44,12 +44,12 @@ class Float7:
             self.m += 16 # if normal, recover the hidden bit = 1
 
     def __float__(self):
-        return (self.m/16) * 2**self.e
+        return self.m * 2**(self.e-4)
 
     def __str__(self):
-        return str(Fx11_7(self.e + 3, self.m))
+        return str(Fx4_7(self.e + 3, self.m))
 
-class Fx11_7:  # 11-bit number with 4 bits in the integer part and 7 in the fraction
+class Fx4_7:  # 11-bit number with 4 bits in the integer part and 7 in the fraction
     digits = [
         [5,0,0,0,0,0,0,0,0,0,0], # constant array, 11 powers of 2 in base 10
         [2,5,0,0,0,0,0,0,0,0,0],
@@ -82,6 +82,12 @@ class Fx11_7:  # 11-bit number with 4 bits in the integer part and 7 in the frac
                 string = '.' + string
         return string
 
+print(float(Float7(93)))
+print(Float7(93))
+
+
+
+'''
 def float2str(x):
     result = '' if x>0 else '-'
     x = abs(x)
@@ -145,33 +151,6 @@ print(float2str(-np.pi ))
 print(float2str2(-np.pi ))
 
 
+
 '''
-01000000000000000000000 = 2097152
-01111100 = 124
-11000000000000000000001 = 6291457
-
-01111100
-11000000000000000000001
-10000000 = 128
-00011000000000000000001 = 786433
-'''
-
-for i in range(128):
-    print(i, Float7(i))
-
-
-digits = [
-    [5,0,0,0,0,0,0,0,0,0,0], # constant array, 11 powers of 2 in base 10
-    [2,5,0,0,0,0,0,0,0,0,0],
-    [1,2,5,0,0,0,0,0,0,0,0],
-    [8,6,2,5,0,0,0,0,0,0,0],
-    [7,5,1,2,5,0,0,0,0,0,0],
-    [0,1,3,6,2,5,0,0,0,0,0],
-    [0,0,0,0,1,2,5,0,0,0,0], # the decimal dot is here
-    [0,0,0,0,0,0,0,1,2,4,8],
-    [0,0,0,0,0,0,0,0,0,0,0]  # zero padding to avoid extra logic
-]
-
-for l in list(map(list, zip(*digits))):
-    print(list(reversed(l)))
 
