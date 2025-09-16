@@ -76,6 +76,10 @@ nav:
     - 'tinyoptimizer':
         - 'tinyoptimizer/index.md'
         - 'tinyoptimizer/mem2reg.md'
+    - 'tinyfloat':
+        - 'tinyfloat/index.md'
+        - 'tinyfloat/computers-and-numbers.md'
+        - 'tinyfloat/print.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 
