@@ -1,3 +1,83 @@
+How should the result of dividing `3.0` by `10.0` be displayed on a screen?
+How many digits should be printed if the user has not specified this?
+
+As you might have noticed, I specified the numbers `3.0` and `10.0` in decimal (base 10), because that’s the notation us humans are used to.
+The problem, however, is that most decimal fractions do not have an exact binary representation:
+
+$$
+0.3_{10} = 0.0100110011001100110011001100\dots_2.
+$$
+
+This binary fraction is infinite, the pattern 0011 repeats forever.
+So, when we write `x = 0.3`, the variable `x` actually strores the nearest representable floating point number.
+For example, in python floating point has double precision (64 bits), so `x` actually stores `0.299999999999999988897769753748434595763683319091796875`.
+
+If we create a second variable `y = 0.1 + 0.2`, it actually stores `0.3000000000000000444089209850062616169452667236328125`.
+It is not surprising to see the difference between the two, since we have accumulated three approximation errors for computing `y`: 
+
+1. first, we need to find the closest float to `0.1` (it is `0.1000000000000000055511151231257827021181583404541015625`), 
+2. then the closest float to `0.2` (it is `0.200000000000000011102230246251565404236316680908203125`).
+3. Finally, the sum introduces its own rounding errors.
+
+
+How should we print the values of `x` and `y`?
+First and foremost, we must guarantee the roundtrip safety.
+It means that whatever the decimal string must allow to recover exactly the same binary float we had in memory.
+
+* If the system displays too many digits, the extra digits may be “garbage” that reflects more information than the number actually contains;
+* if the system displays too few digits, the result will be incorrect in a stricter sense: when converting the decimal representation back to binary, the original binary value may not be restored.
+
+
+
+
+* When read back, exactly recovers the same binary float.
+* But doesn’t show more digits than necessary.
+
+
+
+
+
+
+
+
+But when we print the value of `x`, we get a simple `0.3` on the screen and not the exact stored value:
+
+The idea is to print just enough digits to identify the stored value.
+The correct approach is to print the shortest decimal string that:
+
+* When read back, exactly recovers the same binary float.
+* But doesn’t show more digits than necessary.
+
+
+Let us see an example of why `0.1 + 0.2` is not equal to `0.3`:
+
+
+```python
+from decimal import Decimal
+a = 0.1 + 0.2
+print(Decimal(a))
+
+b = 0.3
+print(Decimal(b))
+```
+
+
+
+
+
+Let us dig in.
+
+A floating-point number is stored in binary, as sign × mantissa × 2^exponent.
+
+Most decimal fractions are not exact in binary.
+For example:
+
+0.5 = 1/2 = 0.1₂ → exact in binary.
+
+0.25 = 1/4 = 0.01₂ → exact.
+
+0.1 = 1/10 → binary expansion is infinite:
+
 
 ```py linenums="1" hl_lines="11"
 n_e = 3
