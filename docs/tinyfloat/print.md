@@ -60,14 +60,13 @@ The first requirement is **round-trip safety**:
 whatever decimal string we output, converting it back must recover *exactly* the same binary float.
 
 * If the system prints too many digits, the extra digits may just be “garbage” noise from binary rounding.
-
     Even if `x` equals `0.299999999999999988897769753748434595763683319091796875`, it is not necessary to print all the 54 digits after the decimal point.
     We actually wanted to store `0.3`, so the 54 digits are in fact numerical garbage.
     A simple `0.3` suffices to identify the value of `x`, even if `x` is not equal to $0.3$.
 
-* If the system prints **too few digits**, the result is incorrect in a stricter sense: converting back to binary might give a *different* float.  
+* If the system prints too few digits, the result is incorrect in a stricter sense: converting back to binary might give a *different* float.
 
-  For instance, the shortest decimal that uniquely identifies `y` is `0.30000000000000004`.  
+  For instance, the shortest decimal that uniquely identifies `y` is `0.30000000000000004`.
   Printing only `0.3` would be wrong, because `0.3` round-trips to a different binary value.
 
 So the rule is:  
@@ -85,7 +84,7 @@ That’s why specialized algorithms exist:
 * Dragon4 (classic, accurate, but complex)  
 * Grisu3, Errol3, Ryu (newer, faster, provably minimal)
 
-These algorithms are among the most intricate parts of language runtimes (C, Java, Python, JavaScript, etc.).  
+These algorithms are among the most intricate parts of language runtimes (C, Java, Python, JavaScript, etc.).
 Moreover, performance is tightly linked with the next difficulty.
 
 

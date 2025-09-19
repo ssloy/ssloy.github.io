@@ -35,6 +35,10 @@ dmitry.sokolov@univ-lorraine.fr<br/>
 
 ---
 
+## [TinyFloat: the most unoptimized soft float librarry](tinyfloat/index.md)
+[<img src="tinyfloat/home/bad-news.jpg" width="480">](tinyfloat/index.md)
+---
+
 ## [Cursed fire or `#define` black magic](strange/cursed-fire.md)
 [![](strange/cursed-fire/define-320.png)](strange/cursed-fire.md)
 
