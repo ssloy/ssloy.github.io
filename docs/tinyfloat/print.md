@@ -1,5 +1,18 @@
+---
+title: Printing floats
+---
+
+# The problem you didn't even know you had
+
 How should the result of dividing `3.0` by `10.0` be displayed on a screen?
 How many digits should be printed if the user has not specified this?
+The chances are that you did not even know that printing floats is a tough problem with dozens of papers on the subject.
+It is actually one of the hardest parts of floating-point support in a language runtime.
+
+Spoiler alert: I'll avoid the hardest part in my implementation.
+Let us check what makes the problem so tough.
+
+## Problem #1: just enough digits
 
 As you might have noticed, I specified the numbers `3.0` and `10.0` in decimal (base 10), because that’s the notation us humans are used to.
 The problem, however, is that most decimal fractions do not have an exact binary representation:
@@ -12,7 +25,21 @@ This binary fraction is infinite, the pattern 0011 repeats forever.
 So, when we write `x = 0.3`, the variable `x` actually strores the nearest representable floating point number.
 For example, in python floating point has double precision (64 bits), so `x` actually stores `0.299999999999999988897769753748434595763683319091796875`.
 
+You can verify it yourself:
+```python
+from decimal import Decimal
+x = 0.3
+print(Decimal(x))
+```
+
 If we create a second variable `y = 0.1 + 0.2`, it actually stores `0.3000000000000000444089209850062616169452667236328125`.
+
+```python
+from decimal import Decimal
+y = 0.1 + 0.2
+print(Decimal(y))
+```
+
 It is not surprising to see the difference between the two, since we have accumulated three approximation errors for computing `y`: 
 
 1. first, we need to find the closest float to `0.1` (it is `0.1000000000000000055511151231257827021181583404541015625`), 
@@ -21,26 +48,21 @@ It is not surprising to see the difference between the two, since we have accumu
 
 
 How should we print the values of `x` and `y`?
-First and foremost, we must guarantee the roundtrip safety.
-It means that whatever the decimal string must allow to recover exactly the same binary float we had in memory.
+Let us see how python does it:
+
+![](print/xy.png)
+
+
+First and foremost, print must guarantee the roundtrip safety.
+It means that whatever the decimal string we output, it must allow to recover exactly the same binary float we had in memory.
 
 * If the system displays too many digits, the extra digits may be “garbage” that reflects more information than the number actually contains;
-* if the system displays too few digits, the result will be incorrect in a stricter sense: when converting the decimal representation back to binary, the original binary value may not be restored.
-
-
-
-
-* When read back, exactly recovers the same binary float.
-* But doesn’t show more digits than necessary.
-
-
-
-
-
-
-
-
-But when we print the value of `x`, we get a simple `0.3` on the screen and not the exact stored value:
+    Even if `x` is equal to `0.299999999999999988897769753748434595763683319091796875`, it is not necessary to print all the 54 digits after the decimal point.
+    We actually wanted to store `0.3`, so the 54 digits are in fact numerical garbage.
+    A simple `0.3` suffices to identify the value of `x`, even if `x` is not equal to $0.3$.
+* If the system displays too few digits, the result will be incorrect in a stricter sense: when converting the decimal representation back to binary, the original binary value may not be restored.
+`0.30000000000000004` is the shortest decimal fraction that allows us to identify the value of `y`.
+It would be incorrect to print simple `0.3` for `y`.
 
 The idea is to print just enough digits to identify the stored value.
 The correct approach is to print the shortest decimal string that:
@@ -48,36 +70,45 @@ The correct approach is to print the shortest decimal string that:
 * When read back, exactly recovers the same binary float.
 * But doesn’t show more digits than necessary.
 
+## Problem #2: speed
 
-Let us see an example of why `0.1 + 0.2` is not equal to `0.3`:
+The naive way to get the shortest output that correctly preserves the floating point value is to simply generate far more decimal digits than necessary;
+then “round back” in the decimal system, converting the decimal string back to binary at each step until the shortest string of digits is found, which is then converted back to the original number.
+However, this approach is very inefficient.
 
+That’s why specialized algorithms exist:
 
-```python
-from decimal import Decimal
-a = 0.1 + 0.2
-print(Decimal(a))
+* Dragon4 (classic, accurate, but complex).
+* Grisu3, Errol3, Ryu (newer, faster, provably minimal).
 
-b = 0.3
-print(Decimal(b))
-```
-
-
+These algorithms are among the most intricate parts of language runtimes like C, Java, Python, and JavaScript.
 
 
 
-Let us dig in.
+## Problem #3: find the right digits
 
-A floating-point number is stored in binary, as sign × mantissa × 2^exponent.
+To generate the correct shortest decimal string that round-trips we conceptually want to write the float as a rational number:
 
-Most decimal fractions are not exact in binary.
-For example:
+$$
+\frac{\text{integer numerator}}{\text{integer denominator}}
+$$
 
-0.5 = 1/2 = 0.1₂ → exact in binary.
 
-0.25 = 1/4 = 0.01₂ → exact.
+Recall that floating point has a huge dynamic range.
+The largest finite `double` is bigger than $10^{308}$
+That number has 308 decimal digits.
+We cannot handle it with ordinary machine integers.
+Even a 128-bit integer only goes up to $10^{38}$
+That’s nowhere near enough to hold the exact decimal numerator or denominator.
+So we need arbitrary-precision arithmetic (bignums) to carry out the exact division without overflow.
 
-0.1 = 1/10 → binary expansion is infinite:
 
+
+
+
+
+
+## Printing exact stored value
 
 ```py linenums="1" hl_lines="11"
 n_e = 3
