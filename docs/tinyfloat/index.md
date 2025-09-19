@@ -87,3 +87,5 @@ Here are some of the myths I am fighting against:
 So, buckle up! Let us first talk about computers and numbers.
 
 
+--8<-- "comments.html"
+

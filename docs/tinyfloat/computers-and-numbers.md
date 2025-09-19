@@ -156,10 +156,10 @@ A good way to understand floating‑point numbers is to construct them step by s
 
 In our example, we have a budget of 7 bits total to represent a number.
 We will use them to store two integer numbers: $e$ (exponent) and $m$ (mantissa).
-It is up to us to decide how many bits we reserve for $e$, so let us say that we use $0<n_e<7$ bits for the exponent
+It is up to us to decide how many bits we reserve for $e$, so let us say that we use $0 < n_e <7$ bits for the exponent
 and $n_m:=7-n_e$ bits for the mantissa.
 
-If we interpret $n_e$ bits as a signed int, then under the most common two's complement interpretation, $e \in [-2^{n_e-1} \dots 2^{n_e-1}-1]$.
+If we interpret $n_e$ bits as a signed int, then under the [offset binary interpretation](https://en.wikipedia.org/wiki/Signed_number_representations), $e \in [-2^{n_e-1} \dots 2^{n_e-1}-1]$.
 If $n_e = 3$, then $e$ can take $2^3=8$ values from $-4$ to $3$.
 Let us plot all $8$ values $2^e$ and in addition one more value $2^{2^{n_e-1}}$ (dashed):
 
@@ -214,4 +214,6 @@ Next time we will talk about printing the decimal value of a float.
 Surprisingly enough, this problem is far from being trivial.
 It is actually one of the hardest parts of floating-point support in a language runtime.
 Stay tuned!
+
+--8<-- "comments.html"
 

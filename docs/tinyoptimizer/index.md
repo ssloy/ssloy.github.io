@@ -18,3 +18,5 @@ While I do not rely on the LLVM library for tinyoptimizer, being compatible with
 I'll re-add assembly when I am done with optimization passes.
 
 
+--8<-- "comments.html"
+

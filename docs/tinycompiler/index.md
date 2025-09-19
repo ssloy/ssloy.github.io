@@ -57,3 +57,5 @@ It is so dull to compute Fibonacci numbers, so here are more eyecandy examples f
 ![](home/sunset-race.gif)
 
 
+--8<-- "comments.html"
+

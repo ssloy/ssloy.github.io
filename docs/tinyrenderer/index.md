@@ -88,3 +88,5 @@ The rendered image is saved to `framebuffer.tga`.
 
 ![](home/diablo-ssao.png)
 
+--8<-- "comments.html"
+
