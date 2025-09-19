@@ -2,7 +2,7 @@
 title: Printing floats
 ---
 
-# The problem you didn't even know you had
+# The problem you didn't even know existed
 
 How should the result of dividing `3.0` by `10.0` be displayed on a screen?
 How many digits should be printed if the user hasn’t specified a precision?
@@ -208,7 +208,7 @@ class Float7:
 print(float(Float7(93)))
 ```
 
-The constructor (line 7) takes a 7-bit pattern and splits it into the exponent $e$ and mantissa $m$, recovering the hidden bit.
+The constructor (line 2) takes a 7-bit pattern and splits it into the exponent $e$ and mantissa $m$, recovering the hidden bit.
 The `__float__()` operator casts our custom class to native python floats.
 Finally, the code prints the 93th floating point:
 
@@ -316,7 +316,7 @@ class Q4_7:  # 11-bit number with 4 bits in the integer part and 7 in the fracti
         [0,1,3,6,2,5,0,0,0,0,0],
         [0,0,0,0,1,2,5,0,0,0,0], # the decimal dot is here
         [0,0,0,0,0,0,0,1,2,4,8],
-        [0,0,0,0,0,0,0,0,0,0,0]  # zero padding to avoid extra logic in line 41
+        [0,0,0,0,0,0,0,0,0,0,0]  # zero padding to avoid extra logic in line 40
     ]
 
     def __init__(self, offset, uint5):
