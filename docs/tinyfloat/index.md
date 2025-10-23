@@ -31,7 +31,7 @@ So, let's talk about numbers and computers.
 
 ## Why reinvent the wheel?
 
-A year ago, I set myself the task of writing a [simple but fully functional compiler](/tinycompiler) for a C-like language I had just invented over the weekend.
+A year ago, I set myself the task of writing a [simple but fully functional compiler](../tinycompiler/index.md) for a C-like language I had just invented over the weekend.
 Writing it was not difficult (see the corresponding series of articles), but describing it is more challenging.
 A good description requires colorful examples. I'm allergic to illustrations involving Fibonacci numbers.
 How many times can you do that?!

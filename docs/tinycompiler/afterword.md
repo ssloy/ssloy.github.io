@@ -68,4 +68,5 @@ Have you tried to program a [zero-player breakout game](https://github.com/ssloy
 
 Stay tuned, have fun!
 
+--8<-- "comments.html"
 

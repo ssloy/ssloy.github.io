@@ -234,7 +234,7 @@ Long story short, check [this code](https://github.com/ssloy/tinyrenderer/blob/d
     ```
 
 Once again, I highlighted the lines affected by the changes.
-This time the timings are not surpizing, we are doing more work, so the time increased from 2.8 to 3.7 seconds :
+This time the timings are not surprizing, we are doing more work, so the time increased from 2.8 to 3.7 seconds :
 
 ```shell
 ssloy@home:~/tinyrenderer/build$ g++ ../tgaimage.cpp ../main.cpp -O3 -Wno-narrowing && time ./a.out
@@ -297,7 +297,7 @@ The processor either waits or predicts the outcome, potentially mispredicting an
 The `if (steep)` condition does not significantly affect performance, as modern branch predictors handle it well — especially since the same branch is consistently taken inside the critical loop.
 However, `if (ierror > bx - ax)` is the performance killer.
 
-There are techniques to rewrite computations in a branchless form, but I applied trick so ugly, that I didn’t even commit it to the repository.
+There are techniques to rewrite computations in a branchless form, but I applied a trick so ugly, that I didn’t even commit it to the repository.
 Check lines 19-20:
 
 ??? example "Ugly branchless rasterization"
