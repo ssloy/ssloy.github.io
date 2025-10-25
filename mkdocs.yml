@@ -27,6 +27,7 @@ markdown_extensions:
             - docs/tinyrenderer/
             - docs/tinycompiler/
             - docs/tinyoptimizer/
+            - docs/tinyfloat/
     - pymdownx.superfences
     - admonition
     - pymdownx.details
@@ -80,6 +81,7 @@ nav:
         - 'tinyfloat/index.md'
         - 'tinyfloat/computers-and-numbers.md'
         - 'tinyfloat/print.md'
+        - 'tinyfloat/add.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 
