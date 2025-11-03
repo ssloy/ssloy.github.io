@@ -228,7 +228,7 @@ In parallel, I maintain a similar list of decorations from function nodes, which
 
 Here is what the semantic analyzer code looks like, it is just a primitive depth-first tree traversal that queries the symbol table whenever it encounters a variable:
 
-??? example "Semantic analyzier"
+??? example "Semantic analyzer"
     ```py
     from syntree import *
     from symtable import *
