@@ -4,17 +4,17 @@ title: Addition
 
 # Addition and numerical errors
 
-Let us continue talking about the most unoptimized 32-bit software floating point library [TinyFloat](https://github.com/ssloy/tinyfloat).
-The library itself is written in C++ and does not use any data types besides 32 bit integers.
-The idea is to have the most readable code possible, so no bit hacking and other clever tricks.
+Let us continue discussing the most unoptimized 32-bit software floating-point library [TinyFloat](https://github.com/ssloy/tinyfloat).
+The library is written in C++ and deliberately avoids built-in floating-point types, relying solely on 32-bit integers.
+The intention is to make the code as readable as possible — no bit-hacks, no clever tricks.
+
 Moreover, I want an extensive documentation on what is happening under the hood.
 Turns out, the best way to document the C++ code is to make a full rewrite in Python :)
 
-In this writing, I use 8-bit floating point, ignoring edge cases such as `NaN` and `Inf`,
-which allows me to give simpler examples and more graphics illustrations.
-In addition to that, in the Python implementation I use native `float` type to test my code.
+In this writing, I use 8-bit floating point, and ignore special values (`NaN`, `Inf`).
+I rely on Python’s native float only for testing the implementation.
 
-From now on, we will be working with signed floating point numbers, so I add the last bit we need to get a `Float8` class.
+From now on, we work with signed floating point numbers, so I add the last bit we need to get a `Float8` class.
 If you have read previous two chapters, you know that this class has integer `e` and `m` members (standing for exponent and mantissa).
 Here I add `s` member that can take either `1` or `-1` value.
 This $(s,e,m)$ triplet represents the real number that can be written in scientific notation $s\cdot  m \cdot 2^{e-4}$, check line 17 of the following listing:
@@ -24,9 +24,15 @@ This $(s,e,m)$ triplet represents the real number that can be written in scienti
     --8<-- "add/float8a.py"
     ```
 
-Note that `Float8` stores exponent $e$ and mantissa $m$ after recovering the hidden bit and correcting for the denormalized numbers (lines 10-13), i.e. 
- $e \in [-3\dots 3]$ and $m\in[0\dots 31]$.
-Therefore, I do not have any edge cases to handle and can safely say that  the  $(s,e,m)$ triplet  encodes the number $s\cdot  m \cdot 2^{e-4}$.
+Note that `Float8` stores the normalized exponent and mantissa: the hidden bit is restored and denormals are converted into normalized form (lines 10-13).
+
+Thus,
+
+* $s \in \{-1, 1\}$,
+* $e \in [-3\dots 3]$,
+* $m\in[0\dots 31]$,
+
+and the triplet encodes the number $s\cdot  m \cdot 2^{e-4}$ without any remaining special-case logic.
 
 
 ## Rounding
@@ -36,15 +42,13 @@ Here is an illustration of RNE rounding mode with our 8-bit floating point repre
 
 ![](add/rounding.svg)
 
-The real number 4.65 is rounded to its only nearest `Float8` neighbor 4.75,
-however there are two nearest `Float8` values (4.75 and 5.0) equidistant to the real number 4.875.
-In this case, RNE mode specifies that 4.875 should round to 5.0 because the bit representation of 5.0 (`0b01100100`) is an even number when interpreted as an integer.
+The real number 4.65 is closest to the `Float8` value 4.75,
+But 4.875 lies exactly halfway between 4.75 and 5.0; in this case RNE requires rounding to the even of the two representable values.
+Since the bit pattern of 5.0 (`0b01100100`) is even as an integer, 4.875 rounds to 5.0.
 Similarly, the real number 5.125 rounds to 5.0 and 5.375 rounds to 5.5.
 
 In the above snippet, `from_float()` function takes a python `float` and rounds it up to our `Float8` using RNE mode.
-The idea is extremely simple: first I compute the distance from the input `float` to all possible `Float8` (line 21).
-Then in this distance array there will be either one or two minimum values.
-If there is one, then I return the corresponding `Float8`, otherwise (if the `float` is equidistant from two `Float8`), I check the parity of the index in the distance array.
+The implementation is simple: compute the distance from the real number to all `Float8` values (line 21), identify the closest candidate(s), and apply the RNE tiebreaker.
 
 ## Naïve addition
 
@@ -542,5 +546,20 @@ Kahan sum:       0.015625
 True sum:        0.015625
 ```
 As expected, naïve sum is way off the true result, pairwise summation gives a reasonable approximation, and Kahan summation is the best.
+
+## Conclusion
+
+Floating-point addition is deceptively subtle.
+Even though the mathematical operation is simple, implementing it correctly requires careful attention to the details.
+
+Limited precision is not a flaw, it is a fundamental constraint of representing infinitely many real numbers with finitely many bits.
+What does matter is understanding where errors arise and how to mitigate them:
+
+* rewrite expressions to improve numerical stability,
+* avoid subtracting nearly equal numbers,
+* use pairwise or Kahan summation when combining long lists of values.
+
+With these tools, even a tiny 8-bit floating-point format can behave predictably and transparently, helping reveal the structure of real floating-point hardware and the numerical algorithms it enables.
+
 
 --8<-- "comments.html"
