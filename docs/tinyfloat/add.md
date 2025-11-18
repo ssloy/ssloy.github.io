@@ -241,14 +241,10 @@ Now we need to correctly round the mantissa following the *round-to-nearest-even
 The decision is simple to make:
 
 ```
-if the fractional part > 0.5:
-    round the mantissa up
-if the fractional part < 0.5:
-    truncate the mantissa down
-if the fractional part = 0.5:
-    if the integer part is odd:
+if the fractional part > 0.5 OR
+   the fractional part = 0.5 AND the integer part is odd:
         round the mantissa up
-    otherwise:
+otherwise:
         truncate the mantissa down
 ```
 
@@ -314,18 +310,237 @@ The mantissa is shifted right, but once the least significant bit is set, it rem
     Alignment of exponents may require more than 3 shifts, so we cannot store all the bits going off the mantissa into GRS bits.
     Nevertheless, the sticky behaviour is sufficient for the final rounding tiebreaker.
 
-
-
 ## Numerical errors
 
-The result of arithmetic operations in floating point experiences rounding error when it cannot be exactly represented.
+As we have just witnessed, the result of arithmetic operations in floating point experiences rounding error when it cannot be exactly represented.
 While modern hardware and libraries produce correctly rounded results for arithmetic operations,
 this rounding error can get amplified with a series of operations because the intermediate result must be rounded.
 When working with finite precision, numerical errors should be carefully addressed.
 
 ### Catastrophic cancellation
 
+
+Imagine you are measuring how much gasoline you use on two identical road trips.
+
+* On the first trip, the car uses $30.2$ liters (your gas pump only shows one decimal place, $\pm 0.1\ L$).
+* On the second trip, after a minor tune-up, you use $30.0$ liters (again, $\pm 0.1\ L$ precision).
+
+You want to figure out how much less gasoline you used after the tune-up:
+
+$$
+\text{Fuel saved} = 30.2\ L - 30.0\ L = 0.2\ L
+$$
+
+But with the pump’s limited precision, each measurement could be off by $\pm 0.1\ L$, so the actual amounts used could have been anywhere from:
+
+* First trip: $30.1 - 30.3\ L$
+* Second trip: $29.9 - 30.1\ L$
+
+So the difference (the savings) could be anywhere from $0.0\ L$ ($30.1 - 30.1$) up to $0.4\ L$ ($30.3 – 29.9$)!
+Your relative error is huge compared to the “saving” you measured.
+Even though your original measurements looked precise to $0.1\ L$, subtracting nearly equal numbers (to get the savings) made your result mostly just noise.
+
+This is catastrophic cancellation: when you subtract nearly equal values, whatever error or uncertainty was in each gets blown up in your small result, regardless of using computers or physical tools.
+
+The problem is NOT because of "floating point", but because you lost accuracy by subtracting two almost equal measurements.
+Catastrophic cancellation can happen in **any system with limited precision** (physical measurements, financial calculations with limited decimal places, etc.).
+
+Now, let's see how a similar effect happens in floating point computations, and how it can be even worse when the numbers are truncated or rounded first.
+The difference of two squares $a^2 − b^2$ seems innocuous,
+but when the two terms are close, catastrophic cancellation occurs.
+Usually it happens in a subtraction on previously truncated operands, for instance, the product of other operands (here, squares).
+
+Let us consider $a = 2.875$ and $b = 2.75$.
+It is easy to compute the true difference of squares $a^2 - b^2 = 0.703125$.
+
+Note that both $a$ and $b$ are **exactly** representable in `Float8`.
+If, however, we compute $a^2-b^2$ in our `Float8` representation, we will get obtain $1.0$ as the result.
+The nearest `Float8` to $a^2$ is $8.5$, and $b^2$ is rounded to $7.5$.
+
+$$
+\begin{alignat}{2}
+2.875^2 &= 8.265625 & \approx 8.5 \\
+2.75^2  &= 7.5625   & \approx 7.5
+\end{alignat}
+$$
+
+Subtracting the two, we get $1.0$. The relative error of our result is $42\%$!
+
+$$
+\frac{|1 - 0.703125|}{|0.703125|} \approx 0.42.
+$$
+
+There is no general, systematic method to completely avoid catastrophic cancellation or to reliably predict exactly how many digits of accuracy have been lost in a given computation.
+However, we can mitigate its effects by carefully designing numerically stable algorithms and reformulating calculations to minimize the subtraction of nearly equal quantities.
+For our difference of squares, the best solution is to use a factorized formulation of the computation $a^2 - b^2 = (a+b)(a-b)$.
+
+For our example, the difference $2.875 - 2.75$ can be computed exactly in our `Float8`, and the sum $2.875 + 2.75$ is rounded to $5.5$:
+
+$$
+\begin{alignat}{2}
+2.875 + 2.75 &= 5.625 & \approx 5.5 \\
+2.875 - 2.75  &= 0.125. &
+\end{alignat}
+$$
+
+Then the product $5.5 \cdot 0.125 = 0.6875$, which is again exactly computable in our `Float8` representation, has only $2\%$ of relative error:
+
+$$
+\frac{|0.6875 - 0.703125|}{|0.703125|} \approx 0.02.
+$$
+
+$2\%$ of error is much better than $42\%$ we had before!
+
+
 ### Summation
 
+Well, okay, subtraction is tricky, but if we add positive numbers nothing can go wrong.
+Say, if I sum $128$ times $\frac{1}{128}$, I'll get $1$, right? Am I right?
+
+
+Note that $1/128$ can be represented exactly in `Float8`, so when I write `Float8.from_float(1/128)`, there is no loss of information.
+Let us test the summation. I start with the accumulator variable `total` initialized to $0$, and add $128$ times $0.0078125$.
+
+```python
+from float8 import *
+
+total = Float8.from_float(0)
+for _ in range(128):
+    total += Float8.from_float(1/128)
+print(float(total))
+```
+
+AAaaand here is the result!
+
+```
+0.25
+```
+
+It is important to understand why it is happening, so let us add $0.25$ and $0.0078125$ by hand.
+First of all, let us find their mantissas and exponents:
+
+$$
+\begin{align}
+0.25 &= 16 \cdot 2^{-2-4}\\
+0.0078125  &= 1\cdot 2^{-3-4}
+\end{align}
+$$
+
+We need to align the mantissas:
+
+$$
+0.0078125 = 0.5 \cdot 2^{-2-4}
+$$
+
+Finally, we sum the mantissas and round them using the RNE rule:
+
+$$
+0.25 + 0.0078125 = (16 + 0.5) \cdot 2^{-2-4} \approx 16 \cdot 2^{-2-4}.
+$$
+
+In other words, in `Float8` representation, `0.25 + 0.0078125 = 0.25`.
+
+When you add two numbers with very different magnitudes, the smaller number may be ignored or “lost” due to limited precision, resulting in a loss of accuracy.
+This is because the significant digits of the smaller number may not fit within the precision allowed when combined with the much larger number.
+
+This is a particular problem in the straightforward (sequential) way of summing a list.
+Pairwise summation is a numerically stable technique that helps reduce this error.
+Instead of adding numbers in a sequence, you recursively sum pairs of numbers, then pairs of those sums, and so on, like a binary tree.
+By always adding numbers of similar size first, pairwise summation keeps as many significant digits as possible, making the final result more accurate than simple sequential addition.
+
+Let us illustrate the idea with working code.
+Here I define two function returning the sum of an array. The first one is the naive, sequential implementation, and the other one implements the binary tree idea:
+
+```python
+def naive_sum(arr):
+    s = Float8.from_float(0.)
+    for v in arr:
+        s += v
+    return s
+
+def pairwise_sum(arr):
+    match len(arr):
+        case 0:
+            return Float8.from_float(0)
+        case 1:
+            return arr[0]
+    mid = len(arr)//2
+    return pairwise_sum(arr[:mid]) + \
+           pairwise_sum(arr[mid:])
+```
+
+And now let us invoke both of them on our test data:
+
+```python
+arr = [ Float8.from_float(1/128) ] * 128
+
+print('naive sum:\t',    float(   naive_sum(arr)))
+print('pairwise sum:\t', float(pairwise_sum(arr)))
+```
+
+Pairwise summation greatly improves the result:
+
+```
+naive sum:       0.25
+pairwise sum:    1.0
+```
+
+While pairwise summation reduces rounding errors when adding large sequences of numbers, there are even more refined methods, such as Kahan summation, that go a step further.
+Kahan summation keeps track of small errors that are typically lost in standard addition.
+By maintaining a compensation variable for lost low-order bits, it ensures that even subtle contributions from tiny numbers aren’t “forgotten.”
+This makes Kahan’s algorithm especially valuable in situations requiring high precision over long sequences of additions.
+
+Moreover, pairwise summation  typically requires knowing all the values in advance, making it ideal for **offline** summation when the complete list is available.
+However, in many practical scenarios, we need to sum values as they arrive, one by one, this is known as **online** summation.
+For such cases, Kahan summation is especially effective.
+
+Here is an implementation:
+
+```python
+def kahan_sum(arr):
+    s, c = Float8.from_float(0), Float8.from_float(0)
+    for v in arr:
+        t = s + (v - c)
+        c = (t - s) - (v - c)
+        s = t
+    return s
+```
+
+Variable `s` is the accumulator, while `c` is the compensation variable.
+The useful obervation to make is that we can approximate the inaccuracy of `s` is it changes from iteration to iteration.
+To do so, consider the expression
+
+$$
+((a+b)-a)-b.
+$$
+
+Algebraically, this expression equals zero. Numerically, however, this may not be the case.
+In particular, the sum $a+b$ may be rounded to floating-point precision. Subtracting $a$ and $b$ one at a time then yields an approximation of the error of approximating $a+b$.
+Removing $a$ and $b$ from $a+b$ intuitively transitions *from* large orders of magnitude *to* smaller ones rather than vice versa and hence is less likely oto induce rounding error
+than evaluating the sum $a+b$; this observation explains why the error estimate is not itself as prone to rounding issues as the original operation.
+
+Let us confront all the implementations on more real world-like data.
+Here I want to sum $128$ random numbers from the range $(-0.25, 0.25)$:
+
+```python
+import random
+random.seed(1)
+arr = [ Float8.from_float(random.uniform(-0.25, .25)) for _ in range(128) ]
+
+print('naive sum:\t',    float(   naive_sum(arr)))
+print('pairwise sum:\t', float(pairwise_sum(arr)))
+print('Kahan sum:\t',    float(   kahan_sum(arr)))
+print('True sum:\t',     float(Float8.from_float(sum([float(v) for v in arr]))))
+```
+
+And here are the results:
+
+```python
+naive sum:       0.1875
+pairwise sum:    -0.03125
+Kahan sum:       0.015625
+True sum:        0.015625
+```
+As expected, naïve sum is way off the true result, pairwise summation gives a reasonable approximation, and Kahan summation is the best.
 
 --8<-- "comments.html"
