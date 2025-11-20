@@ -1,5 +1,5 @@
 ---
-title: Addition
+title: Addition and errors
 ---
 
 # Addition and numerical errors
