@@ -2,9 +2,8 @@
 title: Home
 ---
 
-# TinyFloat - the most unoptimized soft float library
+# TinyFloat - the most unoptimized soft float library on the net
 
-##**N.B.: Under construction!**
 
 
 ## Someone is wrong on the internet!
@@ -12,8 +11,7 @@ title: Home
 ![](home/bad-news.jpg)
 
 Recently, I needed to emulate floating point operations using only integer arithmetic, since floats were unavailable.
-I went online to look for a ready-made library and almost drowned.
-Not only did I not find what I was looking for, but I also discovered that someone on the internet was wrong. :)
+I went online to look for a ready-made library and, to my surprise, not only did I not find what I was looking for, but I also discovered that someone on the internet was wrong. :)
 
 
 It turns out that forums are full of people who don't fully understand how computers manipulate numbers.
@@ -22,7 +20,7 @@ Someone was so scared of the terrible rounding errors of floating point numbers 
 The only problem is that **0.5 + 0.5 is exactly equal to 1.0**.
 
 So, I decided to roll up my sleeves and reinvent the wheel.
-That is, to write the most unoptimized C++ library for emulating IEEE754 32-bit floating-point numbers using only 32-bit integer arithmetic.
+That is, to write [the most unoptimized C++ library](https://github.com/ssloy/tinyfloat) for emulating IEEE754 32-bit floating-point numbers using only 32-bit integer arithmetic.
 The library will fit into a few hundred lines of code and will not contain any bit hacking.
 The task is to write understandable code, not fast code.
 And at the same time, to document it thoroughly in a series of articles.

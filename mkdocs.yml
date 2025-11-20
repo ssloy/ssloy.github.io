@@ -82,6 +82,7 @@ nav:
         - 'tinyfloat/computers-and-numbers.md'
         - 'tinyfloat/print.md'
         - 'tinyfloat/add.md'
+        - 'tinyfloat/div.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
 
