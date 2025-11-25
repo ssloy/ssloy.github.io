@@ -2,7 +2,7 @@
 
 Do you know what a Mendocino motor is?
 It is a sun-powered, magnetically-levitated demonstration motor - beautiful, simple, and educational.
-Such a motor can be made with few tools, making it a really good fun project for any hobbyist.
+Such a motor can be made with very basic tools, making it a really fun project for any hobbyist.
 
 The rotor is mounted on extremely low-friction bearings: the original had a glass cylinder suspended on two needles, while modern versions have a magnetic suspension system.
 The motor is brushless, with solar panels on the rotor that supply voltage to the coils wound on the rotor.
@@ -81,7 +81,7 @@ My physics skills are shaky, so we'll draw on knowledge from [Wikipedia](https:/
 
     where $k$ is the permittivity of vacuum.
 
-Let us focus on the word "potential" first.
+If your physics skills are somewhat comparable to mine (pretty low), then let us focus on the word "potential" first.
 It comes from Latin *potentia*, meaning *power* or *capacity*.
 In physics, it generally refers to a stored ability to do something, something that could be released or converted into motion/work.
 Electrostatic potential $f$ measures the capacity of a point in space to give energy to a charge.
@@ -92,13 +92,14 @@ Let’s say a hill represents **gravitational potential**.
 A ball on the hill has gravitational **potential energy** proportional to height.
 The slope of the hill tells the ball which way it will roll: the steeper the slope, the stronger the force.
 Note that the potential itself is a scalar quantity — it tells you “how much energy per unit particle is stored at this point,” not the force.
-The force comes from the gradient of the potential: the slope of the “energy landscape.”
+The force comes from the gradient of the potential: it is the slope of the “energy landscape.”
 
 In my thought experiments, all coefficients are either zero or one.
 Therefore, both the charge $q$ and the permittivity $k$ are unit.
 That is, a single fixed charge creates a potential measured by the formula $f = 1/r$, where $r$ is the distance to the charge.
 
-Let us use python to draw the map of the potential of our system made of four charges:
+Let us use python to draw the map of the potential of our system made of four charges.
+Then we can use this function to compute the electric potential of a point $(x,y)$ due to a single charge located at the point $(a,b)$:
 
 ```python
 def f(a, b, x, y): # electric potential due to a point charge located at a,b
@@ -115,6 +116,7 @@ def F(x, y):       # electric potential due to 4 point charges
            f(-1, -1, x, y)
 ```
 
+Finally, all we need to do is to plot the the scalar field $F$:
 
 ```python
 import numpy as np
@@ -125,30 +127,49 @@ plt.contourf(X, Y, np.clip(F(X, Y), None, 5))
 plt.show()
 ```
 
-
+And here is the plot. Note that I have clamped $F$ to remove the points where the potential goes to infinity:
 
 ![](earnshaw/3d-potential.jpg)
 
-## Second experiment
+The scalar field $F$ can be seen as a height map, a bird's-eye view of a landscape.
+The dashed lines show the isolines of the elevation, and the yellow arrows indicate the direction of the steepest descent.
+
+Clearly, in the center of the plot there is a basin of attraction, a zone with only incoming yellow arrows.
+If we move slightly our free charge from the center, its energy will increase, so it will return to the center.
+Therefore, this is a stable equilibrium.
+
+Did Earnshaw lie? No, he did not. The problem is that I drew the picture poorly, I made a mistake. And many people would make the same mistake as I did (I have checked it).
+Pause for a second, think about where I went wrong.
+
+## First experiment corrected
+
+In this case, the error lies in the fact that in 2D, a fixed charge creates a potential measured by the formula $f = -\log r$, where $r$ is the distance to the charge, and not $1/r$.
+The Coulomb's formula $f = 1/r$ is derived for 3D. Let's take my word for it for a moment and allow us to modify the Coulomb's formula.
+Then the correct code will look like this (check the highlighted line):
 
 
 ```python linenums="1"  hl_lines="2"
-def charge(a, b, x, y): # electric potential due to a point charge located at a,b
+def f(a, b, x, y): # electric potential due to a point charge located at a,b
     return -np.log(np.hypot(x - a, y - b))
 
-def potential(x, y):    # electric potential due to 4 point charges
-    return charge( 1,  1, x, y) + \
-           charge(-1,  1, x, y) + \
-           charge( 1, -1, x, y) + \
-           charge(-1, -1, x, y)
+def F(x, y):       # electric potential due to 4 point charges
+    return f( 1,  1, x, y) + \
+           f(-1,  1, x, y) + \
+           f( 1, -1, x, y) + \
+           f(-1, -1, x, y)
 
 import numpy as np
 import matplotlib.pyplot as plt
 X, Y = np.meshgrid(np.linspace(-2, 2, 300),
                    np.linspace(-2, 2, 300))
-plt.contourf(X, Y, np.clip(potential(X, Y), None, 5))
+plt.contourf(X, Y, np.clip(F(X, Y), None, 5))
 plt.show()
 ```
+
+There are no local minima on the map.
+The origin is a saddle point, i.e., a point of **unstable** equilibrium.
+As soon as the free charge shifts even a micron away from the origin, it will inevitably drift out of the square, accelerating more and more.
+
 
 
 ![](earnshaw/2d-potential.jpg)
