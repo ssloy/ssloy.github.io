@@ -42,8 +42,6 @@ In other words, people all over the world want to get rid of the side support.
 I didn't do very well in school, and the impossibility of creating a fully magnetic suspension is not obvious to me either.
 Over a cup of tea, I asked my colleagues, this very question: “Why is it impossible, actually?” And you know, it wasn't obvious to him either!
 
-
-
 No one on the above-mentioned forums really explained why it is impossible.
 At best, they quoted some Earnshaw theorem, which is not very easy to digest.
 It states the following:
@@ -68,7 +66,7 @@ Something like this:
 
 Is it possible that the free charge is not in a state of stable equilibrium?
 Intuitively, wherever the charge moves, it approaches one of the fixed charges, increasing the repulsive force!
-Let's try to draw a map of the potential energy of the free charge.
+Let's draw a map of the potential energy for the free charge.
 My physics skills are shaky, so we'll draw on knowledge from [Wikipedia](https://en.wikipedia.org/wiki/Electric_potential).
 
 
@@ -99,7 +97,7 @@ Therefore, both the charge $q$ and the permittivity $k$ are unit.
 That is, a single fixed charge creates a potential measured by the formula $f = 1/r$, where $r$ is the distance to the charge.
 
 Let us use python to draw the map of the potential of our system made of four charges.
-Then we can use this function to compute the electric potential of a point $(x,y)$ due to a single charge located at the point $(a,b)$:
+We can use following function to compute the electric potential of a point $(x,y)$ due to a single charge located at the point $(a,b)$:
 
 ```python
 def f(a, b, x, y): # electric potential due to a point charge located at a,b
@@ -144,7 +142,8 @@ Pause for a second, think about where I went wrong.
 ## First experiment corrected
 
 In this case, the error lies in the fact that in 2D, a fixed charge creates a potential measured by the formula $f = -\log r$, where $r$ is the distance to the charge, and not $1/r$.
-The Coulomb's formula $f = 1/r$ is derived for 3D. Let's take my word for it for a moment and allow us to modify the Coulomb's formula.
+The Coulomb's formula $f = 1/r$ is derived for 3D.
+Take my word for it for a moment and allow me to modify the Coulomb's formula.
 Then the correct code will look like this (check the highlighted line):
 
 
@@ -166,56 +165,103 @@ plt.contourf(X, Y, np.clip(F(X, Y), None, 5))
 plt.show()
 ```
 
-There are no local minima on the map.
+Check the result, there are no local minima on the map.
 The origin is a saddle point, i.e., a point of **unstable** equilibrium.
 As soon as the free charge shifts even a micron away from the origin, it will inevitably drift out of the square, accelerating more and more.
-
-
 
 ![](earnshaw/2d-potential.jpg)
 
 
+## What happened to the electric potential formula?
+
+When I encountered a clear contradiction with Earnshaw's theorem, I realized that I had made a mistake somewhere and began the debugging.
+At some point I saw that I had no other option as to read about Maxwell's equations.
+School physics class were long forgotten, and I never had to deal with them again at university or later in life.
+
+It turns out that the subject is not that hard, especially if we are only interested in electrostatics!
+For the big picture intuition, you can think of the electric field like a flowing fluid:
+
+* Field lines (shown in yellow arrows) are water streams
+* A charge is a source/sink that creates or absorbs flow
+* Potential = height of a landscape; water flows downhill
+
+Four our case, we need two (out of four) Maxwell's equations.
+
+#### Faraday: no swirling, only gradient flow
+
+[Faraday says](https://en.wikipedia.org/wiki/Faraday%27s_law_of_induction) changing magnetic fields create vortices in the electric field.
+But in electrostatics nothing changes in time, so no vortices exist.
+That means the “water” never swirls in circles — it only flows because gravity pulls it downward on a landscape (check the yellow arrows).
+
+Mathematically, for any zero-curl (irrotational) vector field $\vec E$, there exists a scalar potential $f$ such that $\vec E = - \nabla f$.
+To sum up, Faraday said that the for the static case the
+electric field (the yellow lines) can be found as the downhill direction of potential landscape.
 
 
-## 2D electric potential due to a point charge
+#### Gauss: conservation law
 
-In 2D, 
+This is a local conservation law.
+[It states](https://en.wikipedia.org/wiki/Gauss%27s_law) that if there is no charge inside a region, then the total electric flux through the boundary of the region is zero.
+
+If you imagine the field as water flow, then enclosing a charge is like enclosing a faucet: there is net flow out of the surface.
+A positive charge is a fountain, a negative charge is a drain.
+Zero charge in a region tells that there is no net flow through the boundary: What flows in must flow out (no accumulation).
+
+Mathematically, we say that at any point the [divergence](https://en.wikipedia.org/wiki/Divergence) of the electric field is equal to the charge at this point:
 
 $$
-\Delta f(r) = f''(r) + \frac1r f'(r),
+\nabla \cdot \vec{E} = q
 $$
 
-therefore $\Delta f = 0$ becomes
+#### Combine both laws
+
+Let us plug $\vec E = -\nabla f$ into Gauss's law:
 
 $$
-f''(r) + \frac{1}{r} f'(r) = 0.
+\nabla \cdot \vec E = \nabla \cdot (-\nabla f) = -\Delta f = q.
 $$
 
+So, $\Delta f = -q$, which is [Poisson's equation](https://en.wikipedia.org/wiki/Poisson%27s_equation).
+If the region considered contains no free charge, $q=0$. Then Poisson reduces to $\Delta f = 0$, 
+which is [Laplace's equation](https://en.wikipedia.org/wiki/Laplace%27s_equation). Functions satisfying $\Delta f = 0$ are called harmonic.
+Therefore the electrostatic potential is harmonic wherever there is no charge.
 
-To solve it, we can rewrite left part in “derivative of a product” form:
+It turns out that in 2D, function $\frac{1}{r}$ is not harmonic (it has non-zero Laplacian).
+To derive proper potential function, we need to solve the Laplace's equation.
+Here you can see the derivation details:
 
-$$
-f''(r) + \frac{1}{r} f'(r) = \frac{1}{r} \big( r f'(r) \big)'.
-$$
+??? spoiler "2D electric potential due to a point charge"
+    In 2D, $\Delta f(r) = f''(r) + \frac1r f'(r)$, therefore $\Delta f = 0$ becomes
 
+    $$
+    f''(r) + \frac{1}{r} f'(r) = 0.
+    $$
 
-So the ODE becomes
+    To solve it, we can rewrite left part in “derivative of a product” form:
 
-$$
-\frac{1}{r} (r f'(r))' = 0 \quad\Rightarrow\quad (r f'(r))' = 0.
-$$
+    $$
+    f''(r) + \frac{1}{r} f'(r) = \frac{1}{r} \big( r f'(r) \big)'.
+    $$
 
-Then to recover $f$ it suffices to integrate the equation twice:
+    So the ODE becomes
 
+    $$
+    \frac{1}{r} (r f'(r))' = 0 \quad\Rightarrow\quad (r f'(r))' = 0.
+    $$
 
-$$
-\begin{align}
-(r f'(r))' = 0 \quad&\Rightarrow\quad r f'(r) = A,\\
-f'(r) = \frac{A}{r} \quad&\Rightarrow\quad  \boxed{f(r) = A \ln r + B},
-\end{align}
-$$
+    Then to recover $f$ it suffices to integrate the equation twice:
 
-where $A$ and $B$ are constants.
+    $$
+    \begin{align}
+    (r f'(r))' = 0 \quad&\Rightarrow\quad r f'(r) = A,\\
+    f'(r) = \frac{A}{r} \quad&\Rightarrow\quad  \boxed{f(r) = A \ln r + B},
+    \end{align}
+    $$
+
+    here $A$ and $B$ are constants.
+
+As a sanity check, we can also see if we get the Coulomb's potential for the 3D case (yes, we do):
+
 
 ??? spoiler "Derivation of Coulomb's law in 3D"
     The 3D Laplace equation for a radial function $f(r)$ is
@@ -226,12 +272,9 @@ where $A$ and $B$ are constants.
 
     Note the constant 2 appearing in the 3D version, if you are curious where it comes from, check the text under the spoiler.
 
-
-
     ??? spoiler "Laplacian for radial functions for arbitrary dimenensions"
         Let $\vec{x}=(x_1,\dots,x_n)$. Set $r:=|\vec x|$.
         Then the gradient  $\nabla f$ can be written as:
-
 
         $$
            \nabla f = f'(r)\,\nabla r = f'(r)\,\frac{\vec{x}}{r} = f'(r)\,\hat{\vec r},
@@ -264,7 +307,6 @@ where $A$ and $B$ are constants.
     f''(r) + \frac{2}{r} f'(r) = \frac{1}{r^2} \big( r^2 f'(r) \big)'.
     $$
 
-
     $$
     \begin{align}
     (r^2 f'(r))' = 0 \quad&\Rightarrow\quad r^2 f'(r) = A,\\
@@ -276,111 +318,35 @@ where $A$ and $B$ are constants.
     To sum up, we Coulomb's electric potential due to a point charge is indeed derived from Laplace's equation.
 
 
+## Earnshaw's theorem
 
-## **Big Picture Intuition**
+Let us sum up what we have learned from Maxwell's laws: in a region without charge, the electric potential $f$ satisfies Laplace’s equation $\Delta f = 0$.
+Such functions are called **harmonic**, and harmonic functions obey a crucial property: they cannot have any local maxima or minima inside the region, only on the boundary.
+Physically this means the potential is shaped like a perfectly stretched elastic sheet — no bumps or wells can form away from the boundary of the sheet.
 
-Think of the electric field like a *flowing fluid*:
+A free charge placed in an electrostatic field would sit at a point where the electric force vanishes, i.e. in a point where its potential energy has a (local) minimum.
+But since the potential of an electrostatic field has no local minima, a result, the potential energy of a single particle has no local minima.
+Therefore, static electric fields cannot trap a charged particle in stable equilibrium.
 
-* Field lines = water streams
-* Charge = source/sink that creates or absorbs flow
-* Potential = height of a landscape; water flows downhill
+Congratulations, we have just proven Earnshaw's theorem for a single charged particle.
+But what about more complex systems?
+My colleagues have suggested me another thought experiment.
 
-With that analogy, we can reinterpret each step.
+Let's fix two charges and create a moving body consisting of a weightless, inextensible rod with charges at both ends:
 
----
 
-## **1. Gauss’s Law = Conservation of Electric Flux**
+Intuitively, if we move the stick slightly to the left or right, one end will approach the fixed charges, and they will repel it, returning the stick to its original position.
+Where's the catch?
+Let's draw the electrostatic potential of two fixed charges:
 
-**Gauss says: charge is the source of electric field lines.**
 
-If you imagine the field as water flow, then enclosing a charge is like enclosing a faucet: there is net flow *out* of the surface.
 
-* Positive charge = fountain
-* Negative charge = drain
-* No charge = no net flow through the boundary
+How can we draw the potential energy of our stick charged at both ends?
+The stick has three degrees of freedom (two for movement and one for rotation), so the graph would be four-dimensional.
+Let's ignore rotation and allow the stick to move only in parallel.
 
-This is a **local conservation law**:
+Let's fix a point on the stick, for example, its center, and draw a map of the stick's potential energy for the position of its center.
+Then the total potential energy of the stick is the sum of the potential energies of the charges at the ends:
 
-> If there is no charge inside a region, the total electric flux out of any closed surface is zero.
 
-→ *What flows in must flow out* (no accumulation).
-
----
-
-## **2. Faraday + Electrostatics = No Swirling, Only Gradient Flow**
-
-Faraday says changing magnetic fields create vortices in the electric field.
-But in electrostatics nothing changes in time, so **no vortices exist.**
-
-That means the “water” never swirls in circles—it only flows downhill from one place to another.
-
-Flows with no loops must come from a **height function**:
-
-> **Electric field = downhill direction of potential landscape**
-> [
-> \mathbf{E} = -\nabla \phi
-> ]
-
-This is like saying water flows because gravity pulls it downward on a landscape.
-
----
-
-## **3. Plug into Gauss → Charge Creates Curvature in the Potential**
-
-Now combine both ideas:
-
-* Electric field = flow
-* Charge = source of flow
-* Potential = height generating the flow
-
-If the field comes from a potential, then **the amount of flow leaving a point is controlled by how curved the potential landscape is.**
-
-Mathematically:
-[
-\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}
-]
-[
-\mathbf{E} = -\nabla\phi
-]
-
-→ Gives **Poisson’s equation**:
-[
-\nabla^2\phi = -\frac{\rho}{\varepsilon_0}
-]
-
-Interpretation:
-
-> **Charge causes bulges or dents in the potential surface—the curvature of the potential measures how much source you have.**
-
----
-
-## **4. No Charge → No Curvature → Harmonic Potential**
-
-If there's no charge, there’s no source or sink for field flow.
-
-→ Flow is balanced everywhere.
-→ Nothing pushes the potential up or down.
-
-So:
-[
-\nabla^2\phi = 0
-]
-
-This is Laplace’s equation.
-
-Interpretation:
-
-> **A harmonic function is like a rubber sheet pulled tight: it can only bend if something forces it from the boundary.**
-
-Physical consequences:
-
-* No internal maxima or minima (only at boundaries)
-* Mean value property: value at a point = average of surroundings
-* Completely determined by boundary conditions → explains uniqueness in electrostatics
-
----
-
-## **Summary in One Sentence**
-
-> **In electrostatics the field is a flow with no vortices, and if there is no charge then this flow neither originates nor ends anywhere—this forces the potential to be a perfectly balanced surface, i.e., a harmonic function.**
 
