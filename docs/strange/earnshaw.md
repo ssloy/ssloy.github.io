@@ -357,8 +357,8 @@ Let's draw the electrostatic potential of two fixed charges:
 
 ```python
 def F(x, y):       # electric potential due to 2 point charges
-    return f(0,  1, x, y) + \
-           f(0, -1, x, y)
+    return f(0,  2, x, y) + \
+           f(0, -2, x, y)
 ```
 
 ![](earnshaw/2d-potential-2.jpg)
@@ -384,8 +384,8 @@ Let us draw the potential energy of the stick that cannot rotate (here I chose i
 
 ```python
 def P(x,y):
-    return F(x + 1,y) + \
-           F(x - 1,y)
+    return F(x + 2,y) + \
+           F(x - 2,y)
 ```
 
 And here is its plot:
