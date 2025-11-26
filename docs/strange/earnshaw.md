@@ -4,6 +4,8 @@ Do you know what a Mendocino motor is?
 It is a sun-powered, magnetically-levitated demonstration motor - beautiful, simple, and educational.
 Such a motor can be made with very basic tools, making it a really fun project for any hobbyist.
 
+![](earnshaw/mendocino.gif)
+
 The rotor is mounted on extremely low-friction bearings: the original had a glass cylinder suspended on two needles, while modern versions have a magnetic suspension system.
 The motor is brushless, with solar panels on the rotor that supply voltage to the coils wound on the rotor.
 When light hits the solar cells, they power the coils.
@@ -18,6 +20,8 @@ But let us focus on the magnetic suspension.
 We place a pair of fixed magnets on the stator so that a magnet mounted on the rotor axis sits in a local minimum of the magnetic potential in the radial directions — it’s held firmly against sideways (radial) displacement.
 
 ![](earnshaw/shaft.svg)
+
+![](earnshaw/magnetic-bearing.gif)
 
 Repeating that arrangement at both ends of the rotor produces radial confinement for the shaft, but the configuration is axially (longitudinally) unstable: the rotor is free to slide along the shaft direction.
 Resting the shaft lightly against a vertical support supplies the missing axial support while keeping contact friction extremely small, so the assembly behaves as a very low-friction bearing.
@@ -40,7 +44,7 @@ or another one:
 
 In other words, people all over the world want to get rid of the side support.
 I didn't do very well in school, and the impossibility of creating a fully magnetic suspension is not obvious to me either.
-Over a cup of tea, I asked my colleagues, this very question: “Why is it impossible, actually?” And you know, it wasn't obvious to him either!
+Over a cup of tea, I asked my colleagues this very question: “Why is it impossible, actually?” And you know, it wasn't obvious to him either!
 
 No one on the above-mentioned forums really explained why it is impossible.
 At best, they quoted some Earnshaw theorem, which is not very easy to digest.
@@ -318,6 +322,17 @@ As a sanity check, we can also see if we get the Coulomb's potential for the 3D 
     To sum up, we Coulomb's electric potential due to a point charge is indeed derived from Laplace's equation.
 
 
+### Back to the error I made
+
+If we use the Coulomb $1/r$ formula in a 2D space, this corresponds to a situation where we actually have 3 dimensions, but the motion of charges is restricted along one axis by some external mechanism.
+In that case, it is obvious that a stable configuration can be created.
+For example, take a cardboard tube, place it vertically, and put a magnet at the bottom.
+Then place another magnet inside the tube above it.
+This upper magnet will be in equilibrium: the tube prevents horizontal motion (effectively constraining the system to one dimension), and along the vertical direction the gravitational force is balanced by the magnetic repulsion.
+
+Earnshaw’s theorem must be applied either together with the Coulomb law in 3D, or in a space of any dimension, but using the correct potential for that dimension.
+By “correct” I mean the potential that actually follows from Maxwell’s equations in that given number of dimensions.
+
 ## Earnshaw's theorem
 
 Let us sum up what we have learned from Maxwell's laws: in a region without charge, the electric potential $f$ satisfies Laplace’s equation $\Delta f = 0$.
@@ -325,7 +340,7 @@ Such functions are called **harmonic**, and harmonic functions obey a crucial pr
 Physically this means the potential is shaped like a perfectly stretched elastic sheet — no bumps or wells can form away from the boundary of the sheet.
 
 A free charge placed in an electrostatic field would sit at a point where the electric force vanishes, i.e. in a point where its potential energy has a (local) minimum.
-But since the potential of an electrostatic field has no local minima, a result, the potential energy of a single particle has no local minima.
+But since the potential of an electrostatic field has no local minima, a result, the potential energy of a single particle has no local minima either.
 Therefore, static electric fields cannot trap a charged particle in stable equilibrium.
 
 Congratulations, we have just proven Earnshaw's theorem for a single charged particle.
@@ -334,19 +349,73 @@ My colleagues have suggested me another thought experiment.
 
 Let's fix two charges and create a moving body consisting of a weightless, inextensible rod with charges at both ends:
 
+![](earnshaw/4charges.svg)
 
 Intuitively, if we move the stick slightly to the left or right, one end will approach the fixed charges, and they will repel it, returning the stick to its original position.
 Where's the catch?
 Let's draw the electrostatic potential of two fixed charges:
 
+```python
+def F(x, y):       # electric potential due to 2 point charges
+    return f(0,  1, x, y) + \
+           f(0, -1, x, y)
+```
 
+![](earnshaw/2d-potential-2.jpg)
 
 How can we draw the potential energy of our stick charged at both ends?
-The stick has three degrees of freedom (two for movement and one for rotation), so the graph would be four-dimensional.
-Let's ignore rotation and allow the stick to move only in parallel.
+The electric potential $F(r)$ is a property on the field itself and represents the potential energy per unit charge available at each point in space.
+When you place a charge $q$ in that field, the actual potential energy it has is simply $P(\vec x) = q\,F(\vec x)$.
+Recall that in my thought experiments all coefficients are either 1 or 0, so for a single charge the electric potential landscape and the potential energy the charge are pretty much the same thing.
 
-Let's fix a point on the stick, for example, its center, and draw a map of the stick's potential energy for the position of its center.
-Then the total potential energy of the stick is the sum of the potential energies of the charges at the ends:
+For a system of two charges it changes a bit.
+If two point charges $q_1,q_2$ are held at fixed positions $\vec x_1, \vec x_2$ (by a rigid rod), and there is an *external* electrostatic potential $F$, the total electrostatic potential energy of the system of the two charges is
 
+$$
+P(\vec x_1, \vec x_2)=q_1\,F(\vec x_1)+q_2\,F(\vec x_2).
+$$
 
+Basically, the potential energy of the stick is the sum of the potential energies of its charges
+(note that I ignore the mutual Coulomb energy of the two charges because of the rod).
+
+The stick has three degrees of freedom (two for translation and one for rotation), so the full graph would be hard to plot.
+For simplicity I ignore rotations and allow translations only.
+Let us draw the potential energy of the stick that cannot rotate (here I chose its center as the reference point):
+
+```python
+def P(x,y):
+    return F(x + 1,y) + \
+           F(x - 1,y)
+```
+
+And here is its plot:
+
+![](earnshaw/2d-potential-energy.jpg)
+
+So, the energy of the stick has four peaks (each of the two ends of the stick hits each of the two charges).
+As expected, the stick won't want to move horizontally. It will run away vertically!
+
+It is to be expected, since the total energy of the system is the sum of potential energies of each charge.
+We know that the potential energy of each charge is harmonic.
+But the sum of two harmonics is also harmohic...
+That is, potential energy of any charged body (not just our stick!) cannot have local minima in a constant electric field!
+
+## Conclusion
+
+The mental picture most people have of magnetic and electric fields is often misleading, especially if they have not worked closely with physics.
+Our intuition tends to imagine stable energy minima, little “valleys” where objects naturally settle.
+Unfortunately, real electromagnetic fields rarely behave this way, and it turns out to be surprisingly difficult to build something like a Mendocino motor without side support.
+
+So what loopholes might remain?
+Earnshaw’s theorem (to the extent that we even apply it to permanent magnets) applies only to systems of stationary permanent magnets.
+
+1. **Moving or rotating bodies:** Earnshaw excludes dynamics entirely. The classic example is the [levitron](https://en.wikipedia.org/wiki/Levitron).
+2. **Dynamic fields:** time-varying magnetic fields are not covered by Earnshaw’s theorem.
+3. **Diamagnetism and superconductivity:** these involve induced currents or quantum effects that fall outside the theorem’s assumptions.
+
+So the hope is not lost.
+Yes, using any of these ideas will ruin the beautiful simplicity of the original Mendocino motor, but the spectacle of something floating freely in mid-air would overshadow everything else!
+
+As a historical sidenote: arguments related to Earnshaw’s theorem played a role in showing that a purely electrostatic model of matter cannot explain the stability of atoms, ruling out the early idea of matter made of static charges held in place.
+This helped motivate the transition to the planetary ([Rutherford–Bohr](https://en.wikipedia.org/wiki/Bohr_model)) model and, ultimately, quantum mechanics.
 
