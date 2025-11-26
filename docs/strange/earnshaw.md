@@ -419,3 +419,4 @@ Yes, using any of these ideas will ruin the beautiful simplicity of the original
 As a historical sidenote: arguments related to Earnshaw’s theorem played a role in showing that a purely electrostatic model of matter cannot explain the stability of atoms, ruling out the early idea of matter made of static charges held in place.
 This helped motivate the transition to the planetary ([Rutherford–Bohr](https://en.wikipedia.org/wiki/Bohr_model)) model and, ultimately, quantum mechanics.
 
+--8<-- "comments.html"

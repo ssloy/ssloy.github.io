@@ -85,6 +85,7 @@ nav:
         - 'tinyfloat/div.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
+        - 'strange/earnshaw.md'
 
 extra:
     analytics:
