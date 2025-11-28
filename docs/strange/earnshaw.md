@@ -8,9 +8,9 @@ Such a motor can be made with very basic tools, making it a really fun project f
 
 The rotor is mounted on extremely low-friction bearings: the original had a glass cylinder suspended on two needles, while modern versions have a magnetic suspension system.
 The motor is brushless, with solar panels on the rotor that supply voltage to the coils wound on the rotor.
-When light hits the solar cells, they power the coils.
-The powered coil interacts with a magnetic field from fixed external magnets, thus creating a torque.
-The rotor rotates in the fixed magnetic field of the stator, the solar cell moves away from the directed light, and another one takes its place.
+When light hits a solar cell, it powers one coil.
+The powered coil interacts with the magnetic field from fixed external magnets, thus creating a torque.
+The rotor rotates, and the solar cell moves away from the directed light, and another one takes its place.
 This way, the rotor spins continuously as long as light is available.
 An extremely elegant solution that anyone can easily make at home.
 But let us focus on the magnetic suspension.
@@ -197,7 +197,7 @@ Four our case, we need two (out of four) Maxwell's equations.
 But in electrostatics nothing changes in time, so no vortices exist.
 That means the “water” never swirls in circles — it only flows because gravity pulls it downward on a landscape (check the yellow arrows).
 
-Mathematically, for any zero-curl (irrotational) vector field $\vec E$, there exists a scalar potential $f$ such that $\vec E = - \nabla f$.
+Mathematically, for any zero-curl (irrotational) vector field $\vec E$, there exists (in any simply connected neighborhood) a scalar potential $f$ such that $\vec E = - \nabla f$.
 To sum up, Faraday said that the for the static case the
 electric field (the yellow lines) can be found as the downhill direction of potential landscape.
 
