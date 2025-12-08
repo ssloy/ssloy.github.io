@@ -6,7 +6,7 @@ $$
 \frac{dx}{dt} = f(t, x),\quad t\geq 0
 $$
 
-with some initial condition $x(0)$. We want to solve computers to solve the ODE numerically,
+with some initial condition $x(0)$. We want to use computers to solve the ODE numerically,
 so let us set some time sampling rate $\Delta t$ and define the series $t_{i+1} := t_i + \Delta t$.
 The idea is to compute a sequence $\{x_i\}_{i=0}^{n}$ that approximates the ODE, i.e. $x_i \approx x(t_i)$.
 Note the difference, when I am writing $x(t_i)$, I mean the true (unknown) function, whereas $x_i$ is its approximation we want to compute.
@@ -15,7 +15,11 @@ Recall that Taylor series is a way to recover a function from its derivatives,
 and our ODE gives exactly that. So we can write an expansion $x(t)$ around the point $t_i$:
 
 $$
-x(t) = x(t_i) + f(t_i, x(t_i))(t-t_i) + \frac{1}{2!}f'(t_i, x(t_i))(t-t_i)^2 +  \frac{1}{3!}f''(t_i, x(t_i))(t-t_i)^3 + \dots
+\begin{align*}
+x(t) = x(t_i) + &f(t_i, x(t_i))(t-t_i) + \\
+ +\, \frac{1}{2!}&f'(t_i, x(t_i))(t-t_i)^2 +  \\
+ +\, \frac{1}{3!}&f''(t_i, x(t_i))(t-t_i)^3 + \dots
+\end{align*}
 $$
 
 ### Runge-Kutta 1st order (aka Euler’s) method
@@ -286,7 +290,7 @@ Because the ODE is linear, any sum of the homogeneous and particular (steady) so
     So the difference of any two full solutions is a homogeneous solution.
     This is one of the most important ideas in differential equations, and it’s surprisingly simple once you see the underlying structure.
     All diversity of solutions comes entirely from the homogeneous part.
-    A single particular solution + the space of homogeneous solutions gives you all possible solutions.
+    A single particular solution + the space of homogeneous solutions give you all possible solutions.
 
 Thus full solution:
 
