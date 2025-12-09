@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 m  = 0.5           # banana mass, kg
-mu = 0.000001           # kg/s (linear drag coefficient)
+mu = 0.1           # kg/s (linear drag coefficient)
 
 g = np.array([0, -9.81]) # gravity, m/s^2
-w = np.array([-10, 0])   # wind,    m/s
+w = np.array([-40, 0])   # wind,    m/s
 
 speed = 30.0  # initial speed (m/s)
 theta = 40.0  # launch angle in degrees
@@ -15,7 +15,7 @@ x0 = np.array([0., 0.])
 
 x = np.copy(x0)
 v = np.copy(v0)
-dt = 0.1
+dt = 0.01
 
 X = [x[0]]
 Y = [x[1]]
@@ -25,7 +25,7 @@ E = [m/2*np.dot(v, v)]
 GTX = [x[0]]
 GTY = [x[1]]
 
-for _ in range(40):
+for _ in range(400):
     x += dt * v
     v += dt * (-mu / m*(v - w) + g)
 
@@ -48,5 +48,5 @@ plt.plot(X, Y, 'r-+')
 plt.plot(GTX, GTY, 'b')
 plt.show()
 
-plt.plot(E)
-plt.show()
+#plt.plot(E)
+#plt.show()
