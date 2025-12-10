@@ -163,7 +163,7 @@ We want $\vec r(\vec p_0) + S_n \delta\vec p = \vec 0$,
 so we can solve following least-squares system:
 
 $$
-\delta \vec p = \text{argmin}_{\delta p} \|\vec r(\vec p_0) + S_n \delta\vec p\|^2 = (S_n^\top S_n)^{-1} S_n^\top \vec r(p_0)
+\delta \vec p = \text{argmin}_{\delta p} \|\vec r(\vec p_0) + S_n \delta\vec p\|^2 = -(S_n^\top S_n)^{-1} S_n^\top \vec r(p_0)
 $$
 
 ```
@@ -171,7 +171,7 @@ choose p
 
 while not tired:
     compute s_n and S_n
-    p <- p +  (S_n^\top S_n)^{-1} S_n^\top (s_n - s_meas)
+    p <- p - (S_n^\top S_n)^{-1} S_n^\top (s_n - s_meas)
     
 ```
 
