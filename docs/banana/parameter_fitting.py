@@ -59,7 +59,7 @@ def fit(traj):
                 else:
                    A = np.vstack((A, S[:2]))
                    b = np.hstack((b, s[:2]-sm))
-                    
+
                 grad += np.transpose(S[:2]) @ (s[:2] - sm)
                 x.append(s[0])
                 y.append(s[1])
@@ -80,7 +80,8 @@ def fit(traj):
 #        print(p)
 #    print(x, s)
 #    print(S)
-    
+
+
 time_of_flight = 3
 nsamples = 30
 random.seed(1337)
@@ -99,43 +100,4 @@ fit(traj)
 plt.scatter(xs, ys)
 plt.show()
 
-'''
 
-
-
-x = np.copy(x0)
-v = np.copy(v0)
-dt = 0.01
-
-X = [x[0]]
-Y = [x[1]]
-T = [0]
-E = [m/2*np.dot(v, v)]
-
-GTX = [x[0]]
-GTY = [x[1]]
-
-for _ in range(500):
-    x += dt * v
-    v += dt * (-mu / m*(v - w) + g)
-
-#    E.append(x[1] + np.dot(v,v))
-
-    T.append(T[-1]+dt)
-    X.append(x[0])
-    Y.append(x[1])
-
-    t = T[-1]
-    E.append(-m*np.dot(g, gtx - x0) + m/2*np.dot(gtv,gtv))
-    GTX.append(gtx[0])
-    GTY.append(gtx[1])
-
-
-print(v0)
-plt.plot(X, Y, 'r-+')
-plt.plot(GTX, GTY, 'b')
-plt.show()
-
-#plt.plot(E)
-#plt.show()
-'''
