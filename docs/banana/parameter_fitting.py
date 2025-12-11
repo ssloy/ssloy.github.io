@@ -97,7 +97,7 @@ traj = sorted(traj, key= lambda x: x[0])
 xs, ys = zip(*(p for _, p in traj))
 fit(traj)
 
-plt.scatter(xs, ys)
+plt.scatter(xs, ys, 'b')
 plt.show()
 
 
