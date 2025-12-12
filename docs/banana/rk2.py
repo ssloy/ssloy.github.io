@@ -136,8 +136,8 @@ print(p)
 plt.show()
 '''
 
+'''
 maxnorm = 1e20
-
 for tau in np.linspace(.1, 10, 50):
     for wx in np.linspace(-100, 100, 50):
         for g in np.linspace(0, -100, 50):
@@ -150,11 +150,11 @@ for tau in np.linspace(.1, 10, 50):
                 t = ti
                 sm = s + dt/2. * f(s,p)
                 s += dt*f(sm, p)
-                b = np.hstack((b, s[:2] - si))
-                norm = np.linalg.norm(b)
-                if maxnorm>norm:
-                    print(norm, p)
-                    maxnorm = norm
+            b = np.hstack((b, s[:2] - si))
+            norm = np.linalg.norm(b)
+            if maxnorm>norm:
+                print(norm, p)
+                maxnorm = norm
 
-
+'''
 
