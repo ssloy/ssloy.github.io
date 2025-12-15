@@ -1,3 +1,31 @@
+
+# Learn scientific computing by tossing bananas
+
+
+Two pixelated gorillas stand on skyscrapers, tossing bananas across a city skyline.
+Each throw arcs through the air, sometimes overshooting, all governed by simple laws of motion.
+In this course, we will explore how to model, simulate, and ultimately predict these flights using scientific computing.
+What starts as a playful game will guide us through core techniques for understanding and solving real-world problems.
+
+![](home/gorillas.gif)
+
+Physics is the art of building simplified models of the world that are just accurate enough to make reliable predictions.
+We observe how objects move, identify the dominant effects, write down mathematical laws, and then use them to anticipate what will happen next.
+In this course, we will adopt exactly the same mindset, but in a virtual setting.
+Starting from a world we do not fully know, we will observe how bananas fly, infer the underlying rules that govern their motion, and construct a mathematical model of that world.
+By translating our assumptions into equations and solving them numerically, we will learn how prediction emerges from modeling, and how even a simple virtual experiment can teach us the core ideas behind scientific computing.
+
+Scientific computing sits at the intersection of mathematics, modeling, and computation: it is about turning simple physical ideas into executable models and using numerical methods to explore their behavior.
+In this course, we will ground these ideas in a deceptively simple and playful example inspired by the classic gorilla.bas game: launching bananas.
+Behind this iconic setting lies a complete scientific workflow — choosing a model, identifying parameters, simulating outcomes, and interpreting results.
+By working with a familiar and intuitive problem, we can focus on the core principles of scientific computing without being overwhelmed by large codebases or unnecessary technical complexity.
+
+At the heart of many scientific models are differential equations, which describe how quantities evolve over time according to physical laws.
+Whether modeling projectile motion, population dynamics, heat diffusion, or fluid flow, differential equations provide a precise mathematical language for real-world phenomena.
+In most realistic situations, these equations cannot be solved exactly and must be approached numerically.
+In this course, we will learn how to discretize time, approximate derivatives, and build stable and accurate numerical solvers.
+Around our seemingly simple banana-launching project, we will naturally encounter and study major themes of scientific computing: numerical integration, error analysis, parameter sensitivity, optimization, and the validation of models against observations.
+
 ## Parameter fitting
 
 We model a real-world experiment in which the physical state of the system has been measured at a specific time $t_{\text {meas}}$.

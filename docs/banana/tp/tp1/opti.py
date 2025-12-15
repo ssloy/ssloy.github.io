@@ -9,10 +9,10 @@ def time_of_flight(v0, angle):
         return v0y * t + g * t**2/2
 
     a, b = 0, 1
-    while y(b) > 0:     # bracketing
+    while y(b) > 0:      # bracketing
         b *= 2
 
-    while b-a > 0.001:  # binary search
+    while b - a > 0.001: # binary search
         m = (a + b)/2
         if y(m) > 0:
             a = m
