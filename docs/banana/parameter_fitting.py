@@ -25,9 +25,9 @@ def gt(t):
 def fit(traj):
 #    p = np.array([tau, w[0], w[1], g[1]])
     p = np.array([10., 0., -10.])
-    p = np.array([  9.15604053, -75.31675916, -10.25633558])
+#    p = np.array([  9.15604053, -75.31675916, -10.25633558])
 
-    for _ in range(10):
+    for _ in range(1000):
         S = np.zeros((4,3))
         s = np.hstack((x0, v0))
         dt = 0.001
@@ -65,11 +65,11 @@ def fit(traj):
                 y.append(s[1])
                 j += 1
 
-#        grad /= np.linalg.norm(grad)
-#        p -=  grad
-        p -= np.linalg.inv(np.transpose(A)@A) @ np.transpose(A) @ b
+        grad /= np.linalg.norm(grad)
+        p -=  grad
+#        p -= np.linalg.inv(np.transpose(A)@A) @ np.transpose(A) @ b
         print(p)
-    plt.plot(x, y)
+        plt.plot(x, y)
 
 #       grad = np.transpose(S) @ (s-sm)
 #       grad /= np.linalg.norm(grad)
@@ -97,7 +97,7 @@ traj = sorted(traj, key= lambda x: x[0])
 xs, ys = zip(*(p for _, p in traj))
 fit(traj)
 
-plt.scatter(xs, ys, 'b')
+plt.scatter(xs, ys)
 plt.show()
 
 

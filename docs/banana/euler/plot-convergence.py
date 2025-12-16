@@ -29,14 +29,15 @@ plt.rc('font', size=24)
 dt = 1
 for _ in range(6):
     xs, ys = euler(dt)
-    plt.plot(xs, ys, label=f'$\Delta t = {dt}$', marker='.')
+    plt.plot(xs, ys, label=f'$\\Delta t = {dt}$', marker='.')
     dt /= 2
 
 plt.gca().set_xlabel("$x$", fontsize=32)
 plt.gca().set_ylabel("$y$", fontsize=32)
 plt.legend()
-plt.title('Convergence of Euler\'s schema as $\Delta t \\to 0$')
+plt.title('Convergence of Euler\'s schema as $\\Delta t \\to 0$')
 plt.grid(color='gray', linestyle='--', linewidth=0.5)
 plt.gca().set_aspect('equal', 'box')
+plt.savefig("plot-convergence.png")
 plt.show()
 

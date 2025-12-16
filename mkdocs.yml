@@ -28,6 +28,7 @@ markdown_extensions:
             - docs/tinycompiler/
             - docs/tinyoptimizer/
             - docs/tinyfloat/
+            - docs/banana/
     - pymdownx.superfences
     - admonition
     - pymdownx.details
@@ -83,6 +84,10 @@ nav:
         - 'tinyfloat/print.md'
         - 'tinyfloat/add.md'
         - 'tinyfloat/div.md'
+    - 'Learning from bananas':
+        - 'banana/index.md'
+        - 'banana/euler.md'
+        - 'banana/launcher.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
         - 'strange/earnshaw.md'

@@ -19,3 +19,6 @@ g /= len(t)
 
 print(g)
 
+
+print(2*(y[-1]-vy*t[-1])/t[-1]**2)
+

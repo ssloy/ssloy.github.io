@@ -91,5 +91,6 @@ ax_xy.set_title("$y(x)$", fontsize=24)
 ax_xy.grid(color='gray', linestyle='--', linewidth=0.5)
 
 plt.tight_layout()
+plt.savefig("plot3d.png")
 plt.show()
 
