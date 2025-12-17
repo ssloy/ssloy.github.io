@@ -43,7 +43,7 @@ plt.rcParams["font.family"] = "serif"
 plt.rcParams["mathtext.fontset"] = "dejavuserif"
 plt.rcParams['text.usetex'] = True
 
-plt.rc('font', size=18)
+plt.rc('font', size=36)
 '''
 plt.grid(color='gray', linestyle='--', linewidth=0.5)
 plt.plot(xs, ys, marker='.')
@@ -56,9 +56,9 @@ plt.show()
 
 VX, VY = np.meshgrid(np.linspace(.01, 50, 300),
                      np.linspace(.01, 50, 300))
-fig, axes = plt.subplots(1, 3, figsize=(16, 6))
+fig, axes = plt.subplots(1, 3, figsize=(32, 12))
 
-fig.suptitle("Hit a target with least effort:\n unconstrained minimization", fontsize=24)
+fig.suptitle("Hit a target with least effort:\n unconstrained minimization", fontsize=48)
 
 Z1 = np.zeros_like(VX)
 for i in range(VX.shape[0]):
@@ -97,15 +97,15 @@ axes[1].contour(VX, VY, Z2, levels=5, colors='silver', linewidths=0.8, linestyle
 axes[2].contour(VX, VY, Z3, levels=5, colors='silver', linewidths=0.8, linestyles='dashed')
 
 
-axes[0].set_title("$\\sqrt{v_{x,0}^2 + v_{y,0}^2}$", fontsize=16)
+axes[0].set_title("$\\sqrt{v_{x,0}^2 + v_{y,0}^2}$", fontsize=32)
 axes[0].set_xlabel('$v_{x,0}$')
 axes[0].set_ylabel('$v_{y,0}$')
 
-axes[1].set_title("$\\min_i \\sqrt{(x^*-x_i)^2 + (y^* - y_i)^2}$", fontsize=16)
+axes[1].set_title("$\\min_i \\sqrt{(x^*-x_i)^2 + (y^* - y_i)^2}$", fontsize=32)
 axes[1].set_xlabel('$v_{x,0}$')
 axes[1].set_ylabel('$v_{y,0}$')
 
-axes[2].set_title("$\\sqrt{v_{x,0}^2 + v_{y,0}^2} + \\lambda \\cdot \\min_i \\sqrt{(x^*-x_i)^2 + (y^* - y_i)^2}$", fontsize=16)
+axes[2].set_title("$\\sqrt{v_{x,0}^2 + v_{y,0}^2} + \\lambda \\cdot \\min_i \\sqrt{(x^*-x_i)^2 + (y^* - y_i)^2}$", fontsize=32)
 axes[2].set_xlabel('$v_{x,0}$')
 axes[2].set_ylabel('$v_{y,0}$')
 
