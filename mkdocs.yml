@@ -84,7 +84,7 @@ nav:
         - 'tinyfloat/print.md'
         - 'tinyfloat/add.md'
         - 'tinyfloat/div.md'
-    - 'Learning from bananas':
+    - 'The banana tossing project':
         - 'banana/index.md'
         - 'banana/euler.md'
         - 'banana/launcher.md'

@@ -1,4 +1,8 @@
-# Euler method
+# The naïve ape
+
+## Discretization & ODE
+
+
 
 Let us consider a very simple 1D problem: starting from the origin $x = 0$, we are heading to the right with some speed $v$.
 A very natural first question is: where will I be after one second?
@@ -91,6 +95,17 @@ As $\Delta t \to 0$:
 $$
 y(t) \to  v_{y,0}~t + g \frac{t^2}{2} 
 $$
+
+
+
+When we write down the equations of motion for a projectile, we are in fact describing a curve in a three-dimensional space whose coordinates are time and position.
+Each state of the system is a point $(t, x, y)$, and the differential equation tells us how this point moves as time increases.
+From this point of view, the solution of the ODE is not directly a curve in the plane, but a space curve parameterized by time.
+By projecting this curve onto the $(t,x)$ and $(t,y)$ planes, we obtain the two functions $x(t)$ and $y(t)$, which describe how the horizontal and vertical positions evolve in time.
+Most of the time, however, we visualize motion by eliminating time altogether and plotting $y$ as a function of $x$.
+This $(x,y)$ plot is only a projection of the full trajectory, and it hides the role of time.
+It is therefore important to keep the axes in mind: a graph of $y$ versus $t$ does not tell the same story as a graph of $y$ versus $x$, even though both come from the same underlying motion.
+
 
 ![](euler/plot3d.png)
 

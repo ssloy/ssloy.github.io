@@ -22,4 +22,7 @@ class BananaLauncher:
         time_of_flight = -2*vy/BananaLauncher.g
         z = BananaLauncher.measurement_noise
         T = [ random.uniform(0, time_of_flight) for _ in range(BananaLauncher.nsamples) ]
-        return [T, [ vx*t + random.uniform(-z,z) for t in T ], [ vy*t + BananaLauncher.g*t**2/2  + random.uniform(-z,z) for t in T ] ]
+        return sorted([T,
+                       [ vx*t + random.uniform(-z,z) for t in T ],
+                       [ vy*t + BananaLauncher.g*t**2/2  + random.uniform(-z,z) for t in T ] ],
+                        key= lambda x: x[0])
