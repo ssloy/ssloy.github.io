@@ -86,9 +86,9 @@ nav:
         - 'tinyfloat/div.md'
     - 'The banana tossing project':
         - 'banana/index.md'
-        - 'banana/euler-a.md'
-        - 'banana/euler-b.md'
-        - 'banana/euler-c.md'
+        - 'banana/euler.md'
+        - 'banana/trajectory.md'
+        - 'banana/errors.md'
         - 'banana/tof.md'
         - 'banana/least-effort.md'
         - 'banana/wind.md'

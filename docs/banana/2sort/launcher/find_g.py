@@ -16,7 +16,7 @@ def simulate(g, rk2=False):
     ts, xs, ys = [t], [x], [y]
 #    t_max = max(t_meas)
     dt = .25
-    while True: #t < t_max:
+    while y>=0:
         x  += dt * vx
         if rk2:
             y += dt * (vy + dt/2 * g)
@@ -26,18 +26,22 @@ def simulate(g, rk2=False):
         vy += dt * g
         t  += dt
 
-        if y < 0:
-            t = ts[-1]/(ts[-1] - y)
-            x = xs[-1] + t * (x - xs[-1])
-            y = 0
+#       if y < 0:
+#           t = ts[-1]/(ts[-1] - y)
+#           x = xs[-1] + t * (x - xs[-1])
+#           y = 0
 #            ts.append(ts[-1])
-            xs.append(x)
-            ys.append(y)
-            break
+#           xs.append(x)
+#           ys.append(y)
+#           break
 
         ts.append(t)
         xs.append(x)
         ys.append(y)
+    u = ys[-2]/(ys[-2]-ys[-1])
+    ts[-1] = ts[-2] + u*(ts[-1]-ts[-2])
+    xs[-1] = xs[-2] + u*(xs[-1]-xs[-2])
+    ys[-1] = 0
     plt.plot(xs, ys, alpha=.3, marker='.')
     return [ts, xs, ys]
 
@@ -72,7 +76,7 @@ g = ternary_search(-20, 0)
 print(g)
 
 plt.clf()
-simulate(g, True)
+simulate(g, False)
 plt.scatter(x_meas,y_meas)
 plt.grid(True)
 plt.show()
