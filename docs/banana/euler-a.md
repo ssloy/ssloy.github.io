@@ -1,5 +1,7 @@
 # The Ape Counts Seconds
 
+## Introduction
+
 Physics is the art of building simplified models of the world that are just accurate enough to make reliable predictions.
 We observe how objects move, identify the dominant effects, write down mathematical laws, and then use them to anticipate what will happen next.
 In this course, we will adopt exactly the same mindset, but in a virtual setting.
@@ -12,7 +14,7 @@ In most realistic situations, these equations cannot be solved exactly and must 
 In this course, we will learn how to discretize time, approximate derivatives, and build stable and accurate numerical solvers.
 Around our seemingly simple banana-launching project, we will naturally encounter and study major themes of scientific computing: numerical integration, error analysis, parameter sensitivity, optimization, and the validation of models against observations.
 
----
+## First throw
 
 Let us consider a very simple 1D problem: starting from the origin $x = 0$, we are heading to the right with some speed $v$.
 A very natural first question is: where will I be after one second?

@@ -92,8 +92,8 @@ nav:
         - 'banana/tof.md'
         - 'banana/least-effort.md'
         - 'banana/wind.md'
-        - 'banana/rk2.md'
         - 'banana/inverse.md'
+        - 'banana/rk2.md'
     - 'strange things':
         - 'strange/cursed-fire.md'
         - 'strange/earnshaw.md'

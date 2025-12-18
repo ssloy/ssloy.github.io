@@ -4,6 +4,11 @@ title: Home
 
 # The Banana Tossing Project
 
+!!! tip "The takeaway message for the course"
+    Scientific computing is not about writing clever formulas.
+    It is about choosing representations, algorithms, and approximations that fit the question you ask, and, ultimately,
+    about heating computers with huge arrays of numbers to crunch!
+
 ## A journey through scientific computing
 
 Two pixelated gorillas stand on skyscrapers, tossing bananas across a city skyline.
@@ -18,7 +23,4 @@ In this course, we will ground these ideas in a deceptively simple example inspi
 Behind this iconic setting lies a complete scientific workflow — choosing a model, identifying parameters, simulating outcomes, and interpreting results.
 By working with a familiar and intuitive problem, we can focus on the core principles of scientific computing without being overwhelmed by large codebases or unnecessary technical complexity.
 
-!!! tip "The takeaway message for the course"
-    Scientific computing is not about writing clever formulas.
-    It is about choosing representations, algorithms, and approximations that fit the question you ask.
 

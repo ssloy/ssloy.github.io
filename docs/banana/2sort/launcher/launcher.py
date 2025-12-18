@@ -2,7 +2,7 @@ import random
 
 class Launcher:
     g = -9.81
-    measurement_noise = .5
+    measurement_noise = 0*.5
     nsamples = 30
     ntargets = 10
     target_xrange = [10, 50]

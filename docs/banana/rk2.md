@@ -1,5 +1,27 @@
 # Between Two Seconds, Things Happen
 
+An inverse problem always has this structure:
+
+* You choose parameters θ (e.g. g, wind, drag)
+* You simulate forward to get a trajectory
+* You compare simulation to data
+* You adjust θ
+
+So what you are really optimizing is:
+θ  ↦  Integrator(θ)
+
+This means: Any numerical error in the forward solver becomes part of the inverse problem.
+
+
+
+
+Halving Δt halves Euler’s error, but quarters RK2’s error.
+
+
+RK2 stabilizes inverse problems by preventing numerical error from masquerading as physics.
+
+
+
 ## Solving ordinary differential equations
 
 Let us consider an ordinary differential equation (ODE) of the form
