@@ -1,46 +1,4 @@
-# The naïve ape
-
-## Discretization & ODE
-
-
-
-Let us consider a very simple 1D problem: starting from the origin $x = 0$, we are heading to the right with some speed $v$.
-A very natural first question is: where will I be after one second?
-If the velocity were constant, the answer would be simple: position is just “speed times time.”
-
-Let us apply the reasoning to our gorillas.
-Place the gorilla at the origin $(0,0)$, and imagine that it tosses a banana with some known initial speed and direction.
-In two dimensions, this motion naturally splits into two independent directions.
-The horizontal motion only depends on the horizontal component of the velocity, while the vertical motion depends on the vertical component.
-This separation is important: gravity affects only the vertical direction, leaving the horizontal motion unchanged.
-
-With this in mind, we can describe the motion step by step.
-Over the first second, the projectile moves according to its initial velocity.
-Then gravity slightly reduces the vertical velocity.
-Over the next second, the projectile again moves using this updated velocity, and so on.
-By repeating this simple reasoning we build the entire trajectory as a sequence of points in time.
-
-```py
-import numpy as np
-
-g     = -9.81 # gravity, m/s^2
-speed = 30    # initial speed (m/s)
-angle = 45    # launch angle in degrees
-
-x, y = 0, 0   # current state
-vx, vy = speed * np.cos(angle * np.pi/180), \
-         speed * np.sin(angle * np.pi/180)
-
-dt = 1
-while y >= 0:
-    x += dt * vx
-    y += dt * vy
-    vy += g * dt
-
-```
-
-![](euler/plot-euler.png)
-
+# The Ape Buys a Better Watch
 
 Although this description is approximate, refining the time step will gradually reveal the smooth parabolic path familiar from physics.
 
@@ -95,6 +53,57 @@ As $\Delta t \to 0$:
 $$
 y(t) \to  v_{y,0}~t + g \frac{t^2}{2} 
 $$
+
+---
+We treat motion in the horizontal $x$ and vertical $y$ directions separately,
+since they are uncoupled except through the time variable.
+Thus, projectile trajectory is given by $(x(t), y(t))$.
+Let us note by $v_x(t)$ and $v_y(t)$ the corresponding velocity.
+
+Here are our assumptions:
+
+* Gravity is acting vertically, i.e. $\frac{dv_x}{dt} = 0$ and $\frac{dv_y}{dt} = g$ with constant $g$, i.e. flat Earth approximation ;).
+* No air resistance.
+* Initial conditions: the projectile is launched from the origin at the beginning of the time: $x(0) = 0$, $y(0) = 0$.
+The launch speed is $v_0$, and $\theta_0$ is the launch angle w.r.t the ground.
+So, we can compute the initial velocity as
+
+$$
+\begin{align*}
+v_x(0) &= v_0 \cos\theta_0\\
+v_y(0) &= v_0 \sin\theta_0
+\end{align*}
+$$
+
+We can derive the motion equation from Newton's second law.
+As per our assumptions, the acceleration is constant:
+
+$$
+\frac{d^2x}{dt^2} = \frac{dv_x}{dt} = 0, \qquad \frac{d^2y}{dt^2} = \frac{dv_y}{dt} = g.
+$$
+
+We can integrate these once to get the velocity:
+
+$$
+\begin{align*}
+v_x(t) &= v_0 \cos\theta_0 + \int_0^t 0 \,ds =  v_0 \cos\theta_0\\
+v_y(t) &= v_0 \sin\theta_0 + \int_0^t g \,ds =  v_0 \sin\theta_0 + gt.
+\end{align*}
+$$
+
+And integrate the second time to retrieve the position:
+
+$$
+\begin{align*}
+x(t) &= \int_0^t v_0 \cos\theta_0 \,ds = v_0 \cos\theta_0 \, t \\
+y(t) &= \int_0^t (v_0 \sin\theta_0 + gs) \,ds = v_0 \sin\theta_0\, t + g\frac{t^2}2 .
+\end{align*}
+$$
+
+
+
+
+---
 
 
 
