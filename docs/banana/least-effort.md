@@ -10,7 +10,7 @@ Among all throws that satisfy the constraint, the ape wants the least effort pos
 Effort is measured by the magnitude of the initial velocity:
 
 $$
-E(v_{x,0},v_{y,0}) = \sqrt{v_{x,0}^2 + v_{y,0}^2}
+E(v_{x,0},v_{y,0}) := \sqrt{v_{x,0}^2 + v_{y,0}^2}
 $$
 
 This is no longer a “throw farther” problem.  It is a problem of doing just enough.
@@ -35,10 +35,30 @@ The color plot shows the effort for each throw. It is just a radial plot showing
 Therefore, the least effort throw satisfying the constraint is the point on the black curve closest to the origin.
 
 ## Reduction to 1D
+
+Directly searching in two dimensions would be expensive and unnecessary.
+The key observation is that the constraint couples $v_{x,0}$ and $v_{y,0}$.
+If $v_{x,0}$ is fixed, the trajectory’s horizontal motion is determined.
+Only the vertical motion remains adjustable.
+
+This allows the problem to be decomposed:
+* Choose a value of $v_{x,0}$
+* Find the value of $v_{y,0}$ that makes the banana pass through $(x^*,y^*)$.
+
+This second step is no longer an optimization problem, it is a root-finding problem.
+
+
 ![](least-effort/plot2.png)
 
 ## Unconstrained optimization
 
 [![](least-effort/plot3.png)](least-effort/plot3.png)
 
+### Deliverables
+
+* Optimal initial velocity using 1D reduction (bisection inside a ternary search):
+    * Energy plot
+    * Minimum value
+* Unconstrained optimization energy plot
+* Discussion (no coding): will the unconstrained optimization produce the same result?
 
