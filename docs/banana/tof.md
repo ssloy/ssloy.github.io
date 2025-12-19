@@ -1,2 +1,0 @@
-# The Ape Throws Farther
-
