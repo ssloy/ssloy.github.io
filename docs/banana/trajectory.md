@@ -118,3 +118,11 @@ It is therefore important to keep the axes in mind: a graph of $y$ versus $t$ do
 
 ![](euler/plot3d.png)
 
+## Deliverables
+
+* Overlaid trajectories $y(x)$ for different $\Delta t$
+* Short explanation of observed convergence
+* Table of $(t,x,y)$
+* Plot of $x(t)$, $y(t)$ and the trajectory in the $(x,y)$ plane
+
+

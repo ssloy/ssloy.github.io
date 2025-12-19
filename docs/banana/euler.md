@@ -48,8 +48,11 @@ while y >= 0:
     x += dt * vx
     y += dt * vy
     vy += g * dt
-
 ```
 
 ![](euler/plot-euler.png)
+
+## Deliverables
+
+* Plot of $y(x)$
 

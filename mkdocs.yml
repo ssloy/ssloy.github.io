@@ -88,6 +88,7 @@ nav:
         - 'banana/index.md'
         - 'banana/euler.md'
         - 'banana/trajectory.md'
+        - 'banana/ground.md'
         - 'banana/errors.md'
         - 'banana/tof.md'
         - 'banana/least-effort.md'
