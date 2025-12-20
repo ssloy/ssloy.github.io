@@ -9,7 +9,7 @@ x_star, y_star = 34, 23
 
 def simulate(vx, vy):
     x, y = 0, 0   # current state
-    dt = .0001
+    dt = .001
     xs, ys = [x], [y]
     while x < x_star:
         x += dt * vx
@@ -17,7 +17,7 @@ def simulate(vx, vy):
         vy += g * dt
         xs.append(x)
         ys.append(y)
-    plt.plot(xs, ys, alpha=.02, zorder=2)
+    plt.plot(xs, ys, alpha=.04, zorder=2, color='gray')
     return xs, ys
 
 def bisection(vx):
@@ -35,7 +35,7 @@ def bisection(vx):
 
 def ternary_search():
     a, b = 3, 50      # we already have the bracket
-    while b - a > .1:  # ternary search
+    while b - a > .5:  # ternary search
         m1 = a + (b - a) / 3
         m2 = b - (b - a) / 3
         vy1 = bisection(m1)
@@ -48,11 +48,11 @@ def ternary_search():
             b = m2
         print(e1, e2)
         xs, ys = simulate(m1, vy1)
-        plt.plot(xs, ys, alpha=.6)
+        plt.plot(xs, ys, alpha=.6, color=cmap(norm(e1)))
         xs, ys = simulate(m2, vy2)
-        plt.plot(xs, ys, alpha=.6)
+        plt.plot(xs, ys, alpha=.6, color=cmap(norm(e2)))
     r = (a+b)/2
-    return r, simulate(r, bisection(r))[1][-1]
+    return r, bisection(r)
 
 plt.figure(figsize=(16, 9))
 plt.rcParams["font.family"] = "serif"
@@ -64,7 +64,16 @@ plt.title('The lazy ape is not so lazy')
 plt.grid(color='gray', linestyle='--', linewidth=0.5)
 plt.scatter(x_star, y_star)
 
-print(ternary_search())
+vmin, vmax = 25.06, 26
+norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
+cmap = cm.RdYlGn.reversed()
+
+
+vx, vy = ternary_search()
+print(vx,vy)
+
+xs,ys = simulate(vx,vy)
+plt.plot(xs, ys, linewidth=2, color='k')
 
 
 plt.scatter(x_star, y_star, zorder=-1)
@@ -72,8 +81,8 @@ plt.scatter(x_star, y_star, zorder=-1)
 plt.xlabel("$x$")
 plt.ylabel("$y$")
 plt.ylim(0, 35)
-#plt.gca().set_aspect('equal', 'box')
-plt.savefig("plot-ternary.png")
+plt.gca().set_aspect('equal', 'box')
+plt.savefig("least-effort.png")
 plt.show()
 
 

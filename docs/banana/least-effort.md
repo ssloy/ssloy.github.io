@@ -42,6 +42,7 @@ If $v_{x,0}$ is fixed, the trajectory’s horizontal motion is determined.
 Only the vertical motion remains adjustable.
 
 This allows the problem to be decomposed:
+
 * Choose a value of $v_{x,0}$
 * Find the value of $v_{y,0}$ that makes the banana pass through $(x^*,y^*)$.
 
@@ -49,6 +50,74 @@ This second step is no longer an optimization problem, it is a root-finding prob
 
 
 ![](least-effort/plot2.png)
+
+![](least-effort/least-effort.png)
+
+## Ground truth
+
+First we can eliminate the impact time using kinematics.
+
+$$
+x^* = v_x t \quad\Rightarrow\quad t = \frac{x^*}{v_x}
+$$
+
+Insert this immediately into vertical motion:
+
+$$
+y^* = v_y t - \tfrac12 g t^2
+= v_y \frac{x^*}{v_x} - \frac{g}{2} \left(\frac{x^*}{v_x}\right)^2.
+$$
+
+Solve **explicitly for (v_y)**:
+
+$$
+\boxed{ v_y(v_x)
+=
+\frac{y^*}{x^*} v_x
++
+\frac{g x^*}{2 v_x}
+}
+$$
+
+
+
+Reduce the problem to one dimension
+
+$$
+E = v_x^2
++
+\left(
+\frac{y^*}{x^*} v_x
++
+\frac{g x^*}{2 v_x}
+\right)^2.
+$$
+
+Differentiate $E(v_x)$ with respect to $v_x$, set to zero, and simplify.
+After cancellation, one obtains:
+
+$$
+v_x^4 = \frac{g^2 x^{*4}}{4 (x^{*2} + y^{*2})}.
+$$
+
+Hence
+
+$$
+\boxed{v_x^* = x^* \sqrt{\frac{g}{2 \sqrt{x^{*2} + y^{*2}}}} }
+$$
+
+Substitute back into the constraint to obtain $v_y^*$:
+
+$$
+\boxed{
+v_y^* = y^* \sqrt{\frac{g}{2 \sqrt{x^{*2} + y^{*2}}}}
++
+\sqrt{\frac{g \sqrt{x^{*2} + y^{*2}}}{2}}
+}
+$$
+
+This is the **least-effort velocity**, obtained *without ever optimizing over time*.
+
 
 ## Unconstrained optimization
 

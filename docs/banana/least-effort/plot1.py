@@ -45,7 +45,7 @@ plt.ylim(0, 50)
 
 
 plt.gca().set_aspect('equal')
-plt.tight_layout()
+#plt.tight_layout()
 
 
 plt.savefig("plot1.png")
