@@ -1,8 +1,10 @@
 # The Ape Throws Farther
 
+<!-- 
 Up to this point, the simulation has been used to predict what happens given a throw.
 In this chapter, the direction is reversed: the throw itself becomes the unknown.
-The question is simple to state:
+-->
+Now the ape faces a new challenge.
 
 — If the initial speed is fixed, which launch angle makes the banana land the farthest?
 
