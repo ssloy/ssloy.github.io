@@ -157,7 +157,7 @@ Yay, there is such a rule, it is `#12(s->e., mon)`! Let's report success and go 
 
 Let me summarize all the above in the workflow chart:
 
-[![](parser/earley.png)](parser/earley.png)
+[![](parser/earley.svg)](parser/earley.svg)
 
 It has arrows indicating which task spawned which one.
 The pink dotted arrows show the tasks that we **didn't** create to avoid infinite loops.
