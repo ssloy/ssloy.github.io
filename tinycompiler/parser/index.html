@@ -1,0 +1,2516 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/tinycompiler/parser/">
+      
+      
+        <link rel="prev" href="../lexer/">
+      
+      
+        <link rel="next" href="../afterword/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>DIY parser - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diy-parser" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DIY parser
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parsing-11-by-hand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing 1+1 by hand
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parsing 1+1 by hand">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monday-symbol-1-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monday, symbol 1 arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuesday-the-symbol-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuesday, the + symbol arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wednesday-character-1-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wednesday, character 1 arrives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thursday-nothing-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thursday, nothing arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#friday-nothings-coming-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Friday, nothing's coming in
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formalization-and-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formalization and implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#afterword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Afterword
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parsing-11-by-hand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing 1+1 by hand
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parsing 1+1 by hand">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monday-symbol-1-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monday, symbol 1 arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuesday-the-symbol-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuesday, the + symbol arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wednesday-character-1-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wednesday, character 1 arrives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thursday-nothing-arrives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thursday, nothing arrives.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#friday-nothings-coming-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Friday, nothing's coming in
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formalization-and-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formalization and implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#afterword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Afterword
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="diy-parser">DIY parser</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Initially, when I decided to write a compiler in a weekend, I decided there was no point in messing around and used a third-party lexical / syntax analyzer.
+My choice fell on <a href="https://github.com/dabeaz/sly">SLY</a>, a rather well-known library.
+And indeed, a couple of hours of work allowed my compiler to perfectly build syntax trees from source code on <em>wend</em>.
+I tried to look under the hood, struggled with lots of technical terms (LL(1), LR, LALR(1) and so on), and decided that parsing is not for me, I have little interest in the theory of formal languages.
+However, in the end it turned out that a basic parser is not so difficult and I rolled up my sleeves.</p>
+<p>I was mainly motivated by two things:</p>
+<ul>
+<li>The lack of third-party dependencies is great!</li>
+<li>Unpleasant <em>wend</em> syntax.</li>
+</ul>
+<p>And the second point irritated me the most.
+I wanted a language with a C-like syntax, but I couldn't come up with a grammar for it that SLY could parse.
+Here's an illustration:</p>
+<p><img alt="" src="wend-syntax-change.png" /></p>
+<p>On the left is the syntax I was forced to use, on the right is the syntax I wanted.
+As I understand it, SLY uses an algorithm to parse LALR(1) grammars, which means that the parser has to decide the grammar rule to use,
+by looking just one token ahead.</p>
+<p>This creates a lot of problems. Imagine a stream of tokens comes in <code>TYPE(int) ID(sqrt) ...</code> - is it a variable declaration or a function declaration?
+To decide, we need at least a third token.
+SLY was giving me errors, I was getting annoyed. Probably, it is possible to get out of it, but I was not very interested in it, so I quit.</p>
+<p>Then one day I came across a description of the <a href="https://en.wikipedia.org/wiki/Earley_parser">Earley parser</a>.
+And it turned out that it is a very curious thing, extremely primitive in implementation if you don't chase performance.
+And Earley parser can parse <strong>any context-independent grammars, including ambiguous ones</strong>.</p>
+<p>So let's go, shall we? In parsing, our task is to:</p>
+<ol>
+<li>to recognize whether a sequence of tokens is syntactically correct, i.e., conforms to the grammar of our language.</li>
+<li>if there are no syntax errors, to build an appropriate abstract syntactic tree.</li>
+</ol>
+<p>We will return to the second point later, let's focus on the first one first.</p>
+<h2 id="parsing-11-by-hand">Parsing 1+1 by hand</h2>
+<p>For now, let's forget the lexer, and work with character streams and grammar rules by hand.
+Let's assume that we have only two terminal characters 1 and +.
+Let's start with the simplest grammar, such as this one:</p>
+<div class="arithmatex">\[
+\begin{align}
+    s &amp;\rightarrow e\\
+    e &amp;\rightarrow 1\\
+    e &amp;\rightarrow e+e
+\end{align}
+\]</div>
+<p>Here I have two nonterminal symbols: <code>s</code>, the initial symbol of the grammar, and <code>e</code>, a nonterminal denoting an arithmetic expression.
+This grammar can generate sequences of symbols of the form 1, 1+1, 1+1+1+1, etc.
+Note that it is ambiguous: 1+1+1+1 can be parsed as (1+1)+1, or as 1+(1+1).
+Usually ambiguous grammars are avoided, but I chose this example to show that Earley parser can handle it.</p>
+<p>Now imagine that the sequence whose syntactic correctness we need to check, arrives in the mail at <strong>one character per day</strong>.
+This is a realistic assumption, lexers do not produce an array of tokens all at once, but rather send them one at a time.
+This means that until we run out of incoming mail, we will have a list of simple tasks for each day.
+<strong>In each task we will process only one character of a grammar rule</strong>.
+Having processed one symbol, we close the task (but we can open another one).</p>
+<p>In our case, while no letter has arrived yet, we can queue a task that allows us to get a nonterminal <code>s</code>.
+I will write this task as <code>#0(s-&gt;.e, mon)</code>.
+The task number is preceded by the hash sign, then comes the grammar rule to be processed with a marker indicating which symbol of the rule we will process today.
+Finally, at the end there is a timestamp indicating the date when we started processing this rule.</p>
+<p>When processing each task, we have only three cases:</p>
+<ol>
+<li>expected symbol (the one after the dot) is a terminal.</li>
+<li>the expected symbol is a non-terminal</li>
+<li>There is no expected symbol, the marker is at the end of the grammar rule.</li>
+</ol>
+<p>Let's figure out as the play goes on what to do in each of the three cases.</p>
+<h3 id="monday-symbol-1-arrives">Monday, symbol 1 arrives.</h3>
+<p>Worklist at the beginning of the day: <code>#0(s-&gt;.e, mon)</code>.</p>
+<ol>
+<li>
+<p>Take the only task <code>#0</code> to recognize the rule <code>(s-&gt;.e, mon)</code>.
+In this task, the character to be processed is the nonterminal <code>e</code>.
+Let us try to predict how we might obtain it.
+We can iterate through the grammar rules, and find those which produce the nonterminal <code>e</code>.
+Then we can create two new tasks to the worklist:
+<code>#1(e-&gt;.1, mon)</code> and <code>#2(e-&gt;.e + e, mon)</code>. Close the current task.</p>
+</li>
+<li>
+<p>Go to the next task at hand,<code>#1(e-&gt;.1, mon)</code>.
+Here, the expected symbol (the one right after the marker) is the terminal that matches the one we got in the mail, yay!
+The next symbol won't arrive until Tuesday, so we put <code>#3(e-&gt;1., Mon)</code> in the worklist for Tuesday, notice that we just advance the marker position.</p>
+</li>
+<li>
+<p>Take the task <code>#2(e-&gt;.e + e, mon)</code>. In this task the expected symbol is the nonterminal <code>e</code>, but we have already inserted its production rules
+in today's worklist.  Therefore, we skip the task to avoid getting into an infinite loop.</p>
+</li>
+</ol>
+<p>No more job for today, let's go to drink tea.</p>
+<p>List of tasks processed for the day: <code>#0(s-&gt;.e, mon)</code>, <code>#1(e-&gt;.1, mon)</code>, <code>#2(e-&gt;.e + e, mon)</code>.</p>
+<h3 id="tuesday-the-symbol-arrives">Tuesday, the + symbol arrives.</h3>
+<p>Worklist at the beginning of the day: <code>#3(e-&gt;1., mon)</code>.</p>
+<ol>
+<li>
+<p>Let's take the only task so far, <code>#3(e-&gt;1., mon)</code>, it has a marker at the end, which means we've reached the end of the grammatical rule of the non-terminal <code>e</code>.
+The timestamp of the task is Monday, so let's run through the Monday worklist and look for those tasks in which <code>e</code> comes right after the marker, and these are the tasks
+<code>#0(e-&gt;.e, mon)</code> and <code>#2(e-&gt;.e + e, mon)</code>.
+We queue <code>#4(s-&gt;e., mon)</code> and <code>#5(e-&gt;e.+e, mon)</code> to worklist for today. Close <code>#3</code>.</p>
+</li>
+<li>
+<p>Go to <code>#4(s-&gt;e., mon)</code>. Here, the marker is again at the end of the rule, which means that we have reached the end of the grammatical rule of the nonterminal <code>s</code>.
+On Monday we had no tasks where <code>s</code> was the expected symbol, we close <code>#4</code>.</p>
+</li>
+<li>
+<p>Take <code>#5(e-&gt;e.+e, mon)</code>. In it, the expected symbol is the terminal <code>+</code>, which matches the symbol we got in the mail, yay!
+The next symbol won't come until Wednesday, so we put <code>#6(e-&gt;e+.e., mon)</code> on the worklist for Wednesday. Tasks for the day are done, let's go for a cuppa.</p>
+</li>
+</ol>
+<p>List of tasks processed for the day: <code>#3(e-&gt;1., mon)</code>, <code>#4(e-&gt;e., mon)</code>, <code>#5(e-&gt;e.+ e, mon)</code>.</p>
+<h3 id="wednesday-character-1-arrives">Wednesday, character 1 arrives</h3>
+<p>Worklist at the beginning of the day: <code>#6(e-&gt;e+.e, mon)</code>.</p>
+<ol>
+<li>
+<p>Take the only task <code>#6(e-&gt;e+.e, mon)</code>. The expected symbol is the non-terminal <code>e</code>, append to the worklist <code>#7(e-&gt;.1, wed)</code> and <code>#8(e-&gt;.e + e, wed)</code>.
+Note that the timestamp here is Wednesday, not Monday as before.
+Recall that this timestamp marks the moment when we started processing a particular grammar rule.</p>
+</li>
+<li>
+<p>Moving on to <code>#7(e-&gt;.1, wed)</code>. The expected symbol is terminal <code>1</code>, which matches the one that arrived in the mail, yay! Queue <code>#9(e-&gt;1., wed)</code> for Thursday.</p>
+</li>
+<li>
+<p>Moving on to <code>#8(e-&gt;.e + e, wed)</code>. The expected symbol is the non-terminal <code>e</code>, and we have already added matching tasks today when we were processing the task <code>#6</code>.
+Therefore, we skip <code>#8</code> to avoid getting into an infinite loop.  The tasks for the day are over, let's go drink tea.</p>
+</li>
+</ol>
+<p>The list of tasks processed during the day: <code>#6(e-&gt;e +.e, mon)</code>, <code>#7(e-&gt;.1, wed)</code>, <code>#8(e-&gt;.e +.e, wed)</code>.</p>
+<h3 id="thursday-nothing-arrives">Thursday, nothing arrives.</h3>
+<p>Worklist to start the day: <code>#9(e-&gt;1., wed)</code>.</p>
+<p>The post office says there will be no more incoming mail.</p>
+<ol>
+<li>
+<p>Take the only task <code>#9(e-&gt;1., wed)</code>. No characters are expected in it, because the marker is at the very end of the grammar rule for the nonterminal <code>e</code>.
+Let us iterate through Wednesday worklist, looking for tasks with <code>e</code> as the expected symbol.
+The tasks <code>#6(e-&gt;e +.e, mon)</code> and <code>#8(e-&gt;.e + e, wed)</code> fit the description.
+We schedule <code>#10(e-&gt;e+e., mon)</code> and <code>#11(e-&gt;e.+e, wed)</code>, and close <code>#9</code>.</p>
+</li>
+<li>
+<p>Moving on to <code>#10(e-&gt;e-&gt;e+e., mon)</code>, this is again a completed grammar rule for the non-terminal <code>e</code>.
+We run through Monday's worklist, looking for tasks where <code>e</code> was expected.
+These are <code>#0(s-&gt;.e, mon)</code> and <code>#2(e-&gt;.e + e, mon)</code>, so let us queue <code>#12(s-&gt;e., mon)</code> and <code>#13(e-&gt;e. + e, mon)</code>, and close <code>#10</code>.</p>
+</li>
+<li>
+<p>Take <code>#11(e-&gt;e.+ e, wed)</code>. Here, the expected character is the terminal <code>+</code>, and the post office told us there would be no new characters. We close <code>#11</code>.</p>
+</li>
+<li>
+<p>Taking <code>#12(s-&gt;e., mon)</code>, we see the completed grammar rule for <code>s</code>. There was no tasks on Monday where <code>s</code> was expected, we close <code>#12</code>.</p>
+</li>
+<li>
+<p>We take the last task <code>#13(e-&gt;e. + e, mon)</code>, it expects a terminal symbol, but we have no more incoming mail, close <code>#13</code>.</p>
+</li>
+</ol>
+<p>List of tasks processed during the day: <code>#9(e-&gt;1., wed)</code>, <code>#10(e-&gt;e. + e., mon)</code>, <code>#11(e-&gt;e.+ e, wed)</code>, <code>#12(s-&gt;e., mon)</code>, <code>#13(e-&gt;e.+ e, mon)</code>.</p>
+<h3 id="friday-nothings-coming-in">Friday, nothing's coming in</h3>
+<p>Worklist for the day: it's Friday, what worklist?!</p>
+<p>Let's make sure that in the Thursday's worklist we have a completed rule corresponding to the initial nonterminal <code>s</code>, which started on Monday.
+Yay, there is such a rule, it is <code>#12(s-&gt;e., mon)</code>! Let's report success and go have a beer.</p>
+<p>Let me summarize all the above in the workflow chart:</p>
+<p><a href="earley.svg"><img alt="" src="earley.svg" /></a></p>
+<p>It has arrows indicating which task spawned which one.
+The pink dotted arrows show the tasks that we <strong>didn't</strong> create to avoid infinite loops.</p>
+<p>As I said before, we only have three options when processing each task:</p>
+<ol>
+<li>
+<p><strong>The expected symbol is a terminal.</strong> Compare the expected symbol with the one that came in in the mail. If they match, queue a new task for <strong>tomorrow</strong>, draw a green arrow.</p>
+</li>
+<li>
+<p><strong>The expected symbol is a non-temrinal.</strong> Try to predict how this non-terminal might be produced. Add as many tasks as there are corresponding grammar rules, draw black arrows.</p>
+</li>
+<li>
+<p><strong>There is no expected symbol,</strong> the marker is at the end of the grammatical rule.
+That is, we have finished processing this rule, and the input sequence of characters corresponds to some non-terminal.
+We check the worklist history, looking for the tasks  where the non-terminal was the expected symbol.
+Then we open new tasks by advancing the marker past the non-terminal.
+Here we draw blue arrows, they always come in pairs: the solid one comes from the task currently being processed, and the dotted one 
+indicates the one old task where we advance the marker.</p>
+</li>
+</ol>
+<p>Note that in the above procedure we didn't store the arrows themselves anywhere, we just used the worklists without any links between them.
+We don't even need the task number, the only thing we need is the index of the grammar rule, the marker position and the timestamp.</p>
+<h2 id="formalization-and-implementation">Formalization and implementation</h2>
+<p>The Earley parser processes one input character at a time.
+For each input position <span class="arithmatex">\(j \in [0\dots n]\)</span>, it builds a set of <span class="arithmatex">\(J_j\)</span> pairs, called Earley items.
+Each Earley item is of the form <span class="arithmatex">\((\alpha \rightarrow \beta.\gamma,k)\)</span>. The first part of the item is a grammar rule <span class="arithmatex">\(\alpha\rightarrow\beta\gamma\)</span>.
+The rule has a marker (the dot) located somewhere in the right side.
+The dot indicates which part of this producing rule has already been processed.
+The second part of the pair is the index <span class="arithmatex">\(k\)</span>, the number of tokens encountered before we started processing of the nonterminal <span class="arithmatex">\(\alpha\)</span>.</p>
+<p>In code, the pair can be represented as a <code>Task</code> class storing three integer indices.</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span>  <span class="o">=</span> <span class="n">rule</span>  <span class="c1"># index of the parse rule in the grammar</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>   <span class="o">=</span> <span class="n">dot</span>   <span class="c1"># index of next symbol in the rule (dot position)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="c1"># we saw this many tokens when we started the rule</span>
+</span></code></pre></div>
+<p>The algorithm starts with a set <span class="arithmatex">\(J_0\)</span> consisting of a single pair <span class="arithmatex">\((s'\rightarrow .s, 0)\)</span>, where <span class="arithmatex">\(s\)</span> is the initial symbol of the grammar,
+and <span class="arithmatex">\(s'\)</span> is a new artificial symbol introduced to simplify the presentation (just so that the producing rule contains only one non-terminal).
+In code, the sets can be represented this way:</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="n">worklists</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
+</span></code></pre></div>
+<p>Here the <code>worklists</code> will contain all sets <span class="arithmatex">\(\{J_j\}_{j=0}^n\)</span>.
+The algorithm successfully parses a sequence of <span class="arithmatex">\(n\)</span> input tokens <span class="arithmatex">\(t_0t_1\dots t_{n-1}\)</span> if the pair <span class="arithmatex">\((s'\rightarrow s., 0)\)</span> is in set <span class="arithmatex">\(J_n\)</span>, otherwise it reports an error.</p>
+<p>The algorithm works as follows: one by one, for each index <span class="arithmatex">\(j \in [0\dots n]\)</span>, we apply the following three rules modifying the worklists, until none of the rules has an effect:</p>
+<ul>
+<li>
+<p><strong>SCAN:</strong> If the set <span class="arithmatex">\(J_j\)</span> contains a pair <span class="arithmatex">\((\alpha\rightarrow\beta . t \gamma, k)\)</span>, where <span class="arithmatex">\(t\)</span> matches the current input symbol <span class="arithmatex">\(t_j\)</span>,
+then the pair <span class="arithmatex">\((\alpha\rightarrow\beta t . \gamma, k)\)</span> is added to <span class="arithmatex">\(J_{j+1}\)</span>.
+Note that this rule does not modify the set <span class="arithmatex">\(J_j\)</span> itself, and it is the only rule that modifies <span class="arithmatex">\(J_{j+1}\)</span>.</p>
+</li>
+<li>
+<p><strong>PREDICT:</strong> If the set <span class="arithmatex">\(J_j\)</span> contains a pair <span class="arithmatex">\((\alpha\rightarrow \beta . c \gamma, k)\)</span>, where <span class="arithmatex">\(c\)</span> is a nonterminal symbol,
+then for all grammar rules of the form <span class="arithmatex">\(c\rightarrow \delta\)</span> the pair <span class="arithmatex">\((c\rightarrow .\delta, j)\)</span> is added to <span class="arithmatex">\(J_j\)</span>.
+Note the change in the timestamp. Also note that prediction steps can trigger other prediction steps if <span class="arithmatex">\(\delta\)</span> starts with a non-terminal.</p>
+</li>
+<li>
+<p><strong>COMPLETE:</strong> If the set <span class="arithmatex">\(J_j\)</span> contains a pair with a completed rule <span class="arithmatex">\((c\rightarrow\alpha., k)\)</span>,
+then for every pair of the form <span class="arithmatex">\((\beta\rightarrow\gamma . c\delta, l)\)</span> in set <span class="arithmatex">\(J_k\)</span>, a pair <span class="arithmatex">\((\beta\rightarrow\gamma c .\delta, l)\)</span> is added to <span class="arithmatex">\(J_j\)</span>.</p>
+</li>
+</ul>
+<p>The strength of the Earley parser is that it processes several predictions and even completions in parallel.
+Erroneous predictions actually die out, because at some point they result in terminals incompatible with the input tokens encountered.</p>
+<details class="example">
+<summary>Earley recognizer</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span>
+<span class="normal"><a href="#__codelineno-2-23">23</a></span>
+<span class="normal"><a href="#__codelineno-2-24">24</a></span>
+<span class="normal"><a href="#__codelineno-2-25">25</a></span>
+<span class="normal"><a href="#__codelineno-2-26">26</a></span>
+<span class="normal"><a href="#__codelineno-2-27">27</a></span>
+<span class="normal"><a href="#__codelineno-2-28">28</a></span>
+<span class="normal"><a href="#__codelineno-2-29">29</a></span>
+<span class="normal"><a href="#__codelineno-2-30">30</a></span>
+<span class="normal"><a href="#__codelineno-2-31">31</a></span>
+<span class="normal"><a href="#__codelineno-2-32">32</a></span>
+<span class="normal"><a href="#__codelineno-2-33">33</a></span>
+<span class="normal"><a href="#__codelineno-2-34">34</a></span>
+<span class="normal"><a href="#__codelineno-2-35">35</a></span>
+<span class="normal"><a href="#__codelineno-2-36">36</a></span>
+<span class="normal"><a href="#__codelineno-2-37">37</a></span>
+<span class="normal"><a href="#__codelineno-2-38">38</a></span>
+<span class="normal"><a href="#__codelineno-2-39">39</a></span>
+<span class="normal"><a href="#__codelineno-2-40">40</a></span>
+<span class="normal"><a href="#__codelineno-2-41">41</a></span>
+<span class="normal"><a href="#__codelineno-2-42">42</a></span>
+<span class="normal"><a href="#__codelineno-2-43">43</a></span>
+<span class="normal"><a href="#__codelineno-2-44">44</a></span>
+<span class="normal"><a href="#__codelineno-2-45">45</a></span>
+<span class="normal"><a href="#__codelineno-2-46">46</a></span>
+<span class="normal"><a href="#__codelineno-2-47">47</a></span>
+<span class="normal"><a href="#__codelineno-2-48">48</a></span>
+<span class="normal"><a href="#__codelineno-2-49">49</a></span>
+<span class="normal"><a href="#__codelineno-2-50">50</a></span>
+<span class="normal"><a href="#__codelineno-2-51">51</a></span>
+<span class="normal"><a href="#__codelineno-2-52">52</a></span>
+<span class="normal"><a href="#__codelineno-2-53">53</a></span>
+<span class="normal"><a href="#__codelineno-2-54">54</a></span>
+<span class="normal"><a href="#__codelineno-2-55">55</a></span>
+<span class="normal"><a href="#__codelineno-2-56">56</a></span>
+<span class="normal"><a href="#__codelineno-2-57">57</a></span>
+<span class="normal"><a href="#__codelineno-2-58">58</a></span>
+<span class="normal"><a href="#__codelineno-2-59">59</a></span>
+<span class="normal"><a href="#__codelineno-2-60">60</a></span>
+<span class="normal"><a href="#__codelineno-2-61">61</a></span>
+<span class="normal"><a href="#__codelineno-2-62">62</a></span>
+<span class="normal"><a href="#__codelineno-2-63">63</a></span>
+<span class="normal"><a href="#__codelineno-2-64">64</a></span>
+<span class="normal"><a href="#__codelineno-2-65">65</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">terminals</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">grammar</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">]</span>          <span class="p">],</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a>           <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>          <span class="p">],</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a>           <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">]]]</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span>  <span class="o">=</span> <span class="n">rule</span>  <span class="c1"># index of the parse rule in the grammar</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">dot</span>   <span class="o">=</span> <span class="n">dot</span>   <span class="c1"># index of next symbol in the rule (dot position)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="c1"># we saw this many tokens when we started the rule</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_symbol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a>        <span class="n">prod</span> <span class="o">=</span> <span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a>        <span class="k">return</span> <span class="n">prod</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">prod</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rule</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">rule</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dot</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dot</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">start</span>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20"></a>        <span class="n">prod</span> <span class="o">=</span> <span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21"></a>        <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prod</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">])</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22"></a>        <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prod</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dot</span><span class="p">:])</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23"></a>        <span class="n">week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mon&#39;</span><span class="p">,</span> <span class="s1">&#39;tue&#39;</span><span class="p">,</span> <span class="s1">&#39;wed&#39;</span><span class="p">,</span> <span class="s1">&#39;thu&#39;</span><span class="p">,</span> <span class="s1">&#39;fri&#39;</span><span class="p">,</span> <span class="s1">&#39;sat&#39;</span><span class="p">,</span> <span class="s1">&#39;sun&#39;</span><span class="p">]</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">grammar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">-&gt;</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">week</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25"></a>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26"></a><span class="k">def</span><span class="w"> </span><span class="nf">recognize</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27"></a>    <span class="n">worklists</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="p">]</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28"></a>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">)</span><span class="o">==</span><span class="n">i</span><span class="p">:</span>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31"></a>            <span class="n">worklists</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32"></a>        <span class="k">if</span> <span class="n">task</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>                    <span class="c1"># avoid infinite loops, do not add the same task twice</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33"></a>            <span class="n">worklists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34"></a>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35"></a>    <span class="n">token_counter</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>                                         <span class="c1"># fetch tokens one by one until end of file</span>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37"></a>        <span class="n">token</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38"></a>        <span class="k">if</span> <span class="n">token_counter</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">):</span>             <span class="c1"># the worklist is empty =&gt; not good</span>
+</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39"></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40"></a>        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>                                           <span class="c1"># task id</span>
+</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41"></a>        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">worklists</span><span class="p">[</span><span class="n">token_counter</span><span class="p">]):</span>        <span class="c1"># iterate through all tasks in current worklist</span>
+</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42"></a>            <span class="n">task</span>  <span class="o">=</span> <span class="n">worklists</span><span class="p">[</span><span class="n">token_counter</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+</span><span id="__span-2-43"><a id="__codelineno-2-43" name="__codelineno-2-43"></a>            <span class="n">next_symbol</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">next_symbol</span><span class="p">()</span>            <span class="c1"># next symbol in the production rule</span>
+</span><span id="__span-2-44"><a id="__codelineno-2-44" name="__codelineno-2-44"></a>            <span class="k">if</span> <span class="n">next_symbol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>                     <span class="c1"># if no symbol: completed task</span>
+</span><span id="__span-2-45"><a id="__codelineno-2-45" name="__codelineno-2-45"></a>                <span class="k">for</span> <span class="n">prev</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">]:</span>
+</span><span id="__span-2-46"><a id="__codelineno-2-46" name="__codelineno-2-46"></a>                    <span class="k">if</span> <span class="n">prev</span><span class="o">.</span><span class="n">next_symbol</span><span class="p">()</span> <span class="o">==</span> <span class="n">grammar</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">rule</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+</span><span id="__span-2-47"><a id="__codelineno-2-47" name="__codelineno-2-47"></a>                        <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">prev</span><span class="o">.</span><span class="n">rule</span><span class="p">,</span> <span class="n">prev</span><span class="o">.</span><span class="n">dot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">prev</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+</span><span id="__span-2-48"><a id="__codelineno-2-48" name="__codelineno-2-48"></a>            <span class="k">elif</span> <span class="n">next_symbol</span> <span class="ow">in</span> <span class="n">terminals</span><span class="p">:</span>              <span class="c1"># if next symbol is a terminal,</span>
+</span><span id="__span-2-49"><a id="__codelineno-2-49" name="__codelineno-2-49"></a>                <span class="k">if</span> <span class="n">token</span> <span class="ow">and</span> <span class="n">next_symbol</span> <span class="o">==</span> <span class="n">token</span><span class="p">:</span>      <span class="c1"># scan a token</span>
+</span><span id="__span-2-50"><a id="__codelineno-2-50" name="__codelineno-2-50"></a>                    <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">rule</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">dot</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">))</span>
+</span><span id="__span-2-51"><a id="__codelineno-2-51" name="__codelineno-2-51"></a>            <span class="k">else</span><span class="p">:</span>                                       <span class="c1"># if next symbol is nonterminal, emit a prediction task</span>
+</span><span id="__span-2-52"><a id="__codelineno-2-52" name="__codelineno-2-52"></a>                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grammar</span><span class="p">):</span>
+</span><span id="__span-2-53"><a id="__codelineno-2-53" name="__codelineno-2-53"></a>                    <span class="k">if</span> <span class="n">lhs</span> <span class="o">==</span> <span class="n">next_symbol</span><span class="p">:</span>
+</span><span id="__span-2-54"><a id="__codelineno-2-54" name="__codelineno-2-54"></a>                        <span class="n">add_task</span><span class="p">(</span><span class="n">token_counter</span><span class="p">,</span> <span class="n">Task</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">token_counter</span><span class="p">))</span>
+</span><span id="__span-2-55"><a id="__codelineno-2-55" name="__codelineno-2-55"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-2-56"><a id="__codelineno-2-56" name="__codelineno-2-56"></a>        <span class="n">token_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-2-57"><a id="__codelineno-2-57" name="__codelineno-2-57"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span> <span class="k">break</span>                             <span class="c1"># end of file</span>
+</span><span id="__span-2-58"><a id="__codelineno-2-58" name="__codelineno-2-58"></a>    <span class="n">cur</span> <span class="o">=</span> <span class="p">[</span> <span class="n">task</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">worklists</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">task</span> <span class="o">==</span> <span class="n">Task</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">grammar</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># all completed tasks at the end of the parse</span>
+</span><span id="__span-2-59"><a id="__codelineno-2-59" name="__codelineno-2-59"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">worklists</span><span class="p">)</span>
+</span><span id="__span-2-60"><a id="__codelineno-2-60" name="__codelineno-2-60"></a>    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span>
+</span><span id="__span-2-61"><a id="__codelineno-2-61" name="__codelineno-2-61"></a>
+</span><span id="__span-2-62"><a id="__codelineno-2-62" name="__codelineno-2-62"></a><span class="nb">print</span><span class="p">(</span><span class="n">recognize</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+</span><span id="__span-2-63"><a id="__codelineno-2-63" name="__codelineno-2-63"></a>                      <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+</span><span id="__span-2-64"><a id="__codelineno-2-64" name="__codelineno-2-64"></a>                      <span class="s1">&#39;1&#39;</span>
+</span><span id="__span-2-65"><a id="__codelineno-2-65" name="__codelineno-2-65"></a>                     <span class="p">])))</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>This code reports a successful recognition of the 1+1 sequence and prints the worklists for the week.
+Compare it with the graph drawn above, they should match.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[[(s-&gt;.e, mon), (e-&gt;.1, mon), (e-&gt;.e + e, mon)],
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a> [(e-&gt;1., mon), (s-&gt;e., mon), (e-&gt;e.+ e, mon)],
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a> [(e-&gt;e +.e, mon), (e-&gt;.1, wed), (e-&gt;.e + e, wed)],
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a> [(e-&gt;1., wed), (e-&gt;e + e., mon), (e-&gt;e.+ e, wed), (s-&gt;e., mon), (e-&gt;e.+ e, mon)]]
+</span></code></pre></div>
+<p>The above code only gives a binary answer whether the input sequence of tokens corresponds to a given grammar.
+So how do we actually build a syntax tree?
+Well, we have a graph (in my drawing it corresponds to the arrows drawn with solid lines).
+It suffices to trace the path from the initial node to the final one.
+Solid blue lines corresponding to the COMPLETE action, match to the nodes of a syntax tree to create.
+In this example, there are three of them, so the syntax tree will consist of three nodes, a root + and two leaf nodes 1 and 1.</p>
+<p>In my parser, I didn't bother with finding a path through the graph (although it is quite possible),
+I just stored a link to the predecessor node, thus obtaining a linked list from the end node to the start node.</p>
+<p>You can see the code <a href="https://github.com/ssloy/tinycompiler/blob/main/parser.py">in the repository</a>.</p>
+<h2 id="afterword">Afterword</h2>
+<p>With careful implementation, Earley parser runs in <span class="arithmatex">\(O(n^3)\)</span> worst-case time, for unambiguous grammars it can run in <span class="arithmatex">\(O(n^2)\)</span>.
+On LL and LR grammars, the Earley parser can even run in linear.
+John Aycock and Nigel Horspool in their paper ``Practical Earley Parsing'' report that they managed to roughly match
+the performance of the Bison LALR parser (their Earley Parser is 50% slower).
+This is pretty impressive considering the features Earley parsers have to offer.
+In my compiler, I've noticed a performance degradation when moving away from SLY to my own parser, but compile times are still acceptable.</p>
+<p>One last thing worth mentioning: operator precedence.
+When I used SLY, I mixed all the arithmetic operations into the grammar, and just told the library to deal with the priority itself:</p>
+<details class="example">
+<summary>SLY operator precedence</summary>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">precedence</span> <span class="o">=</span> <span class="p">(</span> <span class="c1"># arithmetic operators take precedence over logical operators</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>     <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">PLUS</span><span class="p">,</span> <span class="n">MINUS</span><span class="p">),</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>     <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">TIMES</span><span class="p">,</span> <span class="n">DIVIDE</span><span class="p">,</span> <span class="n">MOD</span><span class="p">),</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>     <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UMINUS</span><span class="p">),</span> <span class="c1"># unary operators</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>     <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UPLUS</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr PLUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>   <span class="s1">&#39;expr MINUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>   <span class="s1">&#39;expr TIMES expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>   <span class="s1">&#39;expr DIVIDE expr&#39;</span><span class="p">,</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>   <span class="s1">&#39;expr MOD expr&#39;</span><span class="p">)</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>    <span class="k">return</span> <span class="n">ArithOp</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span></code></pre></div>
+</details>
+<p>This trick won't work here, but it's not a big deal.
+The precedence of the operators can be handled in the grammar.
+Here is an example of an unambiguous grammar that correctly implements the priority of arithmetic operations:</p>
+<details class="example">
+<summary>Precedence-aware grammar</summary>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">terminals</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMES&#39;</span><span class="p">,</span> <span class="s1">&#39;DIVIDE&#39;</span><span class="p">,</span> <span class="s1">&#39;INTEGER&#39;</span><span class="p">,</span> <span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span> <span class="s1">&#39;RPAREN&#39;</span><span class="p">]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">grammar</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;expression&#39;</span><span class="p">,</span>   <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">]</span>                         <span class="p">],</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">]</span>                           <span class="p">],</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span> <span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;term&#39;</span><span class="p">]</span>        <span class="p">],</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>           <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;addend&#39;</span><span class="p">,</span> <span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;term&#39;</span><span class="p">]</span>         <span class="p">],</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">]</span>                         <span class="p">],</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s1">&#39;TIMES&#39;</span><span class="p">,</span> <span class="s1">&#39;factor&#39;</span><span class="p">]</span>        <span class="p">],</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>           <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s1">&#39;DIVIDE&#39;</span><span class="p">,</span> <span class="s1">&#39;factor&#39;</span><span class="p">]</span>       <span class="p">],</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">]</span>                           <span class="p">],</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;PLUS&#39;</span><span class="p">,</span> <span class="s1">&#39;atom&#39;</span><span class="p">]</span>                   <span class="p">],</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>           <span class="p">[</span><span class="s1">&#39;factor&#39;</span><span class="p">,</span>       <span class="p">[</span><span class="s1">&#39;MINUS&#39;</span><span class="p">,</span> <span class="s1">&#39;atom&#39;</span><span class="p">]</span>                  <span class="p">],</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>           <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;INTEGER&#39;</span><span class="p">]</span>                        <span class="p">],</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>           <span class="p">[</span><span class="s1">&#39;atom&#39;</span><span class="p">,</span>         <span class="p">[</span><span class="s1">&#39;LPAREN&#39;</span><span class="p">,</span> <span class="s1">&#39;expression&#39;</span><span class="p">,</span> <span class="s1">&#39;RPAREN&#39;</span><span class="p">]</span> <span class="p">]]</span>
+</span></code></pre></div>
+</details>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
