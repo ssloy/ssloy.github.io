@@ -34,10 +34,13 @@ Since the gravitational acceleration, the launch angle, the initial position and
 the only remaining free parameter is the initial speed $v_0$.
 The numerical procedure is fully determined, so 
 
+We view the simulator as a function from parameters to outcomes; in inverse-problem language, this is called the forward map.
+
 This entire procedure defines a mapping:
 $$
 F:v_0\to x_\text{impact}
 $$
+
 
 We call $F$ the forward map.
 
@@ -138,7 +141,11 @@ This shift allows us to formulate the ape’s task in a new way:
 
 This is the foundation of inverse problems, optimization, and parameter identification.
 
-![](target/plot-range.png)
+![](target/plot-x-range.png)
+
+![](target/hit-x-binary.png)
+
+![](target/hit-x-linear.png)
 
 
 ## Deliverables
