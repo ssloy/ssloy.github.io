@@ -227,3 +227,70 @@ float Q_rsqrt( float number ) {
 ```
 
 ## Deliverables
+
+
+
+Let the error $e_k$ be 
+
+$$
+e_k := |x_k - x^\star|.
+$$
+
+Define $\delta_k$ as
+
+$$
+\delta_k := \frac{b_k - a_k}{2} - e_k
+$$
+
+Let us assume the root $x^\star$ never coincides with a midpoint $x_k$, i.e. $e_k>0$ for all $k$ (otherwise convergence is finite and the asymptotic question is moot).
+It means that 
+
+$$
+\delta_k < \frac{b_k-a_k}{2} = \frac{b_0 - a_0}{2^{k+1}}.
+$$
+
+
+Thus:
+
+$$
+e_k = \frac{b_0-a_0}{2^{k+1}} - \delta_k,
+\qquad
+ \delta_k < \frac{b_0-a_0}{2^{k+1}}.
+$$
+
+
+
+Now form the ratio:
+
+$$
+\frac{e_{k+1}}{e_k} =
+\frac{
+\frac{b_0-a_0}{2^{k+2}} - \delta_{k+1}
+}{
+\frac{b_0-a_0}{2^{k+1}} - \delta_k
+}
+=
+\frac12
+\cdot
+\frac{
+1 - \frac{2^{k+2}}{b_0-a_0}\delta_{k+1}
+}{
+1 - \frac{2^{k+1}}{b_0-a_0}\delta_k
+}.
+$$
+
+
+Now define:
+
+$$
+\varepsilon_k := \frac{2^{k+1}}{b_0-a_0}\delta_k \in (0,1).
+$$
+
+So:
+
+$$
+\frac{|e_{k+1}|}{|e_k|} = \frac12 \cdot \frac{1-\varepsilon_{k+1}}{1-\varepsilon_k}.
+$$
+
+---
+
