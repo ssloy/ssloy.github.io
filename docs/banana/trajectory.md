@@ -1,37 +1,27 @@
 # The Ape Buys a Better Watch
 
-Although this description is approximate, refining the time step will gradually reveal the smooth parabolic path familiar from physics.
-
-![](euler/plot-convergence.png)
-
-
+## Euler integration scheme
 
 We have a projectile starting at $(x_0, y_0) = (0,0)$, with initial velocity $(v_{x,0}, v_{y,0})$, under constant gravity $g$ acting downward. No air resistance.
-
-The ODEs are:
-
-$$
-\frac{dx}{dt} = v_x, \quad \frac{dy}{dt} = v_y, \quad \frac{dv_x}{dt} = 0, \quad \frac{dv_y}{dt} = g
-$$
-
----
-
-### 2. Euler integration scheme
 
 With a time step $\Delta t$, the Euler update rules are:
 
 $$
 \begin{align*}
-x_{i+1} & = x_i + v_{x,i}~\Delta t\\
-y_{i+1} & = y_i + v_{y,i}~\Delta t\\
-v_{x,i+1} & = v_{x,i} \\
-v_{y,i+1} & = v_{y,i} + g~\Delta t
+x_{i+1} & := x_i + v_{x,i}~\Delta t\\
+y_{i+1} & := y_i + v_{y,i}~\Delta t\\
+v_{x,i+1} & := v_{x,i} \\
+v_{y,i+1} & := v_{y,i} + g~\Delta t
 \end{align*}
 $$
 
----
+
+Although this description is approximate, refining the time step will gradually reveal the smooth parabolic path familiar from physics.
+
+![](euler/plot-convergence.png)
 
 
+## Ground truth — discrete version
 
 Let’s write the explicit formula for $x_i$ and $y_i$.
 
@@ -54,7 +44,15 @@ $$
 y(t) \to  v_{y,0}~t + g \frac{t^2}{2} 
 $$
 
----
+## Ground truth — continuous version
+
+Recall that our ODEs are:
+
+$$
+\frac{dx}{dt} = v_x, \quad \frac{dy}{dt} = v_y, \quad \frac{dv_x}{dt} = 0, \quad \frac{dv_y}{dt} = g
+$$
+
+
 We treat motion in the horizontal $x$ and vertical $y$ directions separately,
 since they are uncoupled except through the time variable.
 Thus, projectile trajectory is given by $(x(t), y(t))$.
@@ -100,12 +98,7 @@ y(t) &= \int_0^t (v_0 \sin\theta_0 + gs) \,ds = v_0 \sin\theta_0\, t + g\frac{t^
 \end{align*}
 $$
 
-
-
-
----
-
-
+## The trajectory of motion
 
 When we write down the equations of motion for a projectile, we are in fact describing a curve in a three-dimensional space whose coordinates are time and position.
 Each state of the system is a point $(t, x, y)$, and the differential equation tells us how this point moves as time increases.

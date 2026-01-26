@@ -147,5 +147,83 @@ This is the foundation of inverse problems, optimization, and parameter identifi
 
 ![](target/hit-x-linear.png)
 
+Let $x_0,x_1,x_2\dots$ be a sequence which converges to $x^\star$ and $e_k:= |x_k - x^\star|$. If there exist $p$ and $r\neq 0$ such that 
+
+$$
+\lim\limits_{k\to\infty} \frac{e_{k+1}}{e_k^p} = r, 
+$$
+
+then $p$ is called the order of convergence and $r$ is the rate of convergence.
+Intuitively, they can be understand by considering the amount of digits accurate per iteration
+
+The number of correct digits in $x_n$ is related to the magnitude of the error, i.e.
+
+$$
+\text{Number of correct digits} \approx - \lg |x_k - x^\star|.
+$$
+
+Let’s analyze how the error changes from $x_k$ to $x_{k+1}$:
+
+$$
+e_{k+1} \approx e_k^p \cdot r
+$$
+
+
+Taking the base-10 logarithm:
+$$
+\lg e_{k+1} \approx p \lg e_k + \lg r
+$$
+This shows that the number of correct digits roughly multiplies by p per iteration.
+Initially the rate of convergence matters the most when $\lg e_k$ is small, while for large $\lg e_k$ the order of convergence will matter more.
+
+
+
+
+
+
+|           | Bisection | Regula falsi                  | Secant                   | Newton                   |
+|---------- | :-------: | :---------------------------: | :----------------------: | :----------------------: |
+| **Order** | $1$       | $1$                           | $\frac{1+\sqrt 5}{2}$    | $2$                      |
+| **Rate**  | $\frac12$ | $-\frac{f''(x)}{2f'(x)}(x-z)$ | $-\frac{f''(x)}{2f'(x)}$ | $-\frac{f''(x)}{2f'(x)}$ |
+
+$z$ denotes the second point used in the regula falsi.
+
+Bisection is very easy to prove, since the interval always halves.
+Midpoint $x_{k+1}$ of interval $(a_k, b_k)$ is an approximation of $x^\star$ with error
+
+$$
+|x_{k+1} - x^\star| \leq \frac12 (b_k - a_k) = 2^{-k-1}(b_0 - a_0).
+$$
+
+Then
+
+$$
+\lim\limits_{k\to\infty} \frac{e_{k+1}}{e_k^p} = \frac{2^{-k-1}(b_0 - a_0)}{\left(2^{-k}(b_0 - a_0)\right)^p} = \frac12 \left(\frac{2^k}{b_0 - a_0}\right)^{p-1}
+$$
+
+For this limit to exist and be finite, the exponent of 2 must vanish, i.e.
+
+$$
+p = 1,\qquad r = \frac12.
+$$
+
+
+## Newton's method
+
+```C linenums="1"
+float Q_rsqrt( float number ) {
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
+	x2 = number * 0.5F;
+	y  = number;
+	i  = * ( long * ) &y;                       // evil floating point bit level hacking
+	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+	y  = * ( float * ) &i;
+	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
+//	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+	return y;
+}
+```
 
 ## Deliverables
