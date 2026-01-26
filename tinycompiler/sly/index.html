@@ -1,0 +1,2836 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/tinycompiler/sly/">
+      
+      
+        <link rel="prev" href="../ast/">
+      
+      
+        <link rel="next" href="../symtable/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>SLY: lexer and parser - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sly-lexer-and-parser" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SLY: lexer and parser
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexical-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lexical Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ambiguities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ambiguities
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sly-lexer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLY: Lexer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sly-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLY: Parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing time
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lexical-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lexical Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lexical Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ambiguities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ambiguities
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sly-lexer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLY: Lexer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sly-parser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLY: Parser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing time
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="sly-lexer-and-parser">SLY: lexer and parser</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Parsing is traditionally separated into two stages: lexical analysis and syntactic analysis.
+However, both are essentially varieties of syntactic analysis, just at different levels.
+Both processes take a sequence of characters as input and create a higher-level structure.</p>
+<p><a href="parsing-primer.png"><img alt="" src="parsing-primer.png" /></a></p>
+<p>This separation is useful because the lexer's job is simpler than the parser's job.
+The lexer transforms the source text into a flat list of tokens such as "numeric literal", "string literal", "identifier", or "operator".
+It performs keyword recognition, removes whitespace, and other insignificant symbols.</p>
+<p>The parser performs a more complex task - it turns the stream of tokens created by the lexer into a parse tree, which reflects the structure of the language.
+Separating these two processes allows the parser to work with more orderly and meaningful material than the raw text.</p>
+<p>In complex languages, interaction cycles between the lexer and the parser may arise, but it is pretty out of scope for the compiler in a week-end.
+I chose to build a syntax tree from the source code using an external tool,
+which is provided with the lexical rules and grammar of the language (this corresponds to the contents of the green and orange boxes in the diagram).
+Let's take a closer look at each of them.</p>
+<details class="hint">
+<summary>Spoiler alert</summary>
+<p>It turned out that it is pretty easy to program a lexer/parser on my own, check two last chapters of this series.
+However, relying on an external tool allows me to focus on semantic analysis, this is why I keep the description of DIY lexer and parser at the very end of the series.</p>
+</details>
+<h2 id="lexical-analysis">Lexical Analysis</h2>
+<p>Lexical analysis is the process of converting a stream of characters into a sequence of tokens.
+A token is a sequence of characters that forms a lexical unit in the grammar of a language.
+Intuitively, it can be thought of as a "word" in a human language.
+To understand these definitions, let's look at the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Tokens</th>
+<th>Token type</th>
+<th>Semantic meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>if, while, fun, var, return, print</td>
+<td>IF, WHILE, FUN, VAR, RETURN, PRINT</td>
+<td>Keywords</td>
+</tr>
+<tr>
+<td>i tmp for23</td>
+<td>ID</td>
+<td>Identifier</td>
+</tr>
+<tr>
+<td>13,27</td>
+<td>INTVAL</td>
+<td>Integer constant</td>
+</tr>
+<tr>
+<td>(,{,}</td>
+<td>LPAREN, BEGIN, END</td>
+<td>Symbols</td>
+</tr>
+<tr>
+<td>%, +, /, =</td>
+<td>MOD, PLUS, DIVIDE, ASSIGN</td>
+<td>Operators</td>
+</tr>
+</tbody>
+</table>
+<p>For example, consider the following source code:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Our lexer should produce the following sequence of tokens:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">ID</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="n">ASSIGN</span><span class="w"> </span><span class="n">INTVAL</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">SEMICOLON</span>
+</span></code></pre></div>
+<p>Note that the tokens contain information about themselves: the token type and its actual content, so we do not lose <code>a</code> or <code>2</code>.
+We simply broke the input text into words, assigning each word a type (for example, in a human language, it could be a noun, verb, etc.).</p>
+<p>How can our lexer do this? In other words, how can we describe and recognize lexemes in a programming language? Let me quote my colleague Hadrien Titeux:
+<em>"Parsing: what computer scientists solved 40 years ago, but you still can’t do it easily on your own."</em></p>
+<p><img alt="" src="lies.png" /></p>
+<p>Tokens are described using regular expressions and recognized by finite automata.
+For example, the following regular expression can be used to identify a valid identifier: <code>[a-zA-Z_][a-zA-Z0-9_]*</code>.
+This means we can use alphanumeric characters and underscores.
+As usual, the first character cannot be a digit.
+And here we immediately run into</p>
+<h3 id="ambiguities">Ambiguities</h3>
+<p>What if we face the following stream of characters?</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">inta</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div>
+<p>This can be interpreted in two ways, generating different streams of tokens:</p>
+<p><div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">int</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">;</span><span class="w">   </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">TYPE</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">ID</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="n">ASSIGN</span><span class="w"> </span><span class="n">INTVAL</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">SEMICOLON</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">inta</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">;</span><span class="w">     </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">ID</span><span class="p">(</span><span class="n">inta</span><span class="p">)</span><span class="w"> </span><span class="n">ASSIGN</span><span class="w"> </span><span class="n">INTVAL</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">SEMICOLON</span>
+</span></code></pre></div>
+How can our lexer decide which rules to use (<code>ID</code> or <code>TYPE</code>)? The intuitive solution is to use the rule that matches the most characters in the source code.
+In our case, the <code>ID</code> rule will be used because it matches 4 characters (<code>inta</code>), while the <code>int</code> rule matches only 3 characters (<code>int</code>).
+However, there is another case of ambiguity that can trick our lexer:</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Which token sequence corresponds to above source code?</p>
+<p><div class="language-cpp highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">TYPE</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">ASSIGN</span><span class="w"> </span><span class="n">INTVAL</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">SEMICOLON</span>
+</span></code></pre></div>
+or
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">ID</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">ASSIGN</span><span class="w"> </span><span class="n">INTVAL</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">SEMICOLON</span>
+</span></code></pre></div>
+Note that even if the above code is syntactically incorrect, we are currently dealing with lexical analysis, not syntactic analysis,
+so we are not trying to check for syntactic errors at this stage.
+To solve this problem, we will use rule priority, that is, specify that a certain rule should be applied
+if two or more regular expressions match the same number of characters in the string.</p>
+<h2 id="sly-lexer">SLY: Lexer</h2>
+<p>For simplicity (see the previous picture), I am relying on existing tools for creating the syntax tree, namely the Python library <a href="https://github.com/dabeaz/sly">SLY</a>.
+This project is more focused on compilation rather than formal languages, so I'll allow myself this dependency for the moment.</p>
+<p>SLY provides two separate classes: <code>Lexer</code> and <code>Parser</code>.
+The <code>Lexer</code> class is used to split the input text into a set of tokens defined by a set of regular expression rules.
+The <code>Parser</code> class is used to recognize the language syntax defined by a context-free grammar.
+These two classes are used together to create a syntax analyzer.</p>
+<p>Let's start with the lexer.
+The description of lexical rules is trivial, so I will provide them for my entire language at once, rather than building them gradually, starting with expression calculators:</p>
+<details class="example">
+<summary>WendLexer</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span>
+<span class="normal"><a href="#__codelineno-7-23">23</a></span>
+<span class="normal"><a href="#__codelineno-7-24">24</a></span>
+<span class="normal"><a href="#__codelineno-7-25">25</a></span>
+<span class="normal"><a href="#__codelineno-7-26">26</a></span>
+<span class="normal"><a href="#__codelineno-7-27">27</a></span>
+<span class="normal"><a href="#__codelineno-7-28">28</a></span>
+<span class="normal"><a href="#__codelineno-7-29">29</a></span>
+<span class="normal"><a href="#__codelineno-7-30">30</a></span>
+<span class="normal"><a href="#__codelineno-7-31">31</a></span>
+<span class="normal"><a href="#__codelineno-7-32">32</a></span>
+<span class="normal"><a href="#__codelineno-7-33">33</a></span>
+<span class="normal"><a href="#__codelineno-7-34">34</a></span>
+<span class="normal"><a href="#__codelineno-7-35">35</a></span>
+<span class="normal"><a href="#__codelineno-7-36">36</a></span>
+<span class="normal"><a href="#__codelineno-7-37">37</a></span>
+<span class="normal"><a href="#__codelineno-7-38">38</a></span>
+<span class="normal"><a href="#__codelineno-7-39">39</a></span>
+<span class="normal"><a href="#__codelineno-7-40">40</a></span>
+<span class="normal"><a href="#__codelineno-7-41">41</a></span>
+<span class="normal"><a href="#__codelineno-7-42">42</a></span>
+<span class="normal"><a href="#__codelineno-7-43">43</a></span>
+<span class="normal"><a href="#__codelineno-7-44">44</a></span>
+<span class="normal"><a href="#__codelineno-7-45">45</a></span>
+<span class="normal"><a href="#__codelineno-7-46">46</a></span>
+<span class="normal"><a href="#__codelineno-7-47">47</a></span>
+<span class="normal"><a href="#__codelineno-7-48">48</a></span>
+<span class="normal"><a href="#__codelineno-7-49">49</a></span>
+<span class="normal"><a href="#__codelineno-7-50">50</a></span>
+<span class="normal"><a href="#__codelineno-7-51">51</a></span>
+<span class="normal"><a href="#__codelineno-7-52">52</a></span>
+<span class="normal"><a href="#__codelineno-7-53">53</a></span>
+<span class="normal"><a href="#__codelineno-7-54">54</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sly</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lexer</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">WendLexer</span><span class="p">(</span><span class="n">Lexer</span><span class="p">):</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>    <span class="n">tokens</span> <span class="o">=</span> <span class="p">{</span> <span class="n">ID</span><span class="p">,</span> <span class="n">BOOLVAL</span><span class="p">,</span> <span class="n">INTVAL</span><span class="p">,</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">PRINT</span><span class="p">,</span> <span class="n">PRINTLN</span><span class="p">,</span> <span class="n">INT</span><span class="p">,</span> <span class="n">BOOL</span><span class="p">,</span> <span class="n">VAR</span><span class="p">,</span> <span class="n">FUN</span><span class="p">,</span> <span class="n">IF</span><span class="p">,</span> <span class="n">ELSE</span><span class="p">,</span> <span class="n">WHILE</span><span class="p">,</span> <span class="n">RETURN</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a>        <span class="n">PLUS</span><span class="p">,</span> <span class="n">MINUS</span><span class="p">,</span> <span class="n">TIMES</span><span class="p">,</span> <span class="n">DIVIDE</span><span class="p">,</span> <span class="n">MOD</span><span class="p">,</span> <span class="n">LTEQ</span><span class="p">,</span> <span class="n">LT</span><span class="p">,</span> <span class="n">GTEQ</span><span class="p">,</span> <span class="n">GT</span><span class="p">,</span> <span class="n">EQ</span><span class="p">,</span> <span class="n">NOTEQ</span><span class="p">,</span> <span class="n">AND</span><span class="p">,</span> <span class="n">OR</span><span class="p">,</span> <span class="n">NOT</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a>        <span class="n">LPAREN</span><span class="p">,</span> <span class="n">RPAREN</span><span class="p">,</span> <span class="n">BEGIN</span><span class="p">,</span> <span class="n">END</span><span class="p">,</span> <span class="n">ASSIGN</span><span class="p">,</span> <span class="n">SEMICOLON</span><span class="p">,</span> <span class="n">COLON</span><span class="p">,</span> <span class="n">COMMA</span> <span class="p">}</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a>    <span class="n">ignore</span> <span class="o">=</span> <span class="s1">&#39; </span><span class="se">\t\r</span><span class="s1">&#39;</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a>    <span class="n">ignore_comment</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\/\/.*&#39;</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a>    <span class="n">ID</span>        <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;[a-zA-Z_][a-zA-Z0-9_]*&#39;</span> <span class="c1"># a regex per token (except for the remapped ones)</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a>    <span class="n">INTVAL</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\d+&#39;</span>                    <span class="c1"># N. B.: the order matters, first match will be taken</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a>    <span class="n">PLUS</span>      <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\+&#39;</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13"></a>    <span class="n">MINUS</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;-&#39;</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14"></a>    <span class="n">TIMES</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\*&#39;</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15"></a>    <span class="n">DIVIDE</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/&#39;</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16"></a>    <span class="n">MOD</span>       <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;%&#39;</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17"></a>    <span class="n">LTEQ</span>      <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&lt;=&#39;</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18"></a>    <span class="n">LT</span>        <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&lt;&#39;</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19"></a>    <span class="n">GTEQ</span>      <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&gt;=&#39;</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20"></a>    <span class="n">GT</span>        <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&gt;&#39;</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21"></a>    <span class="n">EQ</span>        <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;==&#39;</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22"></a>    <span class="n">NOTEQ</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;!=&#39;</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23"></a>    <span class="n">AND</span>       <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\&amp;\&amp;&#39;</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24"></a>    <span class="n">OR</span>        <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\|\|&#39;</span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25"></a>    <span class="n">NOT</span>       <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;!&#39;</span>
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26"></a>    <span class="n">LPAREN</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\(&#39;</span>
+</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27"></a>    <span class="n">RPAREN</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\)&#39;</span>
+</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28"></a>    <span class="n">BEGIN</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\{&#39;</span>
+</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29"></a>    <span class="n">END</span>       <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\}&#39;</span>
+</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30"></a>    <span class="n">ASSIGN</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;=&#39;</span>
+</span><span id="__span-7-31"><a id="__codelineno-7-31" name="__codelineno-7-31"></a>    <span class="n">COLON</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;:&#39;</span>
+</span><span id="__span-7-32"><a id="__codelineno-7-32" name="__codelineno-7-32"></a>    <span class="n">SEMICOLON</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;;&#39;</span>
+</span><span id="__span-7-33"><a id="__codelineno-7-33" name="__codelineno-7-33"></a>    <span class="n">COMMA</span>     <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;,&#39;</span>
+</span><span id="__span-7-34"><a id="__codelineno-7-34" name="__codelineno-7-34"></a>    <span class="n">STRING</span>    <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;&quot;[^&quot;]*&quot;&#39;</span>
+</span><span id="__span-7-35"><a id="__codelineno-7-35" name="__codelineno-7-35"></a>
+</span><span id="__span-7-36"><a id="__codelineno-7-36" name="__codelineno-7-36"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">BOOLVAL</span> <span class="c1"># token remapping for keywords</span>
+</span><span id="__span-7-37"><a id="__codelineno-7-37" name="__codelineno-7-37"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;false&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">BOOLVAL</span> <span class="c1"># this is necessary because keywords match legal identifier pattern</span>
+</span><span id="__span-7-38"><a id="__codelineno-7-38" name="__codelineno-7-38"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;print&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">PRINT</span>
+</span><span id="__span-7-39"><a id="__codelineno-7-39" name="__codelineno-7-39"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;println&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PRINTLN</span>
+</span><span id="__span-7-40"><a id="__codelineno-7-40" name="__codelineno-7-40"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="n">INT</span>
+</span><span id="__span-7-41"><a id="__codelineno-7-41" name="__codelineno-7-41"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;bool&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">BOOL</span>
+</span><span id="__span-7-42"><a id="__codelineno-7-42" name="__codelineno-7-42"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;var&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="n">VAR</span>
+</span><span id="__span-7-43"><a id="__codelineno-7-43" name="__codelineno-7-43"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="n">FUN</span>
+</span><span id="__span-7-44"><a id="__codelineno-7-44" name="__codelineno-7-44"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;if&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">IF</span>
+</span><span id="__span-7-45"><a id="__codelineno-7-45" name="__codelineno-7-45"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;else&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="n">ELSE</span>
+</span><span id="__span-7-46"><a id="__codelineno-7-46" name="__codelineno-7-46"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;while&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">WHILE</span>
+</span><span id="__span-7-47"><a id="__codelineno-7-47" name="__codelineno-7-47"></a>    <span class="n">ID</span><span class="p">[</span><span class="s1">&#39;return&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">RETURN</span>
+</span><span id="__span-7-48"><a id="__codelineno-7-48" name="__codelineno-7-48"></a>
+</span><span id="__span-7-49"><a id="__codelineno-7-49" name="__codelineno-7-49"></a>    <span class="nd">@_</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\n+&#39;</span><span class="p">)</span>
+</span><span id="__span-7-50"><a id="__codelineno-7-50" name="__codelineno-7-50"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">ignore_newline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span> <span class="c1"># line number tracking</span>
+</span><span id="__span-7-51"><a id="__codelineno-7-51" name="__codelineno-7-51"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">lineno</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</span><span id="__span-7-52"><a id="__codelineno-7-52" name="__codelineno-7-52"></a>
+</span><span id="__span-7-53"><a id="__codelineno-7-53" name="__codelineno-7-53"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+</span><span id="__span-7-54"><a id="__codelineno-7-54" name="__codelineno-7-54"></a>        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Line </span><span class="si">%d</span><span class="s1">: illegal character </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>To begin with (lines 4-6), we need to define all possible types of tokens (bonus reading: <a href="https://medium.com/@danieldng/learning-some-metaclass-magic-from-sly-8cceea1df1a6">why doesn't NameError occur?</a>).
+Then (lines 7-8), we ask SLY to ignore whitespace (we're not in Python, after all!), and discard everything from the double slashes to the end of the line.
+After that, we simply provide a list of all regular expressions corresponding to each token.</p>
+<p>Note: the order of these regular expressions is important: first come, first served.
+Let's look at the <code>NOT</code> and <code>NOTEQ</code> tokens as an example.
+We need to process the <code>NOTEQ</code> rule before the <code>NOT</code> rule, otherwise the sequence of characters <code>a != 0</code> will be split into tokens <code>ID(a) NOT ASSIGN INTVAL(0)</code>, instead of the required <code>ID(a) NOTEQ INTVAL(0)</code>.</p>
+<p>The second important point is that all reserved words in <em>wend</em> are valid identifiers, and since the <code>ID</code> rule comes first, they will be identified as such.
+We could create separate rules for them, but SLY offers a mechanism for reassigning tokens (lines 36-47).</p>
+<p>That's it, there's nothing else interesting in the list of lexical rules.
+The lexer itself takes these rules and creates a finite state machine that processes the entire stream of characters.</p>
+<h2 id="sly-parser">SLY: Parser</h2>
+<p>The parser's job is to take a stream of tokens and verify that the tokens form a valid expression according to the source language specification.
+This is often done using a context-free grammar, which recursively defines the components of a program.</p>
+<p>Thus, the parser must determine whether the language grammar accepts the given stream of tokens, then build a syntax tree and pass it to the other parts of the compiler.
+Again, I will not dwell on the classifications of grammars and algorithms for processing the token stream, let's leave that for those who want to discuss the theory of formal languages.
+The only thing we need to know is that we use the <a href="https://en.wikipedia.org/wiki/LALR_parser">simplest</a>.
+Such a parser makes decisions based on one look-ahead token, without ever returning back.</p>
+<p>The grammar of my language is extremely primitive, and writing the corresponding rules for the parser should not be difficult.
+Let's look at the code structure, which is enough to parse the expression <code>x = 3+42*(s-t)</code> (check the orange box in the beginning of the article):</p>
+<details class="example">
+<summary>Assign statement parser</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span>
+<span class="normal"><a href="#__codelineno-8-29">29</a></span>
+<span class="normal"><a href="#__codelineno-8-30">30</a></span>
+<span class="normal"><a href="#__codelineno-8-31">31</a></span>
+<span class="normal"><a href="#__codelineno-8-32">32</a></span>
+<span class="normal"><a href="#__codelineno-8-33">33</a></span>
+<span class="normal"><a href="#__codelineno-8-34">34</a></span>
+<span class="normal"><a href="#__codelineno-8-35">35</a></span>
+<span class="normal"><a href="#__codelineno-8-36">36</a></span>
+<span class="normal"><a href="#__codelineno-8-37">37</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sly</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parser</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lexer</span><span class="w"> </span><span class="kn">import</span> <span class="n">WendLexer</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">syntree</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">WendParser</span><span class="p">(</span><span class="n">Parser</span><span class="p">):</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a>    <span class="n">tokens</span> <span class="o">=</span> <span class="n">WendLexer</span><span class="o">.</span><span class="n">tokens</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a>    <span class="n">precedence</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">PLUS</span><span class="p">,</span> <span class="n">MINUS</span><span class="p">),</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">TIMES</span><span class="p">),</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a>    <span class="p">)</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID ASSIGN expr SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14"></a>        <span class="k">return</span> <span class="n">Assign</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15"></a>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr PLUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17"></a>       <span class="s1">&#39;expr MINUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18"></a>       <span class="s1">&#39;expr TIMES expr&#39;</span><span class="p">)</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20"></a>        <span class="k">return</span> <span class="n">ArithOp</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21"></a>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;LPAREN expr RPAREN&#39;</span><span class="p">)</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24"></a>        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25"></a>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28"></a>        <span class="k">return</span> <span class="n">Var</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29"></a>
+</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;INTVAL&#39;</span><span class="p">)</span>
+</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32"></a>        <span class="k">return</span> <span class="n">Integer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">INTVAL</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-8-33"><a id="__codelineno-8-33" name="__codelineno-8-33"></a>
+</span><span id="__span-8-34"><a id="__codelineno-8-34" name="__codelineno-8-34"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+</span><span id="__span-8-35"><a id="__codelineno-8-35" name="__codelineno-8-35"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+</span><span id="__span-8-36"><a id="__codelineno-8-36" name="__codelineno-8-36"></a>            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Syntax error: unexpected EOF&#39;</span><span class="p">)</span>
+</span><span id="__span-8-37"><a id="__codelineno-8-37" name="__codelineno-8-37"></a>        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Syntax error at line </span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">lineno</span><span class="si">}</span><span class="s1">, token=</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>We inherit from the <code>Parser</code> class and define grammatical rules.
+We have two non-terminal symbols: <code>statement</code>, corresponding to the instruction, and <code>expr</code>, corresponding to the expression.
+There are only two terminal symbols: <code>INTVAL</code> and <code>ID</code>.</p>
+<p>If the parser sees the <code>INTVAL</code> token (lines 30-32), it doesn't look any further and creates an object (syntax tree node) of the <code>Integer</code> class.
+If it sees the <code>ID</code> token (lines 26-28), it creates a syntax tree node of the <code>Var</code> class.
+Note that in both cases, the <code>expr</code> function is called, meaning that both an integer constant and a variable are trivial expressions.
+Similarly, streams of tokens like <code>ID(s) MINUS ID(t)</code> are processed - the parser produces a syntax tree node of type <code>ArithOp</code> with two <code>ID</code> child nodes found by recursion in the parser.
+All the rest is pretty similar, the only thing to pay attention to is the operation priority set in lines 7-10.</p>
+<p>So far, I gave you one statement only (corresponding to the token sequence <code>ID ASSIGN expr SEMICOLON</code>).
+The appropriate grammatical rule is given in lines 12-14, which, when matching such a stream of tokens, creates a syntax tree node of the <code>Assign</code> class.</p>
+<p>If you understand this code, here is the complete set of grammatical rules for wend, with no further subtleties, except for converting the unary operation <code>-x</code> into the binary operation <code>0-x</code>:</p>
+<details class="example">
+<summary>complete WendParser</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-9-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-9-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-9-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-9-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-9-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-9-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-9-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-9-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-9-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-9-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-9-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-9-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-9-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-9-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-9-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-9-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-9-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-9-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-9-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-9-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-9-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-9-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-9-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-9-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-9-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-9-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-9-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-9-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-9-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-9-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-9-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-9-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-9-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-9-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-9-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-9-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-9-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-9-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-9-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-9-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-9-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-9-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-9-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-9-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-9-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-9-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-9-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-9-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-9-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-9-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-9-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-9-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-9-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-9-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-9-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-9-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-9-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-9-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-9-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-9-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-9-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-9-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-9-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-9-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-9-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-9-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-9-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-9-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-9-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-9-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-9-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-9-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-9-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-9-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-9-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-9-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-9-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-9-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-9-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-9-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-9-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-9-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-9-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-9-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-9-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-9-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-9-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-9-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-9-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-9-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-9-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-9-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-9-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-9-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-9-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-9-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-9-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-9-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-9-100">100</a></span>
+<span class="normal"><a href="#__codelineno-9-101">101</a></span>
+<span class="normal"><a href="#__codelineno-9-102">102</a></span>
+<span class="normal"><a href="#__codelineno-9-103">103</a></span>
+<span class="normal"><a href="#__codelineno-9-104">104</a></span>
+<span class="normal"><a href="#__codelineno-9-105">105</a></span>
+<span class="normal"><a href="#__codelineno-9-106">106</a></span>
+<span class="normal"><a href="#__codelineno-9-107">107</a></span>
+<span class="normal"><a href="#__codelineno-9-108">108</a></span>
+<span class="normal"><a href="#__codelineno-9-109">109</a></span>
+<span class="normal"><a href="#__codelineno-9-110">110</a></span>
+<span class="normal"><a href="#__codelineno-9-111">111</a></span>
+<span class="normal"><a href="#__codelineno-9-112">112</a></span>
+<span class="normal"><a href="#__codelineno-9-113">113</a></span>
+<span class="normal"><a href="#__codelineno-9-114">114</a></span>
+<span class="normal"><a href="#__codelineno-9-115">115</a></span>
+<span class="normal"><a href="#__codelineno-9-116">116</a></span>
+<span class="normal"><a href="#__codelineno-9-117">117</a></span>
+<span class="normal"><a href="#__codelineno-9-118">118</a></span>
+<span class="normal"><a href="#__codelineno-9-119">119</a></span>
+<span class="normal"><a href="#__codelineno-9-120">120</a></span>
+<span class="normal"><a href="#__codelineno-9-121">121</a></span>
+<span class="normal"><a href="#__codelineno-9-122">122</a></span>
+<span class="normal"><a href="#__codelineno-9-123">123</a></span>
+<span class="normal"><a href="#__codelineno-9-124">124</a></span>
+<span class="normal"><a href="#__codelineno-9-125">125</a></span>
+<span class="normal"><a href="#__codelineno-9-126">126</a></span>
+<span class="normal"><a href="#__codelineno-9-127">127</a></span>
+<span class="normal"><a href="#__codelineno-9-128">128</a></span>
+<span class="normal"><a href="#__codelineno-9-129">129</a></span>
+<span class="normal"><a href="#__codelineno-9-130">130</a></span>
+<span class="normal"><a href="#__codelineno-9-131">131</a></span>
+<span class="normal"><a href="#__codelineno-9-132">132</a></span>
+<span class="normal"><a href="#__codelineno-9-133">133</a></span>
+<span class="normal"><a href="#__codelineno-9-134">134</a></span>
+<span class="normal"><a href="#__codelineno-9-135">135</a></span>
+<span class="normal"><a href="#__codelineno-9-136">136</a></span>
+<span class="normal"><a href="#__codelineno-9-137">137</a></span>
+<span class="normal"><a href="#__codelineno-9-138">138</a></span>
+<span class="normal"><a href="#__codelineno-9-139">139</a></span>
+<span class="normal"><a href="#__codelineno-9-140">140</a></span>
+<span class="normal"><a href="#__codelineno-9-141">141</a></span>
+<span class="normal"><a href="#__codelineno-9-142">142</a></span>
+<span class="normal"><a href="#__codelineno-9-143">143</a></span>
+<span class="normal"><a href="#__codelineno-9-144">144</a></span>
+<span class="normal"><a href="#__codelineno-9-145">145</a></span>
+<span class="normal"><a href="#__codelineno-9-146">146</a></span>
+<span class="normal"><a href="#__codelineno-9-147">147</a></span>
+<span class="normal"><a href="#__codelineno-9-148">148</a></span>
+<span class="normal"><a href="#__codelineno-9-149">149</a></span>
+<span class="normal"><a href="#__codelineno-9-150">150</a></span>
+<span class="normal"><a href="#__codelineno-9-151">151</a></span>
+<span class="normal"><a href="#__codelineno-9-152">152</a></span>
+<span class="normal"><a href="#__codelineno-9-153">153</a></span>
+<span class="normal"><a href="#__codelineno-9-154">154</a></span>
+<span class="normal"><a href="#__codelineno-9-155">155</a></span>
+<span class="normal"><a href="#__codelineno-9-156">156</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sly</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parser</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lexer</span><span class="w"> </span><span class="kn">import</span> <span class="n">WendLexer</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">syntree</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">WendParser</span><span class="p">(</span><span class="n">Parser</span><span class="p">):</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6"></a>    <span class="n">tokens</span> <span class="o">=</span> <span class="n">WendLexer</span><span class="o">.</span><span class="n">tokens</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7"></a>    <span class="n">precedence</span> <span class="o">=</span> <span class="p">(</span> <span class="c1"># arithmetic operators take precedence over logical operators</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">OR</span><span class="p">),</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">AND</span><span class="p">),</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10"></a>         <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">NOT</span><span class="p">),</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11"></a>         <span class="p">(</span><span class="s1">&#39;nonassoc&#39;</span><span class="p">,</span> <span class="n">LT</span><span class="p">,</span> <span class="n">LTEQ</span><span class="p">,</span> <span class="n">GT</span><span class="p">,</span> <span class="n">GTEQ</span><span class="p">,</span> <span class="n">EQ</span><span class="p">,</span> <span class="n">NOTEQ</span><span class="p">),</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">PLUS</span><span class="p">,</span> <span class="n">MINUS</span><span class="p">),</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13"></a>         <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">TIMES</span><span class="p">,</span> <span class="n">DIVIDE</span><span class="p">,</span> <span class="n">MOD</span><span class="p">),</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14"></a>         <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UMINUS</span><span class="p">),</span> <span class="c1"># unary operators</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15"></a>         <span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">UPLUS</span><span class="p">)</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16"></a>    <span class="p">)</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17"></a>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;fun_decl fun_body&#39;</span><span class="p">)</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20"></a>        <span class="k">return</span> <span class="n">Function</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">fun_decl</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">fun_body</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">fun_decl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21"></a>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;FUN ID LPAREN [ param_list ] RPAREN [ COLON type ]&#39;</span><span class="p">)</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fun_decl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24"></a>        <span class="n">deco</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:(</span><span class="n">p</span><span class="o">.</span><span class="n">type</span> <span class="ow">or</span> <span class="n">Type</span><span class="o">.</span><span class="n">VOID</span><span class="p">),</span> <span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">},</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">param_list</span> <span class="ow">or</span> <span class="p">[])</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">deco</span><span class="p">]</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26"></a>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;param { COMMA param }&#39;</span><span class="p">)</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">param_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">param0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">param1</span>
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30"></a>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID COLON type&#39;</span><span class="p">)</span>
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33"></a>        <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34"></a>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;BEGIN [ var_list ] [ fun_list ] [ statement_list ] END&#39;</span><span class="p">)</span>
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fun_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-37"><a id="__codelineno-9-37" name="__codelineno-9-37"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">var_list</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">p</span><span class="o">.</span><span class="n">fun_list</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">p</span><span class="o">.</span><span class="n">statement_list</span> <span class="ow">or</span> <span class="p">[]]</span>
+</span><span id="__span-9-38"><a id="__codelineno-9-38" name="__codelineno-9-38"></a>
+</span><span id="__span-9-39"><a id="__codelineno-9-39" name="__codelineno-9-39"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;var { var }&#39;</span><span class="p">)</span>
+</span><span id="__span-9-40"><a id="__codelineno-9-40" name="__codelineno-9-40"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">var_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-41"><a id="__codelineno-9-41" name="__codelineno-9-41"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">var0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">var1</span>
+</span><span id="__span-9-42"><a id="__codelineno-9-42" name="__codelineno-9-42"></a>
+</span><span id="__span-9-43"><a id="__codelineno-9-43" name="__codelineno-9-43"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;VAR ID COLON type SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-44"><a id="__codelineno-9-44" name="__codelineno-9-44"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-45"><a id="__codelineno-9-45" name="__codelineno-9-45"></a>        <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-46"><a id="__codelineno-9-46" name="__codelineno-9-46"></a>
+</span><span id="__span-9-47"><a id="__codelineno-9-47" name="__codelineno-9-47"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;fun { fun }&#39;</span><span class="p">)</span>
+</span><span id="__span-9-48"><a id="__codelineno-9-48" name="__codelineno-9-48"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fun_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-49"><a id="__codelineno-9-49" name="__codelineno-9-49"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">fun0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">fun1</span>
+</span><span id="__span-9-50"><a id="__codelineno-9-50" name="__codelineno-9-50"></a>
+</span><span id="__span-9-51"><a id="__codelineno-9-51" name="__codelineno-9-51"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;statement { statement }&#39;</span><span class="p">)</span>
+</span><span id="__span-9-52"><a id="__codelineno-9-52" name="__codelineno-9-52"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-53"><a id="__codelineno-9-53" name="__codelineno-9-53"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">statement0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">statement1</span>
+</span><span id="__span-9-54"><a id="__codelineno-9-54" name="__codelineno-9-54"></a>
+</span><span id="__span-9-55"><a id="__codelineno-9-55" name="__codelineno-9-55"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;WHILE expr BEGIN [ statement_list ] END&#39;</span><span class="p">)</span>
+</span><span id="__span-9-56"><a id="__codelineno-9-56" name="__codelineno-9-56"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-57"><a id="__codelineno-9-57" name="__codelineno-9-57"></a>        <span class="k">return</span> <span class="n">While</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">statement_list</span> <span class="ow">or</span> <span class="p">[],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-58"><a id="__codelineno-9-58" name="__codelineno-9-58"></a>
+</span><span id="__span-9-59"><a id="__codelineno-9-59" name="__codelineno-9-59"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;IF expr BEGIN [ statement_list ] END [ ELSE BEGIN statement_list_optional END ]&#39;</span><span class="p">)</span>
+</span><span id="__span-9-60"><a id="__codelineno-9-60" name="__codelineno-9-60"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-61"><a id="__codelineno-9-61" name="__codelineno-9-61"></a>        <span class="k">return</span> <span class="n">IfThenElse</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">statement_list</span> <span class="ow">or</span> <span class="p">[],</span> <span class="n">p</span><span class="o">.</span><span class="n">statement_list_optional</span> <span class="ow">or</span> <span class="p">[],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-62"><a id="__codelineno-9-62" name="__codelineno-9-62"></a>
+</span><span id="__span-9-63"><a id="__codelineno-9-63" name="__codelineno-9-63"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;statement_list&#39;</span><span class="p">)</span>                  <span class="c1"># sly does not support nested</span>
+</span><span id="__span-9-64"><a id="__codelineno-9-64" name="__codelineno-9-64"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement_list_optional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span> <span class="c1"># optional targets, therefore</span>
+</span><span id="__span-9-65"><a id="__codelineno-9-65" name="__codelineno-9-65"></a>        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">statement_list</span>           <span class="c1"># this rule</span>
+</span><span id="__span-9-66"><a id="__codelineno-9-66" name="__codelineno-9-66"></a>
+</span><span id="__span-9-67"><a id="__codelineno-9-67" name="__codelineno-9-67"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span id="__span-9-68"><a id="__codelineno-9-68" name="__codelineno-9-68"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement_list_optional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-69"><a id="__codelineno-9-69" name="__codelineno-9-69"></a>        <span class="k">return</span> <span class="p">[]</span>
+</span><span id="__span-9-70"><a id="__codelineno-9-70" name="__codelineno-9-70"></a>
+</span><span id="__span-9-71"><a id="__codelineno-9-71" name="__codelineno-9-71"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;PRINT   STRING SEMICOLON&#39;</span><span class="p">,</span>
+</span><span id="__span-9-72"><a id="__codelineno-9-72" name="__codelineno-9-72"></a>       <span class="s1">&#39;PRINTLN STRING SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-73"><a id="__codelineno-9-73" name="__codelineno-9-73"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-74"><a id="__codelineno-9-74" name="__codelineno-9-74"></a>        <span class="k">return</span> <span class="n">Print</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;println&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-75"><a id="__codelineno-9-75" name="__codelineno-9-75"></a>
+</span><span id="__span-9-76"><a id="__codelineno-9-76" name="__codelineno-9-76"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;PRINT   expr SEMICOLON&#39;</span><span class="p">,</span>
+</span><span id="__span-9-77"><a id="__codelineno-9-77" name="__codelineno-9-77"></a>       <span class="s1">&#39;PRINTLN expr SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-78"><a id="__codelineno-9-78" name="__codelineno-9-78"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-79"><a id="__codelineno-9-79" name="__codelineno-9-79"></a>        <span class="k">return</span> <span class="n">Print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;println&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-80"><a id="__codelineno-9-80" name="__codelineno-9-80"></a>
+</span><span id="__span-9-81"><a id="__codelineno-9-81" name="__codelineno-9-81"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;RETURN SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-82"><a id="__codelineno-9-82" name="__codelineno-9-82"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-83"><a id="__codelineno-9-83" name="__codelineno-9-83"></a>        <span class="k">return</span> <span class="n">Return</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-84"><a id="__codelineno-9-84" name="__codelineno-9-84"></a>
+</span><span id="__span-9-85"><a id="__codelineno-9-85" name="__codelineno-9-85"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;RETURN expr SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-86"><a id="__codelineno-9-86" name="__codelineno-9-86"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-87"><a id="__codelineno-9-87" name="__codelineno-9-87"></a>        <span class="k">return</span> <span class="n">Return</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-88"><a id="__codelineno-9-88" name="__codelineno-9-88"></a>
+</span><span id="__span-9-89"><a id="__codelineno-9-89" name="__codelineno-9-89"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID ASSIGN expr SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-90"><a id="__codelineno-9-90" name="__codelineno-9-90"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-91"><a id="__codelineno-9-91" name="__codelineno-9-91"></a>        <span class="k">return</span> <span class="n">Assign</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-92"><a id="__codelineno-9-92" name="__codelineno-9-92"></a>
+</span><span id="__span-9-93"><a id="__codelineno-9-93" name="__codelineno-9-93"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID LPAREN [ args ] RPAREN SEMICOLON&#39;</span><span class="p">)</span>
+</span><span id="__span-9-94"><a id="__codelineno-9-94" name="__codelineno-9-94"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-95"><a id="__codelineno-9-95" name="__codelineno-9-95"></a>        <span class="k">return</span> <span class="n">FunCall</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">args</span> <span class="ow">or</span> <span class="p">[],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-96"><a id="__codelineno-9-96" name="__codelineno-9-96"></a>
+</span><span id="__span-9-97"><a id="__codelineno-9-97" name="__codelineno-9-97"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;MINUS expr %prec UMINUS&#39;</span><span class="p">)</span>
+</span><span id="__span-9-98"><a id="__codelineno-9-98" name="__codelineno-9-98"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-99"><a id="__codelineno-9-99" name="__codelineno-9-99"></a>        <span class="k">return</span> <span class="n">ArithOp</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">Integer</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-100"><a id="__codelineno-9-100" name="__codelineno-9-100"></a>
+</span><span id="__span-9-101"><a id="__codelineno-9-101" name="__codelineno-9-101"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;PLUS expr %prec UPLUS&#39;</span><span class="p">,</span>
+</span><span id="__span-9-102"><a id="__codelineno-9-102" name="__codelineno-9-102"></a>       <span class="s1">&#39;LPAREN expr RPAREN&#39;</span><span class="p">)</span>
+</span><span id="__span-9-103"><a id="__codelineno-9-103" name="__codelineno-9-103"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-104"><a id="__codelineno-9-104" name="__codelineno-9-104"></a>        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span>
+</span><span id="__span-9-105"><a id="__codelineno-9-105" name="__codelineno-9-105"></a>
+</span><span id="__span-9-106"><a id="__codelineno-9-106" name="__codelineno-9-106"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr PLUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-107"><a id="__codelineno-9-107" name="__codelineno-9-107"></a>       <span class="s1">&#39;expr MINUS expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-108"><a id="__codelineno-9-108" name="__codelineno-9-108"></a>       <span class="s1">&#39;expr TIMES expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-109"><a id="__codelineno-9-109" name="__codelineno-9-109"></a>       <span class="s1">&#39;expr DIVIDE expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-110"><a id="__codelineno-9-110" name="__codelineno-9-110"></a>       <span class="s1">&#39;expr MOD expr&#39;</span><span class="p">)</span>
+</span><span id="__span-9-111"><a id="__codelineno-9-111" name="__codelineno-9-111"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-112"><a id="__codelineno-9-112" name="__codelineno-9-112"></a>        <span class="k">return</span> <span class="n">ArithOp</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-113"><a id="__codelineno-9-113" name="__codelineno-9-113"></a>
+</span><span id="__span-9-114"><a id="__codelineno-9-114" name="__codelineno-9-114"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr LT expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-115"><a id="__codelineno-9-115" name="__codelineno-9-115"></a>       <span class="s1">&#39;expr LTEQ expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-116"><a id="__codelineno-9-116" name="__codelineno-9-116"></a>       <span class="s1">&#39;expr GT expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-117"><a id="__codelineno-9-117" name="__codelineno-9-117"></a>       <span class="s1">&#39;expr GTEQ expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-118"><a id="__codelineno-9-118" name="__codelineno-9-118"></a>       <span class="s1">&#39;expr EQ expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-119"><a id="__codelineno-9-119" name="__codelineno-9-119"></a>       <span class="s1">&#39;expr NOTEQ expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-120"><a id="__codelineno-9-120" name="__codelineno-9-120"></a>       <span class="s1">&#39;expr AND expr&#39;</span><span class="p">,</span>
+</span><span id="__span-9-121"><a id="__codelineno-9-121" name="__codelineno-9-121"></a>       <span class="s1">&#39;expr OR expr&#39;</span><span class="p">)</span>
+</span><span id="__span-9-122"><a id="__codelineno-9-122" name="__codelineno-9-122"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-123"><a id="__codelineno-9-123" name="__codelineno-9-123"></a>        <span class="k">return</span> <span class="n">LogicOp</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-124"><a id="__codelineno-9-124" name="__codelineno-9-124"></a>
+</span><span id="__span-9-125"><a id="__codelineno-9-125" name="__codelineno-9-125"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;NOT expr&#39;</span><span class="p">)</span>
+</span><span id="__span-9-126"><a id="__codelineno-9-126" name="__codelineno-9-126"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-127"><a id="__codelineno-9-127" name="__codelineno-9-127"></a>        <span class="k">return</span> <span class="n">LogicOp</span><span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">(</span><span class="s1">&#39;False&#39;</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-128"><a id="__codelineno-9-128" name="__codelineno-9-128"></a>
+</span><span id="__span-9-129"><a id="__codelineno-9-129" name="__codelineno-9-129"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+</span><span id="__span-9-130"><a id="__codelineno-9-130" name="__codelineno-9-130"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-131"><a id="__codelineno-9-131" name="__codelineno-9-131"></a>        <span class="k">return</span> <span class="n">Var</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-132"><a id="__codelineno-9-132" name="__codelineno-9-132"></a>
+</span><span id="__span-9-133"><a id="__codelineno-9-133" name="__codelineno-9-133"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;ID LPAREN [ args ] RPAREN&#39;</span><span class="p">)</span>
+</span><span id="__span-9-134"><a id="__codelineno-9-134" name="__codelineno-9-134"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-135"><a id="__codelineno-9-135" name="__codelineno-9-135"></a>        <span class="k">return</span> <span class="n">FunCall</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">.</span><span class="n">args</span> <span class="ow">or</span> <span class="p">[],</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-136"><a id="__codelineno-9-136" name="__codelineno-9-136"></a>
+</span><span id="__span-9-137"><a id="__codelineno-9-137" name="__codelineno-9-137"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;expr { COMMA expr }&#39;</span><span class="p">)</span>
+</span><span id="__span-9-138"><a id="__codelineno-9-138" name="__codelineno-9-138"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-139"><a id="__codelineno-9-139" name="__codelineno-9-139"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">expr0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">expr1</span>
+</span><span id="__span-9-140"><a id="__codelineno-9-140" name="__codelineno-9-140"></a>
+</span><span id="__span-9-141"><a id="__codelineno-9-141" name="__codelineno-9-141"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;INTVAL&#39;</span><span class="p">)</span>
+</span><span id="__span-9-142"><a id="__codelineno-9-142" name="__codelineno-9-142"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-143"><a id="__codelineno-9-143" name="__codelineno-9-143"></a>        <span class="k">return</span> <span class="n">Integer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">INTVAL</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-144"><a id="__codelineno-9-144" name="__codelineno-9-144"></a>
+</span><span id="__span-9-145"><a id="__codelineno-9-145" name="__codelineno-9-145"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;BOOLVAL&#39;</span><span class="p">)</span>
+</span><span id="__span-9-146"><a id="__codelineno-9-146" name="__codelineno-9-146"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-147"><a id="__codelineno-9-147" name="__codelineno-9-147"></a>        <span class="k">return</span> <span class="n">Boolean</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">BOOLVAL</span><span class="o">==</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;lineno&#39;</span><span class="p">:</span><span class="n">p</span><span class="o">.</span><span class="n">lineno</span><span class="p">})</span>
+</span><span id="__span-9-148"><a id="__codelineno-9-148" name="__codelineno-9-148"></a>
+</span><span id="__span-9-149"><a id="__codelineno-9-149" name="__codelineno-9-149"></a>    <span class="nd">@_</span><span class="p">(</span><span class="s1">&#39;INT&#39;</span><span class="p">,</span> <span class="s1">&#39;BOOL&#39;</span><span class="p">)</span>
+</span><span id="__span-9-150"><a id="__codelineno-9-150" name="__codelineno-9-150"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+</span><span id="__span-9-151"><a id="__codelineno-9-151" name="__codelineno-9-151"></a>        <span class="k">return</span> <span class="n">Type</span><span class="o">.</span><span class="n">INT</span> <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;int&#39;</span> <span class="k">else</span> <span class="n">Type</span><span class="o">.</span><span class="n">BOOL</span>
+</span><span id="__span-9-152"><a id="__codelineno-9-152" name="__codelineno-9-152"></a>
+</span><span id="__span-9-153"><a id="__codelineno-9-153" name="__codelineno-9-153"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+</span><span id="__span-9-154"><a id="__codelineno-9-154" name="__codelineno-9-154"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+</span><span id="__span-9-155"><a id="__codelineno-9-155" name="__codelineno-9-155"></a>            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Syntax error: unexpected EOF&#39;</span><span class="p">)</span>
+</span><span id="__span-9-156"><a id="__codelineno-9-156" name="__codelineno-9-156"></a>        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Syntax error at line </span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">lineno</span><span class="si">}</span><span class="s1">, token=</span><span class="si">{</span><span class="n">token</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<h2 id="testing-time">Testing time</h2>
+<p>The corresponding code is available under the <a href="https://github.com/ssloy/tinycompiler/releases/tag/v0.0.2">tag v0.0.2</a> in the repository. I will no longer touch the parser or lexer:
+we have a great tool that allows us to automatically create syntax trees from source files in wend.
+You can test it by simply running <code>make test</code>, and see that the basic tests pass, but the compiler fails two tests:</p>
+<p><img alt="" src="fails.png" /></p>
+<p>I remind you that the compiler is currently just a <em>pretty print</em> layer over the lexer and parser, and it outputs Python code.
+Let's take a closer look at the failed tests, showing the wend source code and the compiled Python code side by side:</p>
+<p><img alt="" src="fail1.png" /></p>
+<p>Python is a very powerful language, it can do much more than wend, and my <em>pretty print</em> just dumbly repeats the structure of the source code.
+The only thing Python can't do out of the box is function overloading. 
+Therefore, it is quite expected to dislike four different <code>main</code> functions,
+it even refuses to compile (I'm talking about the compilation by the Python interpreter of the output from my compiler).</p>
+<p>But this one is a bit more interesting:</p>
+<p><img alt="" src="fail2.png" /></p>
+<p>This Python code runs nice, but it prints 0 to the screen, while the expected output of my code is 3.
+And this is the topic of our next discussion, namely, <a href="../symtable/">variable scopes and symbol tables</a>.
+In other words, we will move from lexical and syntactic analysis to semantic analysis.</p>
+<p>But let's end on a positive note, here is a program in <em>wend</em> that allows you to display the Mandelbrot set:</p>
+<details class="example">
+<summary>Mandelbrot.wend</summary>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span>
+<span class="normal"><a href="#__codelineno-10-21">21</a></span>
+<span class="normal"><a href="#__codelineno-10-22">22</a></span>
+<span class="normal"><a href="#__codelineno-10-23">23</a></span>
+<span class="normal"><a href="#__codelineno-10-24">24</a></span>
+<span class="normal"><a href="#__codelineno-10-25">25</a></span>
+<span class="normal"><a href="#__codelineno-10-26">26</a></span>
+<span class="normal"><a href="#__codelineno-10-27">27</a></span>
+<span class="normal"><a href="#__codelineno-10-28">28</a></span>
+<span class="normal"><a href="#__codelineno-10-29">29</a></span>
+<span class="normal"><a href="#__codelineno-10-30">30</a></span>
+<span class="normal"><a href="#__codelineno-10-31">31</a></span>
+<span class="normal"><a href="#__codelineno-10-32">32</a></span>
+<span class="normal"><a href="#__codelineno-10-33">33</a></span>
+<span class="normal"><a href="#__codelineno-10-34">34</a></span>
+<span class="normal"><a href="#__codelineno-10-35">35</a></span>
+<span class="normal"><a href="#__codelineno-10-36">36</a></span>
+<span class="normal"><a href="#__codelineno-10-37">37</a></span>
+<span class="normal"><a href="#__codelineno-10-38">38</a></span>
+<span class="normal"><a href="#__codelineno-10-39">39</a></span>
+<span class="normal"><a href="#__codelineno-10-40">40</a></span>
+<span class="normal"><a href="#__codelineno-10-41">41</a></span>
+<span class="normal"><a href="#__codelineno-10-42">42</a></span>
+<span class="normal"><a href="#__codelineno-10-43">43</a></span>
+<span class="normal"><a href="#__codelineno-10-44">44</a></span>
+<span class="normal"><a href="#__codelineno-10-45">45</a></span>
+<span class="normal"><a href="#__codelineno-10-46">46</a></span>
+<span class="normal"><a href="#__codelineno-10-47">47</a></span>
+<span class="normal"><a href="#__codelineno-10-48">48</a></span>
+<span class="normal"><a href="#__codelineno-10-49">49</a></span>
+<span class="normal"><a href="#__codelineno-10-50">50</a></span>
+<span class="normal"><a href="#__codelineno-10-51">51</a></span>
+<span class="normal"><a href="#__codelineno-10-52">52</a></span>
+<span class="normal"><a href="#__codelineno-10-53">53</a></span>
+<span class="normal"><a href="#__codelineno-10-54">54</a></span>
+<span class="normal"><a href="#__codelineno-10-55">55</a></span>
+<span class="normal"><a href="#__codelineno-10-56">56</a></span>
+<span class="normal"><a href="#__codelineno-10-57">57</a></span>
+<span class="normal"><a href="#__codelineno-10-58">58</a></span>
+<span class="normal"><a href="#__codelineno-10-59">59</a></span>
+<span class="normal"><a href="#__codelineno-10-60">60</a></span>
+<span class="normal"><a href="#__codelineno-10-61">61</a></span>
+<span class="normal"><a href="#__codelineno-10-62">62</a></span>
+<span class="normal"><a href="#__codelineno-10-63">63</a></span>
+<span class="normal"><a href="#__codelineno-10-64">64</a></span>
+<span class="normal"><a href="#__codelineno-10-65">65</a></span>
+<span class="normal"><a href="#__codelineno-10-66">66</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">fun</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">    </span><span class="c1">// constants</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">l</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">w</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">h</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">s</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="c1">// variables</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">x</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">r</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">v</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">d</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">e</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">a</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">z</span><span class="o">:</span><span class="kt">int</span><span class="p">;</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17"></a>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="n">palette</span><span class="p">(</span><span class="n">i</span><span class="o">:</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;&#39;&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;~&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">4</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;=&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;+&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">6</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;:&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">7</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;;&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">8</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;[&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">9</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;&lt;&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;&amp;&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;?&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">13</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;o&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">14</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;x&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">15</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;O&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-35"><a id="__codelineno-10-35" name="__codelineno-10-35"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;X&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-36"><a id="__codelineno-10-36" name="__codelineno-10-36"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">17</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot;#&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-37"><a id="__codelineno-10-37" name="__codelineno-10-37"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">print</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-38"><a id="__codelineno-10-38" name="__codelineno-10-38"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-39"><a id="__codelineno-10-39" name="__codelineno-10-39"></a>
+</span><span id="__span-10-40"><a id="__codelineno-10-40" name="__codelineno-10-40"></a><span class="w">    </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span>
+</span><span id="__span-10-41"><a id="__codelineno-10-41" name="__codelineno-10-41"></a><span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
+</span><span id="__span-10-42"><a id="__codelineno-10-42" name="__codelineno-10-42"></a><span class="w">    </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25</span><span class="p">;</span>
+</span><span id="__span-10-43"><a id="__codelineno-10-43" name="__codelineno-10-43"></a><span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8192</span><span class="p">;</span>
+</span><span id="__span-10-44"><a id="__codelineno-10-44" name="__codelineno-10-44"></a>
+</span><span id="__span-10-45"><a id="__codelineno-10-45" name="__codelineno-10-45"></a><span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-46"><a id="__codelineno-10-46" name="__codelineno-10-46"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">&lt;</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-47"><a id="__codelineno-10-47" name="__codelineno-10-47"></a><span class="w">        </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="p">(</span><span class="mi">125</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">((</span><span class="mi">25</span><span class="o">*</span><span class="n">s</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">;</span>
+</span><span id="__span-10-48"><a id="__codelineno-10-48" name="__codelineno-10-48"></a><span class="w">        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-49"><a id="__codelineno-10-49" name="__codelineno-10-49"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="o">&lt;</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-50"><a id="__codelineno-10-50" name="__codelineno-10-50"></a><span class="w">            </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-2</span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">((</span><span class="mi">25</span><span class="o">*</span><span class="n">s</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">w</span><span class="p">;</span>
+</span><span id="__span-10-51"><a id="__codelineno-10-51" name="__codelineno-10-51"></a><span class="w">            </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-52"><a id="__codelineno-10-52" name="__codelineno-10-52"></a><span class="w">            </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-53"><a id="__codelineno-10-53" name="__codelineno-10-53"></a><span class="w">            </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+</span><span id="__span-10-54"><a id="__codelineno-10-54" name="__codelineno-10-54"></a><span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">&lt;</span><span class="n">l</span><span class="mi">-1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="o">+</span><span class="n">e</span><span class="o">*</span><span class="n">e</span><span class="o">&lt;</span><span class="mi">4</span><span class="o">*</span><span class="n">s</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-55"><a id="__codelineno-10-55" name="__codelineno-10-55"></a><span class="w">                </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">d</span><span class="o">-</span><span class="n">e</span><span class="o">*</span><span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="n">s</span><span class="o">+</span><span class="n">v</span><span class="p">;</span>
+</span><span id="__span-10-56"><a id="__codelineno-10-56" name="__codelineno-10-56"></a><span class="w">                </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="n">d</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="o">/</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+</span><span id="__span-10-57"><a id="__codelineno-10-57" name="__codelineno-10-57"></a><span class="w">                </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="p">;</span>
+</span><span id="__span-10-58"><a id="__codelineno-10-58" name="__codelineno-10-58"></a><span class="w">                </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-10-59"><a id="__codelineno-10-59" name="__codelineno-10-59"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-10-60"><a id="__codelineno-10-60" name="__codelineno-10-60"></a><span class="w">            </span><span class="n">palette</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span><span id="__span-10-61"><a id="__codelineno-10-61" name="__codelineno-10-61"></a><span class="w">            </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-10-62"><a id="__codelineno-10-62" name="__codelineno-10-62"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-10-63"><a id="__codelineno-10-63" name="__codelineno-10-63"></a><span class="w">        </span><span class="n">println</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span id="__span-10-64"><a id="__codelineno-10-64" name="__codelineno-10-64"></a><span class="w">        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-10-65"><a id="__codelineno-10-65" name="__codelineno-10-65"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-66"><a id="__codelineno-10-66" name="__codelineno-10-66"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>And here is the result of its execution:</p>
+<p><img alt="" src="mandelbrot.png" /></p>
+<p>We are starting to encounter <em>wend</em> code for which it would be very cumbersome to build syntax trees manually, so having a parser is great!</p>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
