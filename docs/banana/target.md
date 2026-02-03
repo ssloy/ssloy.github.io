@@ -275,6 +275,13 @@ A new thought boggles the mind of the restless ape:
 
 ## Order of convergence
 
+
+![](target/convergence-x-bisection.png)
+
+![](target/convergence-x-regula-falsi.png)
+
+![](target/convergence-x-secant.png)
+
 ---
 
 
