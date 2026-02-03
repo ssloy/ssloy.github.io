@@ -30,7 +30,7 @@ plt.rcParams["mathtext.fontset"] = "dejavuserif"
 plt.rcParams['text.usetex'] = True
 
 plt.rc('font', size=34)
-plt.title(f'Targeting $x^*$={xstar} m with improved binary search')
+plt.title(f'Targeting $x^\star$={xstar} m with improved binary search')
 plt.grid(color='gray', linestyle='--', linewidth=0.5)
 
 bananas = 0

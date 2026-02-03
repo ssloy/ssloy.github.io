@@ -1,152 +1,289 @@
 # The Ape Hits a Target
 
-Up to this point, the simulation has been used to predict what happens given a throw. In this chapter, the direction is reversed: the throw itself becomes the unknown. The question is simple to state:
+Up to now, the ape has been throwing bananas and asking:
 
-— If the throw angle is fixed, which launch angle makes the banana hit a target at the ground?
+— Given a throw, where does the banana land?
 
-While the problem has an analytical solution, the idea is to find the answer entirely from numerical simulation. This way, we can check the closed-form solution to assess our results.
+In this chapter, the direction is reversed: the throw itself becomes the unknown. The question is simple to state:
 
-A target is painted on the ground, at a known horizontal position $x^*$.
-The throw angle is fixed, and the only thing the ape is willing to adjust is the initial speed.
-Every failed throw costs a banana.
-The ape wants to spend as few bananas as possible.
+— Given a target position $x^\star$ on the ground, how should the ape throw the banana to hit it?
 
-## One parameter, one event, one constraint.
+To keep things simple (and realistic for a lazy ape):
 
-In the previous chapter, the ape learned how to simulate the motion of a banana using a time-stepping scheme and how to detect the moment when the banana hits the ground.
+- the launch angle $\theta$ is fixed,
+- the launch speed $v_0$ the only unknown,
+- as before, the banana starts at the origin, gravity acts vertically with acceleration $g$, air resistance is ignored.
+
+In the previous chapter, we learned how to simulate the motion of a banana using a time-stepping scheme and how to detect the moment when the banana hits the ground.
 This required careful handling of two distinct ingredients:
 
 * A numerical integration scheme (explicit Euler)
 * An event detection mechanism to stop the simulation at the correct physical time.
 
-We now revisit this procedure from a different point of view.
-
-At first sight, the simulation seems to produce a trajectory: $(x(t),y(t)),t \geq 0$.
-
-However, this is not what we ultimately need.
-
 In the present problem, the ape is not interested in the entire flight of the banana.
 Only one number matters, namely, the horizontal position of the banana when it hits the ground.
-Let us call it $x_\text{impact}$.
+Let us call it "$\text{range}$".
 
-This observation allows us to radically simplify our description of the numerical procedure.
-Since the gravitational acceleration, the launch angle, the initial position and the time step $\Delta t$ are fixed, 
-the only remaining free parameter is the initial speed $v_0$.
-The numerical procedure is fully determined, so 
+We formalize this as a numerical black box:
 
-We view the simulator as a function from parameters to outcomes; in inverse-problem language, this is called the forward map.
-
-This entire procedure defines a mapping:
 $$
-F:v_0\to x_\text{impact}
+\text{range}(v_0) := \text{horizontal position where the banana hits the ground}.
 $$
 
+Our goal is now crystal clear:
+Find $v_0$ such that $\text{range}(v_0)=x^\star$.
+Equivalently, define $f(v_0):=\text{range}(v_0)−x^\star$, and look for a root of $f$.
 
-We call $F$ the forward map.
+Each failed throw costs a banana.
+Bananas cost time, effort, and dignity.
+The ape wants to hit the target using as few bananas as possible!
 
-It is essential to understand what the forward map is — and what it is not.
+---
 
-    FF is not a closed-form formula.
+## Closed-form solution (for later validation)
 
-    FF is not evaluated analytically.
+Before going fully numerical, let’s derive the analytical solution — not to use it, but to check our results afterward.
 
-    FF is produced by a numerical algorithm.
+With initial speed $v_0$ and fixed angle $\theta$, the motion is:
 
-Yet, from the outside, it behaves exactly like an ordinary function:
+$$
+\begin{aligned}
+x(t) &= v_0 \cos\theta \; t, \\
+y(t) &= v_0 \sin\theta \; t + \tfrac{1}{2} g t^2.
+\end{aligned}
+$$
 
-    One input
+The banana hits the ground when $y(t)=0$ (excluding $t=0$):
 
-    One output
+$$
+t_{\text{impact}} = -\frac{2 v_0 \sin\theta}{g}.
+$$
 
-    Always the same output for the same input
+The corresponding range is:
 
-From now on, we will treat the simulator as a function.
+$$
+\text{range}(v_0) = x(t_{\text{impact}}) = -v_0 \cos\theta \cdot \frac{2 v_0 \sin\theta}{g} = -\frac{v_0^2}{g} \sin 2\theta.
+$$
 
+To hit $x^\star$, we need:
 
-1.5 Black-box viewpoint
+$$
+-\frac{v_0^2}{g} \sin(2\theta) = x^\star.
+$$
 
-In scientific computing, it is often neither possible nor useful to inspect the internal structure of a simulation code.
+Solving for $v_0$:
 
-We therefore adopt the following rule:
+$$
+\boxed{
+v_0^\star
+= \sqrt{-\frac{g\,x^\star}{\sin(2\theta)}}
+}
+\qquad (\text{assuming } \sin(2\theta) > 0).
+$$
 
-    The forward map FF is a black box.
+This is the exact answer — and our numerical method should converge to it.
 
-This means:
+---
 
-    We can evaluate F(v0)F(v0​).
+## Range as a function of launch speed
 
-    We can evaluate it again for another value of v0v0​.
-
-    We do not assume any explicit formula for FF.
-
-This viewpoint is not a simplification — it is a realistic model of how numerical solvers are used in practice.
-1.6 Determinism and reproducibility
-
-Because all numerical choices are fixed, the forward map has an important property:
-
-    Determinism
-
-Running the simulation twice with the same v0v0​ produces exactly the same ximpactximpact​.
-
-This is what allows us to reason about FF as a mathematical object, even though it is generated numerically.
-1.7 Smoothness: an empirical observation
-
-At this stage, we do not assume anything about the regularity of FF.
-
-However, numerical experiments reveal that:
-
-    Small changes in v0v0​ lead to small changes in ximpactximpact​.
-
-    The map appears smooth.
-
-This observation will become important later, but for now it remains empirical.
-1.8 Cost of evaluating the forward map
-
-Each evaluation of FF requires:
-
-    A full time integration
-
-    Event detection
-
-    Interpolation
-
-In the ape’s world, this cost is easy to measure:
-
-    One evaluation of FF consumes exactly one banana.
-
-From this point onward, numerical algorithms will be judged not only by correctness, but also by banana efficiency.
-1.9 Why this abstraction matters
-
-This section marks a conceptual turning point.
-
-We no longer think in terms of:
-
-    Positions
-
-    Velocities
-
-    Time steps
-
-Instead, we think in terms of:
-
-    Inputs
-
-    Outputs
-
-    Numerical cost
-
-This shift allows us to formulate the ape’s task in a new way:
-
-    Given a function FF, find an input such that its output satisfies a constraint.
-
-This is the foundation of inverse problems, optimization, and parameter identification.
+Now forget the formula and think like a numerical ape.
+Let’s plot the $\text{range}(v_0)$ function:
 
 ![](target/plot-x-range.png)
 
+Graphically, we’re just finding where the curve crosses the horizontal line $x^\star$.
+From physics (and confirmed numerically), we can observe three key facts:
+
+1. $\text{range}(0) = 0$,
+2. $\text{range}(v_0)$ increases monotonically,
+3. the curve is well-behaved: it is smooth, and  small changes in $v_0$ produce small changes in range.
+
+This means that the equation $\text{range}(v_0)=x^\star$ has one unique solution,
+the function is regular enough for standard root-finding methods, numerical inversion is safe and robust.
+
+---
+
+## First weapon: bisection (a cautious ape)
+
+The bisection method is the simplest and most reliable strategy the ape can use to hit the target.
+It is slow, a bit stubborn, but impossible to fool, which makes it perfect as a first numerical method.
+
+Recall that we define the function
+
+$$
+f(v_0) = \text{range}(v_0) - x^\star,
+$$
+
+where $v_0$ is the launch speed, $\text{range}(v_0)$ is obtained from a numerical simulation,
+and $x^\star$ is the target position on the ground.
+
+Hitting the target means solving:
+
+$$
+f(v_0) = 0.
+$$
+
+We assume:
+
+* $f$ is continuous,
+* $f(0) < 0$ (a very weak throw falls short),
+* for large enough $v_0$, $f(v_0) > 0$  (the banana overshoots).
+
+So the correct launch speed lies somewhere in between.
+
+### Step 1: bracketing the solution
+
+The ape starts by choosing two speeds $v_{\min}$ and $v_{\max}$,
+such that:
+
+$$
+f(v_{\min}) < 0, \qquad f(v_{\max}) > 0.
+$$
+
+This means:
+
+* a throw with speed $v_{\min}$ undershoots,
+* a throw with speed $v_{\max}$ overshoots.
+
+The ape now knows, with certainty, that the correct speed lies inside the interval $[v_{\min}, v_{\max}]$.
+This step is crucial: **bisection never loses the target once it is bracketed.**
+
+
+### Step 2: split the interval
+
+The ape now takes the midpoint:
+
+$$
+v_{\text{mid}} := \frac{v_{\min} + v_{\max}}{2}.
+$$
+
+A banana is thrown with speed $v_{\text{mid}}$, and the simulation returns the landing position, hence the sign of $f(v_{\text{mid}})$.
+Three outcomes are possible:
+
+* $f(v_{\text{mid}}) = 0$: perfect hit (we are done),
+* $f(v_{\text{mid}}) < 0$: the banana falls short,
+* $f(v_{\text{mid}}) > 0$: the banana goes too far.
+
+### Step 3: keep the correct half
+
+Depending on the result, the ape updates the interval:
+
+* If $f(v_{\text{mid}}) < 0$, the root lies in $[v_{\text{mid}}, v_{\max}]$,
+  so we can update the interval: $v_{\min} \leftarrow v_{\text{mid}}$.
+
+* If $f(v_{\text{mid}}) > 0$, the root lies in $[v_{\min}, v_{\text{mid}}]$,
+  so we can update the interval: $v_{\max} \leftarrow v_{\text{mid}}$.
+
+In both cases the new interval is half the size of the old one, and the root is still guaranteed to be inside.
+The ape has learned something from the banana, and the uncertainty has been cut in half.
+
+We can repeat the above procedure:
+
+1. take the midpoint,
+2. throw a banana,
+3. keep the half that contains the target.
+
+After $k$ iterations, the uncertainty on the launch speed satisfies:
+
+$$
+|v_0 - v_0^\star| \le \frac{v_{\max} - v_{\min}}{2^k}.
+$$
+
+This gives a very concrete stopping rule: stop when $v_{\max} - v_{\min}$ is small enough, or when the banana lands close enough to the target.
+
+Here is an example plot of bananas launched to hit a target $x^\star=42$ m with the throw angle fixed to $\theta = 60^\circ$.
+The ape spent 9 bananas to hit the target with $\pm 10$ cm of accuracy.
+
 ![](target/hit-x-binary.png)
+
+The power of bisection comes from two simple facts:
+
+1. **Continuity**: the range changes continuously with the launch speed.
+2. **Intermediate Value Theorem**: a continuous function that changes sign must cross zero.
+
+No derivatives are needed, no clever guesses are required. No banana is ever wasted in the sense of losing the target. As long as the ape is patient, success is inevitable.
+
+---
+
+## Regula falsi: aiming smarter
+
+The ape asks itself the question:
+
+— If I know that one throw fell **just short** and another went **way too far**, why should I always try the midpoint?
+
+The bisection method taught the ape an important lesson: as long as the target is bracketed, it cannot be lost.
+But it also revealed a frustration: every new throw is made at the midpoint, even when previous bananas already showed **how far** the ape missed the target.
+The regula falsi method (literally false position) keeps the same safety guarantee as bisection, but uses more information from each throw to make (hopefully) smarter choices.
+
+The problem settings are unchanged, we work with the function
+
+$$
+f(v_0) = \text{range}(v_0) - x^\star,
+$$
+
+and we assume that we have two launch speeds $v_{\min}$ and $v_{\max}$ such that
+
+$$
+f(v_{\min}) < 0, \qquad f(v_{\max}) > 0.
+$$
+
+The key idea is to redefine how $v_{\text{mid}}$ is computed.
+Bisection only looks at signs, while regula falsi uses more information per banana
+by exploiting the actual values of $f$.
+While $f$ is unknown in its whole, we do know values $f(v_{\min})$ and $f(v_{\max})$,
+and we can approximate $f$ inbetween by a straight line.
+
+If one throw misses the target by a lot and the other only by a little,
+the straight line automatically biases the next guess toward the better side.
+
+So, instead of throwing at the midpoint, the ape now does the following:
+
+* plot the two known points $(v_{\min}, f(v_{\min}))$ and  $(v_{\max}, f(v_{\max}))$,
+* approximate the unknown function $f$ by the straight line passing through them,
+* choose the next throw where this line crosses zero.
+
+Geometrically, we intersect the secant line with the horizontal axis.
+The equation of the secant line is linear, and its zero can be computed explicitly:
+
+$$
+v_{\text{mid}}:=  v_{\min} - f(v_{\min}) \frac{v_{\max} - v_{\min}}{f(v_{\max}) - f(v_{\min})}
+$$
+
+This value replaces the midpoint used in bisection, so regula falsi is a natural evolution of bisection.
+It never loses the target, but reuses information from past throws, making it (often) converger faster in practice.
+
+Here is the same experiment as before: the ape hits a target $x^\star=42$ m with the throw angle fixed to $\theta = 60^\circ$.
 
 ![](target/hit-x-linear.png)
 
+Now the ape has spent 5 bananas only, almost half of 9 bananas it used with binary search!
+
+A new thought boggles the mind of the restless ape:
+
+— If I keep drawing secant lines anyway… do I really need to keep the interval?
+
+---
+
+## Secants: the ape is taking risks
+
+---
+
+## Newton: the ape learns calculus
+
+---
+
+## Order of convergence
+
+---
+
+
+
+
+
+
+
+<!--
 Let $x_0,x_1,x_2\dots$ be a sequence which converges to $x^\star$ and $e_k:= |x_k - x^\star|$. If there exist $p$ and $r\neq 0$ such that 
 
 $$
@@ -206,9 +343,11 @@ For this limit to exist and be finite, the exponent of 2 must vanish, i.e.
 $$
 p = 1,\qquad r = \frac12.
 $$
+-->
 
+## Fast inverse square root
 
-## Newton's method
+![](target/arena.jpg)
 
 ```C linenums="1"
 float Q_rsqrt( float number ) {
@@ -226,6 +365,7 @@ float Q_rsqrt( float number ) {
 }
 ```
 
+<!--
 ## Deliverables
 
 
@@ -294,3 +434,4 @@ $$
 
 ---
 
+-->
