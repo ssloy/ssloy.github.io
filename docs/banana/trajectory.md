@@ -118,4 +118,4 @@ It is therefore important to keep the axes in mind: a graph of $y$ versus $t$ do
 * Table of $(t,x,y)$
 * Plot of $x(t)$, $y(t)$ and the trajectory in the $(x,y)$ plane
 
-
+--8<-- "comments.html"

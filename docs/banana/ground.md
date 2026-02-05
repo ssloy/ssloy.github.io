@@ -115,4 +115,4 @@ Refining $\Delta t$ without interpolation still misses events.
 * Plot of the trajectory with correct event detection
 
 
-
+--8<-- "comments.html"

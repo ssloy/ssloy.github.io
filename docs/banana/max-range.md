@@ -118,3 +118,4 @@ The maximum of $\sin(2\theta)$ is $1$, attained at $90°$, so the optimal launch
     * precision / certification
     * what if a function to optimize was not unimodal?
 
+--8<-- "comments.html"

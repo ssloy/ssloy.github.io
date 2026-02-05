@@ -75,3 +75,4 @@ This chapter does not have another deliverables but the understanding that you s
 The goal for the course is not mastery of methods, but a simple introduction to the field, awareness of the error stack, skepticism toward results, and the habit of asking “what could be wrong?”.
 Ask this question **every** time you are doing something.
 
+--8<-- "comments.html"

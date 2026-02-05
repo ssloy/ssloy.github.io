@@ -23,4 +23,4 @@ In this course, we will ground these ideas in a deceptively simple example inspi
 Behind this iconic setting lies a complete scientific workflow — choosing a model, identifying parameters, simulating outcomes, and interpreting results.
 By working with a familiar and intuitive problem, we can focus on the core principles of scientific computing without being overwhelmed by large codebases or unnecessary technical complexity.
 
-
+--8<-- "comments.html"

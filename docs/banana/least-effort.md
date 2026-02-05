@@ -131,3 +131,4 @@ This is the **least-effort velocity**, obtained *without ever optimizing over ti
 * Unconstrained optimization energy plot
 * Discussion (no coding): will the unconstrained optimization produce the same result?
 
+--8<-- "comments.html"
