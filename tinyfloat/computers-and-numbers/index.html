@@ -1,0 +1,2303 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/tinyfloat/computers-and-numbers/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../print/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Computers and Numbers - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#computers-and-numbers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Computers and Numbers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-reals-are-hard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Reals Are Hard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Reals Are Hard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integers-computers-natural-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integers: computers’ natural language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rational-numbers-manageable-with-two-integers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rational numbers: manageable with two integers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-numbers-the-impossible-dream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real numbers: the impossible dream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real numbers: the impossible dream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#computable-reals-a-tiny-subset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Computable reals: a tiny subset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-limits-finite-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage limits: finite precision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approximations-and-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximations and errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Approximations and errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed-point-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed-point numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approximation-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximation errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floating-point-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Floating point numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-reals-are-hard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Reals Are Hard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Reals Are Hard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integers-computers-natural-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integers: computers’ natural language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rational-numbers-manageable-with-two-integers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rational numbers: manageable with two integers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-numbers-the-impossible-dream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real numbers: the impossible dream
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real numbers: the impossible dream">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#computable-reals-a-tiny-subset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Computable reals: a tiny subset
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-limits-finite-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage limits: finite precision
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#approximations-and-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximations and errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Approximations and errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed-point-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed-point numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approximation-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Approximation errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#floating-point-numbers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Floating point numbers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="computers-and-numbers">Computers and Numbers</h1>
+<h2 id="why-reals-are-hard">Why Reals Are Hard</h2>
+<p>Let us talk about numbers and computers.
+First of all, there are three most common families of numbers we are dealing with: integer, rational and real numbers.
+Computers can manipulate integers perfectly, rationals with effort, and reals only in dreams. Most reals cannot even be named by any algorithm, and the few that can still collapse to approximations when stored in finite memory.
+Let me elaborate.</p>
+<h3 id="integers-computers-natural-language">Integers: computers’ natural language</h3>
+<p>Computers are digital machines. Inside the hardware, everything is stored in binary: strings of 0s and 1s.
+This makes integers (whole numbers) the most natural fit.</p>
+<p>A 32-bit register can hold exactly <span class="arithmatex">\(2^{32}\)</span> different patterns of 0s and 1s; it is common to interpret them as integers from <span class="arithmatex">\(0\)</span> to <span class="arithmatex">\(4\ 294\ 967\ 295\)</span> (unsigned), or from <span class="arithmatex">\(-2\ 147\ 483\ 648\)</span> to <span class="arithmatex">\(2\ 147\ 483\ 647\)</span> (signed).
+Arithmetic on integers (addition, subtraction, multiplication, division) is exact, as long as the result fits within the chosen bit width.
+So computers excel at integers: representation is exact, arithmetic is reliable, and all values in the range are covered.</p>
+<h3 id="rational-numbers-manageable-with-two-integers">Rational numbers: manageable with two integers</h3>
+<p>A rational number is a ratio of two integers, like <span class="arithmatex">\(\frac34\)</span> or <span class="arithmatex">\(-\frac{22}7\)</span>.
+Computers can store these exactly by keeping an integer numerator and denominator.
+For example, in Python, the <code>fractions.Fraction</code> class does exactly this.
+Arithmetic works correctly, but denominators may grow very large, making computations slower.
+So, representing rationals is possible and exact, but less efficient.
+Computers can handle it, though it is not what hardware is optimized for.</p>
+<h3 id="real-numbers-the-impossible-dream">Real numbers: the impossible dream</h3>
+<p>Real numbers include all rationals plus all irrationals — like <span class="arithmatex">\(\sqrt{2}\)</span> and <span class="arithmatex">\(\pi\)</span>.
+Most real numbers cannot be described exactly with a finite sequence of digits,
+but this infinity is not the biggest problem.
+The problem with real numbers is their sheer abundance.
+Forget about computers for a moment, let us talk about math on paper.</p>
+<h4 id="computable-reals-a-tiny-subset">Computable reals: a tiny subset</h4>
+<p>Let us say that a real number is <strong>computable</strong> if there exists an algorithm that, given <span class="arithmatex">\(n\)</span>, outputs the <span class="arithmatex">\(n\)</span>-th digit of the number.
+Examples are numerous, we know formulas to compute digits of <span class="arithmatex">\(\pi\)</span>, <span class="arithmatex">\(\sqrt 2\)</span>, <span class="arithmatex">\(e\)</span> and many others.
+Let us focus on the word <strong>algorithm</strong>.
+In our context, an algorithm is a textual description (in fact, a computer program) telling us how to compute the <span class="arithmatex">\(n\)</span>-th digit of some number.
+The set of texts (computer programs) is <strong>countable</strong>: there are only finitely many programs of length 1, finitely many of length 2, and so on.</p>
+<p>The set of real numbers <span class="arithmatex">\(\mathbb R\)</span>, however, is <strong>uncountable</strong> (<a href="https://en.wikipedia.org/wiki/Cantor%27s_diagonal_argument">Cantor’s diagonal argument</a>).
+Uncountable sets are "bigger" that countable sets, therefore most real numbers cannot even be described by any program — they are <strong>incomputable</strong>.
+Although there are infinitely many computable reals, they form a countable set — a drop in the ocean compared to all reals.</p>
+<h4 id="storage-limits-finite-precision">Storage limits: finite precision</h4>
+<p>Even for computable numbers, storing them directly is problematic.
+A real number may have infinitely many digits, but a computer can only store finitely many bits.
+Therefore, even computable real numbers cannot be represented exactly. Approximations are unavoidable.</p>
+<p>Putting it together: most real numbers are incomputable — no algorithm can generate them.
+Of the computable reals, computers can only hold a finite precision approximation.
+This means the “continuum” of real numbers is <strong>forever beyond reach</strong> of finite digital machines.</p>
+<p>In practice, numerical computation is built on the illusion of reals: we pretend to work with them (solving equations, integrating, simulating physics),
+but everything is grounded in a finite lattice of floating-point approximations.
+The success of scientific computing rests on the fact that this illusion is often “good enough” — relative errors are kept small, and algorithms are stable.</p>
+<h2 id="approximations-and-errors">Approximations and errors</h2>
+<p>So we want to represent real numbers on a computer, but only have a finite number of bit patterns.
+Suppose we want to represent numbers between 0 and 16, and we have 7 bits available. This gives us a budget of <span class="arithmatex">\(2^7 = 128\)</span> distinct numbers.</p>
+<h3 id="fixed-point-numbers">Fixed-point numbers</h3>
+<p>If <span class="arithmatex">\(m\)</span> is the unsigned integer value of a 7‑bit pattern, then <span class="arithmatex">\(m\)</span> ranges from 0 to 127.
+We can interpret this as the fractional number <span class="arithmatex">\(m/8\)</span>. Let us plot all 128 such numbers:</p>
+<p><a href="fixed-point.png"><img alt="" src="fixed-point.png" /></a></p>
+<p>These numbers are evenly spaced across the range.
+They are called <strong>fixed‑point</strong> numbers because the “binary point” (the denominator) stays in the same position for all values.</p>
+<p>For example, take <span class="arithmatex">\(m = 125\)</span>. The bit pattern for <span class="arithmatex">\(m\)</span> is <code>1111101</code> (since <span class="arithmatex">\(125_{10} = 1111101_2\)</span>).
+Dividing by 8 shifts the binary point three places to the left: <span class="arithmatex">\(\tfrac{125}{8}_{10} = 1111.101_2\)</span>.
+The binary point is fixed for all the numbers, hence the name.</p>
+<h3 id="approximation-errors">Approximation errors</h3>
+<p>Fixed-point numbers offer the best possible <strong>absolute error</strong> of approximation.
+If the real number is <span class="arithmatex">\(x\)</span> and the computer stores <span class="arithmatex">\(\tilde x\)</span>, then
+$$
+\text{absolute error} := |x - \tilde{x}|.
+$$</p>
+<p>Say, we want to represent the real number <span class="arithmatex">\(0.1\)</span> with our 7 bit fixed-point numbers.
+The closest number we have is <span class="arithmatex">\(\frac{10}{8} = 0.125\)</span>.
+Therefore, we commited a 0.025 error.</p>
+<p>Often what matters is how big the error is compared to the size of the number.
+Let us define the notion of <strong>relative error</strong>:</p>
+<div class="arithmatex">\[
+\text{relative error} := \frac{|x - \tilde{x}|}{|x|}.
+\]</div>
+<p>Let us illustrate the difference between the two:</p>
+<ul>
+<li>If <span class="arithmatex">\(x=1000\)</span> and <span class="arithmatex">\(\tilde x = 1000.1\)</span>, then absolute error = 0.1, but relative error = 0.1 / 1000 = 0.0001 (very small, good).</li>
+<li>If <span class="arithmatex">\(x=0.01\)</span> and <span class="arithmatex">\(\tilde x = 0.0101\)</span>, then absolute error is very small (0.0001), but relative error = 0.0001 / 0.01 = 0.01. That is 1% error, not great.</li>
+</ul>
+<p>There are two natural goals that arise when representing real numbers on a computer:</p>
+<ul>
+<li>Cover a huge dynamic range: from tiny numbers like <span class="arithmatex">\(10^{-30}\)</span> to to huge numbers like <span class="arithmatex">\(10^{30}\)</span>.</li>
+<li>Give decent precision everywhere: the numbers should be relatively close to the true reals.</li>
+</ul>
+<p>If we used fixed-point, the numbers are evenly spaced. That’s great for precision but terrible for range: you can’t represent both 
+<span class="arithmatex">\(10^{-30}\)</span> and <span class="arithmatex">\(10^{30}\)</span> unless you use thousands of bits.</p>
+<p>The solution is to use a logarithmic distribution of representable numbers:</p>
+<p><a href="ideal-distribution.png"><img alt="" src="ideal-distribution.png" /></a></p>
+<p>Here the numbers are evenly spaced on a log scale:</p>
+<p><a href="ideal-distribution2.png"><img alt="" src="ideal-distribution2.png" /></a></p>
+<p>This means there are as many numbers between 0.1 and 1 as between 1 and 10.
+Thus we achieve uniform relative precision rather than uniform absolute precision.
+This matches real‑world needs, where significant digits matter more than absolute spacing.</p>
+<p>The more bits available, the larger the range we can cover.
+IEEE <a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">single‑precision floating‑point</a> numbers, for example, can go up to about <span class="arithmatex">\(10^{38}\)</span>.</p>
+<p>If we again take <span class="arithmatex">\(m \in [0,127]\)</span>, we could define numbers as <span class="arithmatex">\(2^{-4 + m/16}\)</span> in the <span class="arithmatex">\([0,16]\)</span> range — as plotted in the “ideal” graphs above.</p>
+<details class="bug">
+<summary>Spoiler</summary>
+<p>Attentive readers may notice that these numbers do not start from zero — a detail we will address later.</p>
+</details>
+<p>This distribution would be perfect if our only goal was to approximate reals with uniform relative error. Unfortunately, it introduces problems.</p>
+<p>For example, suppose we want to add two such numbers. Given <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> representing <span class="arithmatex">\(2^{-4 + a/16}\)</span> and <span class="arithmatex">\(2^{-4 + b/16}\)</span>, we would need to solve for <span class="arithmatex">\(c\)</span>:
+$$
+2^{-4 + a/16} + 2^{-4 + b/16} = 2^{-4 + c/16}.
+$$
+This is a gnarly equation to solve, especially since the exponents are fractional.
+Even a simple addition of two numbers kills efficiency.</p>
+<p>Moreover, pure log encoding cannot represent integers exactly, except powers of two. Floating‑point formats fix this: they preserve all integers up to a certain size exactly (e.g., all integers up to <span class="arithmatex">\(2^{24}\)</span> fit in a <code>float32</code>). This property is essential in many algorithms (array indexing, loop counters, geometry).</p>
+<details class="tip">
+<summary>Fun fact</summary>
+<p>There are “<a href="https://en.wikipedia.org/wiki/Logarithmic_number_system">logarithmic number systems</a>” (LNS), used in niche areas like DSP (digital signal processing) and deep learning accelerators. They are great for multiplication/division (turns into add/subtract), but bad for addition. Hardware designs typically combine both worlds.</p>
+</details>
+<h3 id="floating-point-numbers">Floating point numbers</h3>
+<p>The idea of floating‑point is to mimic the logarithmic distribution while retaining efficient arithmetic.
+A good way to understand floating‑point numbers is to construct them step by step.</p>
+<p>In our example, we have a budget of 7 bits total to represent a number.
+We will use them to store two integer numbers: <span class="arithmatex">\(e\)</span> (exponent) and <span class="arithmatex">\(m\)</span> (mantissa).
+It is up to us to decide how many bits we reserve for <span class="arithmatex">\(e\)</span>, so let us say that we use <span class="arithmatex">\(0 &lt; n_e &lt;7\)</span> bits for the exponent
+and <span class="arithmatex">\(n_m:=7-n_e\)</span> bits for the mantissa.</p>
+<p>If we interpret <span class="arithmatex">\(n_e\)</span> bits as a signed int, then under the <a href="https://en.wikipedia.org/wiki/Signed_number_representations">offset binary interpretation</a>, <span class="arithmatex">\(e \in [-2^{n_e-1} \dots 2^{n_e-1}-1]\)</span>.
+If <span class="arithmatex">\(n_e = 3\)</span>, then <span class="arithmatex">\(e\)</span> can take <span class="arithmatex">\(2^3=8\)</span> values from <span class="arithmatex">\(-4\)</span> to <span class="arithmatex">\(3\)</span>.
+Let us plot all <span class="arithmatex">\(8\)</span> values <span class="arithmatex">\(2^e\)</span> and in addition one more value <span class="arithmatex">\(2^{2^{n_e-1}}\)</span> (dashed):</p>
+<p><a href="anchors.png"><img alt="" src="anchors.png" /></a></p>
+<p>Python snippet:
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">n_e</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">anchors</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_e</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_e</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">anchors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">e</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p>These anchors divide the range into intervals. With <span class="arithmatex">\(n_m = 4\)</span>, <span class="arithmatex">\(m\)</span> can take <span class="arithmatex">\(2^4 = 16\)</span> values.
+Within each interval, we evenly place 16 numbers. Thus we have <span class="arithmatex">\(8 \times 16 = 128\)</span> numbers, exactly fitting into 7 bits.</p>
+<p>Here is a bit of python that generates all the numbers:
+<div class="language-py highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">n_m</span> <span class="o">=</span> <span class="mi">7</span> <span class="o">-</span> <span class="n">n_e</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">numbers</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">anchors</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># for each interval</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">n_m</span><span class="p">):</span>     <span class="c1"># populate it with 2**n_m numbers</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="n">v</span> <span class="o">=</span> <span class="n">anchors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="n">n_m</span> <span class="o">*</span> <span class="p">(</span><span class="n">anchors</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">anchors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p>And here is the corresponding plot of the numbers:</p>
+<p><a href="floats.png"><img alt="" src="floats.png" /></a></p>
+<p>Each interval is a linear interpolation between anchors. Inside each interval the binary point is fixed, but it shifts between intervals — hence <strong>floating point</strong>.</p>
+<p>One issue remains: the very first anchor is <span class="arithmatex">\(2^{-2^{n_e-1}}\)</span>, so zero is missing.
+The common fix is a hack: redefine the first anchor as zero.</p>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">anchors</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_e</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_e</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">anchors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">e</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The first interval is now special — its values are called <a href="https://en.wikipedia.org/wiki/Subnormal_number"><strong>subnormals</strong></a> (a term we will revisit later).</p>
+<p>Here are our 128 floats:</p>
+<p><a href="subnormal.png"><img alt="" src="subnormal.png" /></a></p>
+<p>Because anchors are powers of two, integers can be represented exactly.
+As for arithmetic efficiency — that is the focus of this tutorial: how to manipulate floating‑point numbers using only integer operations.</p>
+<p>Next time we will talk about printing the decimal value of a float.
+Surprisingly enough, this problem is far from being trivial.
+It is actually one of the hardest parts of floating-point support in a language runtime.
+Stay tuned!</p>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

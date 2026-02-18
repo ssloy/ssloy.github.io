@@ -1,0 +1,2450 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/strange/earnshaw/">
+      
+      
+        <link rel="prev" href="../cursed-fire/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Mendocino motor and Earnshaw's theorem - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mendocino-motor-and-earnshaws-theorem" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mendocino motor and Earnshaw's theorem
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#magnetic-suspension-puzzle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Magnetic suspension puzzle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-thought-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First thought experiment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-experiment-corrected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First experiment corrected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened-to-the-electric-potential-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happened to the electric potential formula?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happened to the electric potential formula?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#faraday-no-swirling-only-gradient-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Faraday: no swirling, only gradient flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gauss-conservation-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gauss: conservation law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-both-laws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine both laws
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-to-the-error-i-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Back to the error I made
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#earnshaws-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Earnshaw's theorem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#magnetic-suspension-puzzle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Magnetic suspension puzzle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-thought-experiment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First thought experiment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-experiment-corrected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First experiment corrected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened-to-the-electric-potential-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happened to the electric potential formula?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What happened to the electric potential formula?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#faraday-no-swirling-only-gradient-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Faraday: no swirling, only gradient flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gauss-conservation-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gauss: conservation law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combine-both-laws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combine both laws
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-to-the-error-i-made" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Back to the error I made
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#earnshaws-theorem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Earnshaw's theorem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mendocino-motor-and-earnshaws-theorem">Mendocino motor and Earnshaw's theorem</h1>
+<p>Do you know what a Mendocino motor is?
+It is a sun-powered, magnetically-levitated demonstration motor - beautiful, simple, and educational.
+Such a motor can be made with very basic tools, making it a really fun project for any hobbyist.</p>
+<p><img alt="" src="mendocino.gif" /></p>
+<p>The rotor is mounted on extremely low-friction bearings: the original had a glass cylinder suspended on two needles, while modern versions have a magnetic suspension system.
+The motor is brushless, with solar panels on the rotor that supply voltage to the coils wound on the rotor.
+When light hits a solar cell, it powers one coil.
+The powered coil interacts with the magnetic field from fixed external magnets, thus creating a torque.
+The rotor rotates, and the solar cell moves away from the directed light, and another one takes its place.
+This way, the rotor spins continuously as long as light is available.
+An extremely elegant solution that anyone can easily make at home.
+But let us focus on the magnetic suspension.</p>
+<h2 id="magnetic-suspension-puzzle">Magnetic suspension puzzle</h2>
+<p>We place a pair of fixed magnets on the stator so that a magnet mounted on the rotor axis sits in a local minimum of the magnetic potential in the radial directions — it’s held firmly against sideways (radial) displacement.</p>
+<p><img alt="" src="shaft.svg" /></p>
+<p><img alt="" src="magnetic-bearing.gif" /></p>
+<p>Repeating that arrangement at both ends of the rotor produces radial confinement for the shaft, but the configuration is axially (longitudinally) unstable: the rotor is free to slide along the shaft direction.
+Resting the shaft lightly against a vertical support supplies the missing axial support while keeping contact friction extremely small, so the assembly behaves as a very low-friction bearing.</p>
+<p><strong>But why, then, do all Mendocino motors still include a tiny side support for the shaft?</strong>
+The side plate is somehow... inelegant, isn't it?
+It's quite logical to want a rotor that floats completely in the air, without any kind of support.
+Turns out, it is impossible, but I am not the only one wanting a fully magnetic suspension.
+Let me, for example, quote this <a href="https://scienceforums.net/topic/87824-mendocino-motor/">forum</a>:</p>
+<details class="quote" open="open">
+<summary>Quote #1</summary>
+<p>On a Mendocino Motor why does one side float free while the other has a tip to a wall? I know the question might sound trivial but I have worked up the idea why not use the same magnets used to levitate as a counter force on both sides of the shaft? I attached a very rough jpg of what I mean. the green magnets at the end of the shafts is what im referring to. is there some theory or law preventing this?
+<img alt="" src="forum1.jpg" /></p>
+</details>
+<p>or another one:</p>
+<details class="quote" open="open">
+<summary>Quote #2</summary>
+<p>What would happen if the base magnets were spaced and oriented like in this drawing? Would it give it stability in the axial plane, and do away with the mirror requirement?
+<img alt="" src="forum2.jpg" /></p>
+</details>
+<p>In other words, people all over the world want to get rid of the side support.
+I didn't do very well in school, and the impossibility of creating a fully magnetic suspension is not obvious to me either.
+Over a cup of tea, I asked my colleagues this very question: “Why is it impossible, actually?” And you know, it wasn't obvious to him either!</p>
+<p>No one on the above-mentioned forums really explained why it is impossible.
+At best, they quoted some Earnshaw theorem, which is not very easy to digest.
+It states the following:</p>
+<details class="quote" open="open">
+<summary>Earnshaw's theorem</summary>
+<p>Any equilibrium configuration of point charges is unstable if nothing else acts on them except Coulomb's forces of attraction and repulsion.</p>
+</details>
+<p>Is that clear to you? It's not to me.
+Let's say I can accept that we're talking about charged particles and not magnets.
+But what's next?
+Let us brainstorm with few thought experiments!</p>
+<h2 id="first-thought-experiment">First thought experiment</h2>
+<p>When something is unclear to me, I draw a picture.
+For simplicity, let us start with 2D electrostatics.
+Imagine four fixed unit charges at the corners of a square and a free charge in the center of the square.
+Something like this:</p>
+<p><img alt="" src="5charges.svg" /></p>
+<p>Is it possible that the free charge is not in a state of stable equilibrium?
+Intuitively, wherever the charge moves, it approaches one of the fixed charges, increasing the repulsive force!
+Let's draw a map of the potential energy for the free charge.
+My physics skills are shaky, so we'll draw on knowledge from <a href="https://en.wikipedia.org/wiki/Electric_potential">Wikipedia</a>.</p>
+<details class="quote" open="open">
+<summary>Wikipedia quote</summary>
+<p>The electric (Coulomb) potential <span class="arithmatex">\(f\)</span> arising from a point charge, <span class="arithmatex">\(q\)</span>, at a distance, <span class="arithmatex">\(r\)</span>, from the location of <span class="arithmatex">\(q\)</span> is observed to be <span class="arithmatex">\(f\)</span></p>
+<div class="arithmatex">\[
+f = k \frac q r,
+\]</div>
+<p>where <span class="arithmatex">\(k\)</span> is the permittivity of vacuum.</p>
+</details>
+<p>If your physics skills are somewhat comparable to mine (pretty low), then let us focus on the word "potential" first.
+It comes from Latin <em>potentia</em>, meaning <em>power</em> or <em>capacity</em>.
+In physics, it generally refers to a stored ability to do something, something that could be released or converted into motion/work.
+Electrostatic potential <span class="arithmatex">\(f\)</span> measures the capacity of a point in space to give energy to a charge.
+A higher potential means a charge placed there would have more energy.</p>
+<p>Gravity is a great analogy because it’s familiar.
+Let’s say a hill represents <strong>gravitational potential</strong>.
+A ball on the hill has gravitational <strong>potential energy</strong> proportional to height.
+The slope of the hill tells the ball which way it will roll: the steeper the slope, the stronger the force.
+Note that the potential itself is a scalar quantity — it tells you “how much energy per unit particle is stored at this point,” not the force.
+The force comes from the gradient of the potential: it is the slope of the “energy landscape.”</p>
+<p>In my thought experiments, all coefficients are either zero or one.
+Therefore, both the charge <span class="arithmatex">\(q\)</span> and the permittivity <span class="arithmatex">\(k\)</span> are unit.
+That is, a single fixed charge creates a potential measured by the formula <span class="arithmatex">\(f = 1/r\)</span>, where <span class="arithmatex">\(r\)</span> is the distance to the charge.</p>
+<p>Let us use python to draw the map of the potential of our system made of four charges.
+We can use following function to compute the electric potential of a point <span class="arithmatex">\((x,y)\)</span> due to a single charge located at the point <span class="arithmatex">\((a,b)\)</span>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="c1"># electric potential due to a point charge located at a,b</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+</span></code></pre></div>
+<p>To compute the electric potential of the system, it suffices to sum four point charge potentials:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>       <span class="c1"># electric potential due to 4 point charges</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">return</span> <span class="n">f</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>           <span class="n">f</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>           <span class="n">f</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>           <span class="n">f</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Finally, all we need to do is to plot the the scalar field <span class="arithmatex">\(F\)</span>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                   <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p>And here is the plot. Note that I have clamped <span class="arithmatex">\(F\)</span> to remove the points where the potential goes to infinity:</p>
+<p><img alt="" src="3d-potential.jpg" /></p>
+<p>The scalar field <span class="arithmatex">\(F\)</span> can be seen as a height map, a bird's-eye view of a landscape.
+The dashed lines show the isolines of the elevation, and the yellow arrows indicate the direction of the steepest descent.</p>
+<p>Clearly, in the center of the plot there is a basin of attraction, a zone with only incoming yellow arrows.
+If we move slightly our free charge from the center, its energy will increase, so it will return to the center.
+Therefore, this is a stable equilibrium.</p>
+<p>Did Earnshaw lie? No, he did not. The problem is that I drew the picture poorly, I made a mistake. And many people would make the same mistake as I did (I have checked it).
+Pause for a second, think about where I went wrong.</p>
+<h2 id="first-experiment-corrected">First experiment corrected</h2>
+<p>In this case, the error lies in the fact that in 2D, a fixed charge creates a potential measured by the formula <span class="arithmatex">\(f = -\log r\)</span>, where <span class="arithmatex">\(r\)</span> is the distance to the charge, and not <span class="arithmatex">\(1/r\)</span>.
+The Coulomb's formula <span class="arithmatex">\(f = 1/r\)</span> is derived for 3D.
+Take my word for it for a moment and allow me to modify the Coulomb's formula.
+Then the correct code will look like this (check the highlighted line):</p>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="c1"># electric potential due to a point charge located at a,b</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="hll">    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span>
+</span></span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>       <span class="c1"># electric potential due to 4 point charges</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a>    <span class="k">return</span> <span class="n">f</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a>           <span class="n">f</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a>           <span class="n">f</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a>           <span class="n">f</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a>                   <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Check the result, there are no local minima on the map.
+The origin is a saddle point, i.e., a point of <strong>unstable</strong> equilibrium.
+As soon as the free charge shifts even a micron away from the origin, it will inevitably drift out of the square, accelerating more and more.</p>
+<p><img alt="" src="2d-potential.jpg" /></p>
+<h2 id="what-happened-to-the-electric-potential-formula">What happened to the electric potential formula?</h2>
+<p>When I encountered a clear contradiction with Earnshaw's theorem, I realized that I had made a mistake somewhere and began the debugging.
+At some point I saw that I had no other option as to read about Maxwell's equations.
+School physics class were long forgotten, and I never had to deal with them again at university or later in life.</p>
+<p>It turns out that the subject is not that hard, especially if we are only interested in electrostatics!
+For the big picture intuition, you can think of the electric field like a flowing fluid:</p>
+<ul>
+<li>Field lines (shown in yellow arrows) are water streams</li>
+<li>A charge is a source/sink that creates or absorbs flow</li>
+<li>Potential = height of a landscape; water flows downhill</li>
+</ul>
+<p>Four our case, we need two (out of four) Maxwell's equations.</p>
+<h4 id="faraday-no-swirling-only-gradient-flow">Faraday: no swirling, only gradient flow</h4>
+<p><a href="https://en.wikipedia.org/wiki/Faraday%27s_law_of_induction">Faraday says</a> changing magnetic fields create vortices in the electric field.
+But in electrostatics nothing changes in time, so no vortices exist.
+That means the “water” never swirls in circles — it only flows because gravity pulls it downward on a landscape (check the yellow arrows).</p>
+<p>Mathematically, for any zero-curl (irrotational) vector field <span class="arithmatex">\(\vec E\)</span>, there exists (in any simply connected neighborhood) a scalar potential <span class="arithmatex">\(f\)</span> such that <span class="arithmatex">\(\vec E = - \nabla f\)</span>.
+To sum up, Faraday said that the for the static case the
+electric field (the yellow lines) can be found as the downhill direction of potential landscape.</p>
+<h4 id="gauss-conservation-law">Gauss: conservation law</h4>
+<p>This is a local conservation law.
+<a href="https://en.wikipedia.org/wiki/Gauss%27s_law">It states</a> that if there is no charge inside a region, then the total electric flux through the boundary of the region is zero.</p>
+<p>If you imagine the field as water flow, then enclosing a charge is like enclosing a faucet: there is net flow out of the surface.
+A positive charge is a fountain, a negative charge is a drain.
+Zero charge in a region tells that there is no net flow through the boundary: What flows in must flow out (no accumulation).</p>
+<p>Mathematically, we say that at any point the <a href="https://en.wikipedia.org/wiki/Divergence">divergence</a> of the electric field is equal to the charge at this point:</p>
+<div class="arithmatex">\[
+\nabla \cdot \vec{E} = q
+\]</div>
+<h4 id="combine-both-laws">Combine both laws</h4>
+<p>Let us plug <span class="arithmatex">\(\vec E = -\nabla f\)</span> into Gauss's law:</p>
+<div class="arithmatex">\[
+\nabla \cdot \vec E = \nabla \cdot (-\nabla f) = -\Delta f = q.
+\]</div>
+<p>So, <span class="arithmatex">\(\Delta f = -q\)</span>, which is <a href="https://en.wikipedia.org/wiki/Poisson%27s_equation">Poisson's equation</a>.
+If the region considered contains no free charge, <span class="arithmatex">\(q=0\)</span>. Then Poisson reduces to <span class="arithmatex">\(\Delta f = 0\)</span>, 
+which is <a href="https://en.wikipedia.org/wiki/Laplace%27s_equation">Laplace's equation</a>. Functions satisfying <span class="arithmatex">\(\Delta f = 0\)</span> are called harmonic.
+Therefore the electrostatic potential is harmonic wherever there is no charge.</p>
+<p>It turns out that in 2D, function <span class="arithmatex">\(\frac{1}{r}\)</span> is not harmonic (it has non-zero Laplacian).
+To derive proper potential function, we need to solve the Laplace's equation.
+Here you can see the derivation details:</p>
+<details class="spoiler">
+<summary>2D electric potential due to a point charge</summary>
+<p>In 2D, <span class="arithmatex">\(\Delta f(r) = f''(r) + \frac1r f'(r)\)</span>, therefore <span class="arithmatex">\(\Delta f = 0\)</span> becomes</p>
+<div class="arithmatex">\[
+f''(r) + \frac{1}{r} f'(r) = 0.
+\]</div>
+<p>To solve it, we can rewrite left part in “derivative of a product” form:</p>
+<div class="arithmatex">\[
+f''(r) + \frac{1}{r} f'(r) = \frac{1}{r} \big( r f'(r) \big)'.
+\]</div>
+<p>So the ODE becomes</p>
+<div class="arithmatex">\[
+\frac{1}{r} (r f'(r))' = 0 \quad\Rightarrow\quad (r f'(r))' = 0.
+\]</div>
+<p>Then to recover <span class="arithmatex">\(f\)</span> it suffices to integrate the equation twice:</p>
+<div class="arithmatex">\[
+\begin{align}
+(r f'(r))' = 0 \quad&amp;\Rightarrow\quad r f'(r) = A,\\
+f'(r) = \frac{A}{r} \quad&amp;\Rightarrow\quad  \boxed{f(r) = A \ln r + B},
+\end{align}
+\]</div>
+<p>here <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> are constants.</p>
+</details>
+<p>As a sanity check, we can also see if we get the Coulomb's potential for the 3D case (yes, we do):</p>
+<details class="spoiler">
+<summary>Derivation of Coulomb's law in 3D</summary>
+<p>The 3D Laplace equation for a radial function <span class="arithmatex">\(f(r)\)</span> is</p>
+<div class="arithmatex">\[
+\Delta f = f''(r) + \frac{2}{r} f'(r) = 0, \quad r&gt;0.
+\]</div>
+<p>Note the constant 2 appearing in the 3D version, if you are curious where it comes from, check the text under the spoiler.</p>
+<details class="spoiler">
+<summary>Laplacian for radial functions for arbitrary dimenensions</summary>
+<p>Let <span class="arithmatex">\(\vec{x}=(x_1,\dots,x_n)\)</span>. Set <span class="arithmatex">\(r:=|\vec x|\)</span>.
+Then the gradient  <span class="arithmatex">\(\nabla f\)</span> can be written as:</p>
+<div class="arithmatex">\[
+   \nabla f = f'(r)\,\nabla r = f'(r)\,\frac{\vec{x}}{r} = f'(r)\,\hat{\vec r},
+\]</div>
+<p>where <span class="arithmatex">\(\hat{\vec r}=\vec{x}/r\)</span> is the radial unit vector.
+Laplacian is divergence of the gradient:</p>
+<div class="arithmatex">\[
+   \Delta f = \nabla\cdot\Big(f'(r)\,\hat{\vec r}\Big).
+\]</div>
+<p>Use product rule:</p>
+<div class="arithmatex">\[
+   \nabla\cdot\Big(f'(r)\,\hat{\vec r}\Big) = f''(r)\,\hat{\vec r}\cdot\nabla r + f'(r)\,\nabla\cdot\hat{\vec r}.
+\]</div>
+<p>But <span class="arithmatex">\(\hat{\vec r}\cdot\nabla r = \dfrac{\vec{x}}{r}\cdot\dfrac{\vec{x}}{r}=1\)</span>, so the first term is <span class="arithmatex">\(f''(r)\)</span>.
+For the second term we can note that the divergence of the radial unit vector in <span class="arithmatex">\(n\)</span> dimensions is
+<span class="arithmatex">\(\nabla\cdot\hat{\mathbf r}=\frac{n-1}{r}\)</span>. Combining both, we obtain</p>
+<div class="arithmatex">\[
+   \boxed{\Delta f = f''(r) + f'(r)\frac{n-1}{r}}.
+\]</div>
+</details>
+<p>As before, we rewrite the left part in “derivative of a product” form:</p>
+<div class="arithmatex">\[
+f''(r) + \frac{2}{r} f'(r) = \frac{1}{r^2} \big( r^2 f'(r) \big)'.
+\]</div>
+<div class="arithmatex">\[
+\begin{align}
+(r^2 f'(r))' = 0 \quad&amp;\Rightarrow\quad r^2 f'(r) = A,\\
+f'(r) = \frac{A}{r^2} \quad&amp;\Rightarrow\quad \boxed{f(r) = \frac{A}{r} + B},
+\end{align}
+\]</div>
+<p>where <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> are constants.
+To sum up, we Coulomb's electric potential due to a point charge is indeed derived from Laplace's equation.</p>
+</details>
+<h3 id="back-to-the-error-i-made">Back to the error I made</h3>
+<p>If we use the Coulomb <span class="arithmatex">\(1/r\)</span> formula in a 2D space, this corresponds to a situation where we actually have 3 dimensions, but the motion of charges is restricted along one axis by some external mechanism.
+In that case, it is obvious that a stable configuration can be created.
+For example, take a cardboard tube, place it vertically, and put a magnet at the bottom.
+Then place another magnet inside the tube above it.
+This upper magnet will be in equilibrium: the tube prevents horizontal motion (effectively constraining the system to one dimension), and along the vertical direction the gravitational force is balanced by the magnetic repulsion.</p>
+<p>Earnshaw’s theorem must be applied either together with the Coulomb law in 3D, or in a space of any dimension, but using the correct potential for that dimension.
+By “correct” I mean the potential that actually follows from Maxwell’s equations in that given number of dimensions.</p>
+<h2 id="earnshaws-theorem">Earnshaw's theorem</h2>
+<p>Let us sum up what we have learned from Maxwell's laws: in a region without charge, the electric potential <span class="arithmatex">\(f\)</span> satisfies Laplace’s equation <span class="arithmatex">\(\Delta f = 0\)</span>.
+Such functions are called <strong>harmonic</strong>, and harmonic functions obey a crucial property: they cannot have any local maxima or minima inside the region, only on the boundary.
+Physically this means the potential is shaped like a perfectly stretched elastic sheet — no bumps or wells can form away from the boundary of the sheet.</p>
+<p>A free charge placed in an electrostatic field would sit at a point where the electric force vanishes, i.e. in a point where its potential energy has a (local) minimum.
+But since the potential of an electrostatic field has no local minima, a result, the potential energy of a single particle has no local minima either.
+Therefore, static electric fields cannot trap a charged particle in stable equilibrium.</p>
+<p>Congratulations, we have just proven Earnshaw's theorem for a single charged particle.
+But what about more complex systems?
+My colleagues have suggested me another thought experiment.</p>
+<p>Let's fix two charges and create a moving body consisting of a weightless, inextensible rod with charges at both ends:</p>
+<p><img alt="" src="4charges.svg" /></p>
+<p>Intuitively, if we move the stick slightly to the left or right, one end will approach the fixed charges, and they will repel it, returning the stick to its original position.
+Where's the catch?
+Let's draw the electrostatic potential of two fixed charges:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">F</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>       <span class="c1"># electric potential due to 2 point charges</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>           <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span></code></pre></div>
+<p><img alt="" src="2d-potential-2.jpg" /></p>
+<p>How can we draw the potential energy of our stick charged at both ends?
+The electric potential <span class="arithmatex">\(F(r)\)</span> is a property on the field itself and represents the potential energy per unit charge available at each point in space.
+When you place a charge <span class="arithmatex">\(q\)</span> in that field, the actual potential energy it has is simply <span class="arithmatex">\(P(\vec x) = q\,F(\vec x)\)</span>.
+Recall that in my thought experiments all coefficients are either 1 or 0, so for a single charge the electric potential landscape and the potential energy the charge are pretty much the same thing.</p>
+<p>For a system of two charges it changes a bit.
+If two point charges <span class="arithmatex">\(q_1,q_2\)</span> are held at fixed positions <span class="arithmatex">\(\vec x_1, \vec x_2\)</span> (by a rigid rod), and there is an <em>external</em> electrostatic potential <span class="arithmatex">\(F\)</span>, the total electrostatic potential energy of the system of the two charges is</p>
+<div class="arithmatex">\[
+P(\vec x_1, \vec x_2)=q_1\,F(\vec x_1)+q_2\,F(\vec x_2).
+\]</div>
+<p>Basically, the potential energy of the stick is the sum of the potential energies of its charges
+(note that I ignore the mutual Coulomb energy of the two charges because of the rod).</p>
+<p>The stick has three degrees of freedom (two for translation and one for rotation), so the full graph would be hard to plot.
+For simplicity I ignore rotations and allow translations only.
+Let us draw the potential energy of the stick that cannot rotate (here I chose its center as the reference point):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">P</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="k">return</span> <span class="n">F</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>           <span class="n">F</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</span></code></pre></div>
+<p>And here is its plot:</p>
+<p><img alt="" src="2d-potential-energy.jpg" /></p>
+<p>So, the energy of the stick has four peaks (each of the two ends of the stick hits each of the two charges).
+As expected, the stick won't want to move horizontally. It will run away vertically!</p>
+<p>It is to be expected, since the total energy of the system is the sum of potential energies of each charge.
+We know that the potential energy of each charge is harmonic.
+But the sum of two harmonics is also harmohic...
+That is, potential energy of any charged body (not just our stick!) cannot have local minima in a constant electric field!</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The mental picture most people have of magnetic and electric fields is often misleading, especially if they have not worked closely with physics.
+Our intuition tends to imagine stable energy minima, little “valleys” where objects naturally settle.
+Unfortunately, real electromagnetic fields rarely behave this way, and it turns out to be surprisingly difficult to build something like a Mendocino motor without side support.</p>
+<p>So what loopholes might remain?
+Earnshaw’s theorem (to the extent that we even apply it to permanent magnets) applies only to systems of stationary permanent magnets.</p>
+<ol>
+<li><strong>Moving or rotating bodies:</strong> Earnshaw excludes dynamics entirely. The classic example is the <a href="https://en.wikipedia.org/wiki/Levitron">levitron</a>.</li>
+<li><strong>Dynamic fields:</strong> time-varying magnetic fields are not covered by Earnshaw’s theorem.</li>
+<li><strong>Diamagnetism and superconductivity:</strong> these involve induced currents or quantum effects that fall outside the theorem’s assumptions.</li>
+</ol>
+<p>So the hope is not lost.
+Yes, using any of these ideas will ruin the beautiful simplicity of the original Mendocino motor, but the spectacle of something floating freely in mid-air would overshadow everything else!</p>
+<p>As a historical sidenote: arguments related to Earnshaw’s theorem played a role in showing that a purely electrostatic model of matter cannot explain the stability of atoms, ruling out the early idea of matter made of static charges held in place.
+This helped motivate the transition to the planetary (<a href="https://en.wikipedia.org/wiki/Bohr_model">Rutherford–Bohr</a>) model and, ultimately, quantum mechanics.</p>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

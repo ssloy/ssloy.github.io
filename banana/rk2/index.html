@@ -1,0 +1,2193 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/banana/rk2/">
+      
+      
+        <link rel="prev" href="../inverse/">
+      
+      
+        <link rel="next" href="../../strange/cursed-fire/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Between Two Seconds, Things Happen - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#between-two-seconds-things-happen" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Between Two Seconds, Things Happen
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solving-ordinary-differential-equations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solving ordinary differential equations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solving ordinary differential equations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runge-kutta-1st-order-aka-eulers-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runge-Kutta 1st order (aka Euler’s) method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runge-kutta-2nd-order-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runge-Kutta 2nd order methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rk2-scheme-for-the-no-air-banana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RK2 scheme for the no-air banana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rk2-scheme-for-the-banana-with-wind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RK2 scheme for the banana with wind
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#solving-ordinary-differential-equations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solving ordinary differential equations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solving ordinary differential equations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runge-kutta-1st-order-aka-eulers-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runge-Kutta 1st order (aka Euler’s) method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runge-kutta-2nd-order-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runge-Kutta 2nd order methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rk2-scheme-for-the-no-air-banana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RK2 scheme for the no-air banana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rk2-scheme-for-the-banana-with-wind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RK2 scheme for the banana with wind
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="between-two-seconds-things-happen">Between Two Seconds, Things Happen</h1>
+<p>An inverse problem always has this structure:</p>
+<ul>
+<li>You choose parameters θ (e.g. g, wind, drag)</li>
+<li>You simulate forward to get a trajectory</li>
+<li>You compare simulation to data</li>
+<li>You adjust θ</li>
+</ul>
+<p>So what you are really optimizing is:
+θ  ↦  Integrator(θ)</p>
+<p>This means: Any numerical error in the forward solver becomes part of the inverse problem.</p>
+<p>Halving Δt halves Euler’s error, but quarters RK2’s error.</p>
+<p>RK2 stabilizes inverse problems by preventing numerical error from masquerading as physics.</p>
+<h2 id="solving-ordinary-differential-equations">Solving ordinary differential equations</h2>
+<p>Let us consider an ordinary differential equation (ODE) of the form</p>
+<div class="arithmatex">\[
+\frac{dx}{dt} = f(t, x),\quad t\geq 0
+\]</div>
+<p>with some initial condition <span class="arithmatex">\(x(0)\)</span>. We want to use computers to solve the ODE numerically,
+so let us set some time sampling rate <span class="arithmatex">\(\Delta t\)</span> and define the series <span class="arithmatex">\(t_{i+1} := t_i + \Delta t\)</span>.
+The idea is to compute a sequence <span class="arithmatex">\(\{x_i\}_{i=0}^{n}\)</span> that approximates the ODE, i.e. <span class="arithmatex">\(x_i \approx x(t_i)\)</span>.
+Note the difference, when I am writing <span class="arithmatex">\(x(t_i)\)</span>, I mean the true (unknown) function, whereas <span class="arithmatex">\(x_i\)</span> is its approximation we want to compute.</p>
+<p>Recall that Taylor series is a way to recover a function from its derivatives,
+and our ODE gives exactly that. So we can write an expansion <span class="arithmatex">\(x(t)\)</span> around the point <span class="arithmatex">\(t_i\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+x(t) = x(t_i) + &amp;f(t_i, x(t_i))(t-t_i) + \\
+ +\, \frac{1}{2!}&amp;f'(t_i, x(t_i))(t-t_i)^2 +  \\
+ +\, \frac{1}{3!}&amp;f''(t_i, x(t_i))(t-t_i)^3 + \dots
+\end{align*}
+\]</div>
+<h3 id="runge-kutta-1st-order-aka-eulers-method">Runge-Kutta 1st order (aka Euler’s) method</h3>
+<p>We can build the simplest approximation <span class="arithmatex">\(\{x_i\}_{i=0}^{n}\)</span> by using the first two terms of the Taylor series:</p>
+<div class="arithmatex">\[
+x_{i+1} := x_i + f(t_i, x_i) \Delta t.
+\]</div>
+<h3 id="runge-kutta-2nd-order-methods">Runge-Kutta 2nd order methods</h3>
+<p>So what would a 2nd order method formula look like? It would include one more term of the Taylor series as follows.</p>
+<div class="arithmatex">\[
+x_{i+1} := x_i + f(t_i, x_i) \Delta t + \frac 1{2!} f'(t_i, x_i)\Delta t^2.
+\]</div>
+<p>Because <span class="arithmatex">\(x'=f(t,x)\)</span>, we already know the first derivative.
+The second derivative <span class="arithmatex">\(x''\)</span> can be computed using the chain rule:</p>
+<div class="arithmatex">\[
+x''(t) = \frac d {dt} f(t, x(t)) = \frac{\partial f}{\partial t} + \frac{\partial f}{\partial x} f.
+\]</div>
+<p>Thus</p>
+<div class="arithmatex">\[
+x(t+\Delta t) = x(t) + \Delta t\, f(t, x) + \frac {\Delta t^2}{2}\Big(\frac{\partial f}{\partial t} + \frac{\partial f}{\partial x} f\Big) + O(\Delta t^3).
+\tag{1}
+\label{taylor}
+\]</div>
+<p>This is the <strong>target</strong> that any 2nd-order numerical method should match up to <span class="arithmatex">\(O(\Delta t^3)\)</span>.</p>
+<p>Note that we won't use this expansion directly, even if it is possible.
+As you can see, it would explicitly require derivatives of <span class="arithmatex">\(f\)</span> with both <span class="arithmatex">\(t\)</span> and <span class="arithmatex">\(x\)</span>.
+For a scalar ODE, that’s already annoying.
+For systems of equations it rapidly becomes untractable:
+if we have a system of <span class="arithmatex">\(n\)</span> equations (<span class="arithmatex">\(x\in R^{n}\)</span>), even the first derivative <span class="arithmatex">\(\partial f/\partial x\)</span> is an <span class="arithmatex">\(n\times n\)</span> matrix.
+It becomes unusable for real problems, especially as we increase order.</p>
+<p>The idea behind Runge-Kutta methods is to get the same accuracy Taylor expansion offers, but without ever differentiating <span class="arithmatex">\(f\)</span>.
+Instead, we can evaluate <span class="arithmatex">\(f\)</span> multiple times at cleverly chosen points.
+What <a href="https://en.wikipedia.org/wiki/Carl_Runge">Carl Runge</a> and <a href="https://en.wikipedia.org/wiki/Martin_Kutta">Wilhelm Kutta</a> did in 1901, was write the 2nd order method as</p>
+<div class="arithmatex">\[
+x_{i+1} := x_i + (a_1 k_1 + a_2 k_2) \Delta t,
+\tag{2}
+\label{rk}
+\]</div>
+<p>where</p>
+<div class="arithmatex">\[
+\begin{align*}
+k_1 &amp;:= f(t_i, x_i)\\
+k_2 &amp;:= f(t_i + b_1\Delta t,\, x_i + b_2 k_1\Delta t).
+\end{align*}
+\]</div>
+<p>This form allows one to reach the accuracy of the 2nd order method without having to calculate <span class="arithmatex">\(f'(t, x)\)</span>.
+Here we do not yet know the coefficients <span class="arithmatex">\(a_1, a_2, b_1, b_2\)</span>.
+We determine them by matching Taylor expansions.</p>
+<p>To do so, first we expand <span class="arithmatex">\(k_2\)</span> around <span class="arithmatex">\((t_i, x_i)\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align*}
+k_2 &amp;= f + b_1 \Delta t \frac{\partial f}{\partial t} + b_2 k_1 \Delta t \frac{\partial f}{\partial x} + O(\Delta t^2) = \\
+&amp;= f +\Delta t \left( b_1 \frac{\partial f}{\partial t} + b_2\, f\, \frac{\partial f}{\partial x}\right) + O(\Delta t^2).
+\end{align*}
+\]</div>
+<p>We can plug this expansion into the RK update:</p>
+<div class="arithmatex">\[
+\begin{align*}
+x_{i+1} &amp; := x_i + (a_1 k_1 + a_2 k_2) \Delta t = \\
+&amp; = x_i + \Delta t\left(a_1 f+ a_2\left(  f +\Delta t \left( b_1 \frac{\partial f}{\partial t} + b_2\, f\, \frac{\partial f}{\partial x}\right)    \right)\right)  + O(\Delta t^3) = \\
+&amp; = x_i + \Delta t (a_1 + a_2)\,f  + \Delta t^2\, a_2 \left( b_1 \frac{\partial f}{\partial t} + b_2\, f\, \frac{\partial f}{\partial x}\right)      + O(\Delta t^3)
+\end{align*}
+\]</div>
+<p>Now we can match the coefficients with respect to the true expansion <span class="arithmatex">\(\eqref{taylor}\)</span>.
+This gives us following constraints:</p>
+<div class="arithmatex">\[
+\begin{align*}
+a_1 + a_2 &amp;= 1\\
+a_2\, b_1 &amp;= \frac12\\
+a_2\, b_2 &amp;= \frac12
+\end{align*}
+\]</div>
+<p>Thus Runge-Kutta update scheme <span class="arithmatex">\(\eqref{rk}\)</span> uses four parameters that are tied by three constraints,
+leaving one parameter free.
+Generally, the value of <span class="arithmatex">\(a_2\)</span> is chosen to evaluate the other three constants.
+Three popular choices for <span class="arithmatex">\(a_2\)</span> are <span class="arithmatex">\(\frac12\)</span>, <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(\frac23\)</span>,
+and are known as <a href="https://en.wikipedia.org/wiki/Heun%27s_method">Heun’s method</a>, the midpoint method, and Ralston’s method, respectively.</p>
+<p>The midpoint method (<span class="arithmatex">\(a_1 = 0\)</span>, <span class="arithmatex">\(a_2 = 1\)</span>, <span class="arithmatex">\(b_1 = b_2 = 1/2\)</span>) is the simplest one.
+It results to the following RK2 update:</p>
+<ul>
+<li>first we estimate the midpoint using 1st order integration</li>
+</ul>
+<div class="arithmatex">\[
+  \begin{align*}
+  t_{i+0.5} &amp;:= t_i + \frac{\Delta t}{2}\\
+  x_{i+0.5} &amp;:= x_i + \frac{\Delta t}{2} f(t_i,  x_i)
+  \end{align*}
+\]</div>
+<ul>
+<li>and then we evaluate <span class="arithmatex">\(f\)</span> at the midpoint to obtain the 2nd order without ever differentiating <span class="arithmatex">\(f\)</span></li>
+</ul>
+<div class="arithmatex">\[
+x_{i+1} := x_i + \Delta t\, f\left(t_{i+0.5}, ~ x_{i+0.5} \right).
+\]</div>
+<p>Clever and beautiful, is not it?</p>
+<!--
+
+Recall that our general idea is to approximate the exact integral over one timestep:
+
+$$
+\int_{t_i}^{t_{i+1}} f(t, x(t))\, dt
+$$
+
+Each RK2 method tries to approximate this integral by evaluating $f$ only two times:
+
+* Midpoint samples the slope exactly in the middle (best accuracy for smooth curves).
+* Heun samples at the ends and averages (more smoothing, more stable).
+* Ralston samples at slightly biased points to minimize the truncation error.
+
+Each is a different quadrature rule for the unknown slope curve,
+so the choice depends on what you care about.
+
+* If you want best accuracy per step, use Ralston.
+* If you want simplicity and good behavior on oscillatory systems, use midpoint.
+* If you want stability and robustness, then Heun is a good choice.
+
+-->
+
+<h3 id="rk2-scheme-for-the-no-air-banana">RK2 scheme for the no-air banana</h3>
+<p>Let the state vector be</p>
+<div class="arithmatex">\[
+\vec x(t) = \begin{pmatrix}x \\ y \\ v_x \\ v_y\end{pmatrix}.
+\]</div>
+<p>Then the projectile motion equation can be written as <span class="arithmatex">\(\frac{d}{dt} \vec x(t) = \vec f(t, \vec x)\)</span>, where <span class="arithmatex">\(\vec f\)</span> is:</p>
+<div class="arithmatex">\[
+\vec f(t, \vec x) = \begin{pmatrix}v_x \\ v_y \\ 0 \\ g\end{pmatrix}
+\]</div>
+<p>Having an approximation <span class="arithmatex">\(\vec x_i\)</span> of the state vector at time <span class="arithmatex">\(t_i\)</span>, we want to compute the RK2 update <span class="arithmatex">\(\vec x_{i+1}\)</span>.
+First we need to compute the midpoint state <span class="arithmatex">\(\vec x_{i+0.5}\)</span>:</p>
+<div class="arithmatex">\[
+\vec x_{i+0.5} = \vec x_i +  \frac{\Delta t}{2} \vec f(t_i, \vec x_i) = \begin{pmatrix}x_i + \frac{\Delta t}{2} v_{x,i} \\ y_i + \frac{\Delta t}{2} v_{y,i} \\ v_{x,i} \\ v_{y,i} + \frac{\Delta t}{2} g\end{pmatrix}.
+\]</div>
+<p>Then we can compute <span class="arithmatex">\(\vec x_{i+1}\)</span>:</p>
+<div class="arithmatex">\[
+\vec x_{i+1} = \vec x_i + \Delta t\, \vec f(t_{i+0.5}, \vec x_{i+0.5}) =  \begin{pmatrix}x_i \\ y_i \\ v_{x,i} \\ v_{y,i}\end{pmatrix} + \Delta t \begin{pmatrix}v_{x,i} \\ v_{y,i} + \frac{\Delta t}{2} g \\ 0 \\ g\end{pmatrix}
+\]</div>
+<h3 id="rk2-scheme-for-the-banana-with-wind">RK2 scheme for the banana with wind</h3>
+<p>Let the state vector be</p>
+<div class="arithmatex">\[
+\vec x(t) = \begin{pmatrix}x \\ y \\ v_x \\ v_y\end{pmatrix}.
+\]</div>
+<p>Then the projectile motion equation can be written as <span class="arithmatex">\(\frac{d}{dt} \vec x(t) = \vec f(t, \vec x)\)</span>, where <span class="arithmatex">\(\vec f\)</span> is:</p>
+<div class="arithmatex">\[
+\vec f(t, \vec x) = \begin{pmatrix}v_x \\ v_y \\ \frac1\mu (w_x - v_x) \\ \frac1\mu(w_y - v_y) + g\end{pmatrix}
+\]</div>
+<div class="arithmatex">\[
+\vec x_{i+0.5} = \vec x_i +  \frac{\Delta t}{2} \vec f(t_i, \vec x_i) = \begin{pmatrix}x_i + \frac{\Delta t}{2} v_{x,i} \\ y_i + \frac{\Delta t}{2} v_{y,i} \\ v_{x,i} + \frac{\Delta t}{2}\frac1\mu (w_x - v_x)  \\ v_{y,i} + \frac{\Delta t}{2}\left(\frac1\mu (w_y - v_y) + g\right)\end{pmatrix}.
+\]</div>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

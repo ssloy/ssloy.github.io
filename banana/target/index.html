@@ -1,0 +1,2514 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/banana/target/">
+      
+      
+        <link rel="prev" href="../errors/">
+      
+      
+        <link rel="next" href="../max-range/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>The Ape Hits a Target - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-ape-hits-a-target" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The Ape Hits a Target
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/add/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyfloat/div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#closed-form-solution-for-later-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closed-form solution (for later validation)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#range-as-a-function-of-launch-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range as a function of launch speed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-weapon-bisection-a-cautious-ape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First weapon: bisection (a cautious ape)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="First weapon: bisection (a cautious ape)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-bracketing-the-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: bracketing the solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-split-the-interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: split the interval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-keep-the-correct-half" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: keep the correct half
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regula-falsi-aiming-smarter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regula falsi: aiming smarter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secants-the-ape-is-taking-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secants: the ape is taking risks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#newton-the-ape-learns-calculus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Newton: the ape learns calculus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#order-of-convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Order of convergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fast-inverse-square-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast inverse square root
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#closed-form-solution-for-later-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closed-form solution (for later validation)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#range-as-a-function-of-launch-speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range as a function of launch speed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-weapon-bisection-a-cautious-ape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First weapon: bisection (a cautious ape)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="First weapon: bisection (a cautious ape)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-bracketing-the-solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: bracketing the solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-split-the-interval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: split the interval
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-keep-the-correct-half" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: keep the correct half
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#regula-falsi-aiming-smarter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regula falsi: aiming smarter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secants-the-ape-is-taking-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secants: the ape is taking risks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#newton-the-ape-learns-calculus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Newton: the ape learns calculus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#order-of-convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Order of convergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fast-inverse-square-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast inverse square root
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="the-ape-hits-a-target">The Ape Hits a Target</h1>
+<p>Up to now, the ape has been throwing bananas and asking:</p>
+<p>— Given a throw, where does the banana land?</p>
+<p>In this chapter, the direction is reversed: the throw itself becomes the unknown. The question is simple to state:</p>
+<p>— Given a target position <span class="arithmatex">\(x^\star\)</span> on the ground, how should the ape throw the banana to hit it?</p>
+<p>To keep things simple (and realistic for a lazy ape):</p>
+<ul>
+<li>the launch angle <span class="arithmatex">\(\theta\)</span> is fixed,</li>
+<li>the launch speed <span class="arithmatex">\(v_0\)</span> the only unknown,</li>
+<li>as before, the banana starts at the origin, gravity acts vertically with acceleration <span class="arithmatex">\(g\)</span>, air resistance is ignored.</li>
+</ul>
+<p>In the previous chapter, we learned how to simulate the motion of a banana using a time-stepping scheme and how to detect the moment when the banana hits the ground.
+This required careful handling of two distinct ingredients:</p>
+<ul>
+<li>A numerical integration scheme (explicit Euler)</li>
+<li>An event detection mechanism to stop the simulation at the correct physical time.</li>
+</ul>
+<p>In the present problem, the ape is not interested in the entire flight of the banana.
+Only one number matters, namely, the horizontal position of the banana when it hits the ground.
+Let us call it "<span class="arithmatex">\(\text{range}\)</span>".</p>
+<p>We formalize this as a numerical black box:</p>
+<div class="arithmatex">\[
+\text{range}(v_0) := \text{horizontal position where the banana hits the ground}.
+\]</div>
+<p>Our goal is now crystal clear:
+Find <span class="arithmatex">\(v_0\)</span> such that <span class="arithmatex">\(\text{range}(v_0)=x^\star\)</span>.
+Equivalently, define <span class="arithmatex">\(f(v_0):=\text{range}(v_0)−x^\star\)</span>, and look for a root of <span class="arithmatex">\(f\)</span>.</p>
+<p>Each failed throw costs a banana.
+Bananas cost time, effort, and dignity.
+The ape wants to hit the target using as few bananas as possible!</p>
+<hr />
+<h2 id="closed-form-solution-for-later-validation">Closed-form solution (for later validation)</h2>
+<p>Before going fully numerical, let’s derive the analytical solution — not to use it, but to check our results afterward.</p>
+<p>With initial speed <span class="arithmatex">\(v_0\)</span> and fixed angle <span class="arithmatex">\(\theta\)</span>, the motion is:</p>
+<div class="arithmatex">\[
+\begin{aligned}
+x(t) &amp;= v_0 \cos\theta \; t, \\
+y(t) &amp;= v_0 \sin\theta \; t + \tfrac{1}{2} g t^2.
+\end{aligned}
+\]</div>
+<p>The banana hits the ground when <span class="arithmatex">\(y(t)=0\)</span> (excluding <span class="arithmatex">\(t=0\)</span>):</p>
+<div class="arithmatex">\[
+t_{\text{impact}} = -\frac{2 v_0 \sin\theta}{g}.
+\]</div>
+<p>The corresponding range is:</p>
+<div class="arithmatex">\[
+\text{range}(v_0) = x(t_{\text{impact}}) = -v_0 \cos\theta \cdot \frac{2 v_0 \sin\theta}{g} = -\frac{v_0^2}{g} \sin 2\theta.
+\]</div>
+<p>To hit <span class="arithmatex">\(x^\star\)</span>, we need:</p>
+<div class="arithmatex">\[
+-\frac{v_0^2}{g} \sin(2\theta) = x^\star.
+\]</div>
+<p>Solving for <span class="arithmatex">\(v_0\)</span>:</p>
+<div class="arithmatex">\[
+\boxed{
+v_0^\star
+= \sqrt{-\frac{g\,x^\star}{\sin(2\theta)}}
+}
+\qquad (\text{assuming } \sin(2\theta) &gt; 0).
+\]</div>
+<p>This is the exact answer — and our numerical method should converge to it.</p>
+<hr />
+<h2 id="range-as-a-function-of-launch-speed">Range as a function of launch speed</h2>
+<p>Now forget the formula and think like a numerical ape.
+Let’s plot the <span class="arithmatex">\(\text{range}(v_0)\)</span> function:</p>
+<p><img alt="" src="plot-x-range.png" /></p>
+<p>Graphically, we’re just finding where the curve crosses the horizontal line <span class="arithmatex">\(x^\star\)</span>.
+From physics (and confirmed numerically), we can observe three key facts:</p>
+<ol>
+<li><span class="arithmatex">\(\text{range}(0) = 0\)</span>,</li>
+<li><span class="arithmatex">\(\text{range}(v_0)\)</span> increases monotonically,</li>
+<li>the curve is well-behaved: it is smooth, and  small changes in <span class="arithmatex">\(v_0\)</span> produce small changes in range.</li>
+</ol>
+<p>This means that the equation <span class="arithmatex">\(\text{range}(v_0)=x^\star\)</span> has one unique solution,
+the function is regular enough for standard root-finding methods, numerical inversion is safe and robust.</p>
+<hr />
+<h2 id="first-weapon-bisection-a-cautious-ape">First weapon: bisection (a cautious ape)</h2>
+<p>The bisection method is the simplest and most reliable strategy the ape can use to hit the target.
+It is slow, a bit stubborn, but impossible to fool, which makes it perfect as a first numerical method.</p>
+<p>Recall that we define the function</p>
+<div class="arithmatex">\[
+f(v_0) = \text{range}(v_0) - x^\star,
+\]</div>
+<p>where <span class="arithmatex">\(v_0\)</span> is the launch speed, <span class="arithmatex">\(\text{range}(v_0)\)</span> is obtained from a numerical simulation,
+and <span class="arithmatex">\(x^\star\)</span> is the target position on the ground.</p>
+<p>Hitting the target means solving:</p>
+<div class="arithmatex">\[
+f(v_0) = 0.
+\]</div>
+<p>We assume:</p>
+<ul>
+<li><span class="arithmatex">\(f\)</span> is continuous,</li>
+<li><span class="arithmatex">\(f(0) &lt; 0\)</span> (a very weak throw falls short),</li>
+<li>for large enough <span class="arithmatex">\(v_0\)</span>, <span class="arithmatex">\(f(v_0) &gt; 0\)</span>  (the banana overshoots).</li>
+</ul>
+<p>So the correct launch speed lies somewhere in between.</p>
+<h3 id="step-1-bracketing-the-solution">Step 1: bracketing the solution</h3>
+<p>The ape starts by choosing two speeds <span class="arithmatex">\(v_{\min}\)</span> and <span class="arithmatex">\(v_{\max}\)</span>,
+such that:</p>
+<div class="arithmatex">\[
+f(v_{\min}) &lt; 0, \qquad f(v_{\max}) &gt; 0.
+\]</div>
+<p>This means:</p>
+<ul>
+<li>a throw with speed <span class="arithmatex">\(v_{\min}\)</span> undershoots,</li>
+<li>a throw with speed <span class="arithmatex">\(v_{\max}\)</span> overshoots.</li>
+</ul>
+<p>The ape now knows, with certainty, that the correct speed lies inside the interval <span class="arithmatex">\([v_{\min}, v_{\max}]\)</span>.
+This step is crucial: <strong>bisection never loses the target once it is bracketed.</strong></p>
+<h3 id="step-2-split-the-interval">Step 2: split the interval</h3>
+<p>The ape now takes the midpoint:</p>
+<div class="arithmatex">\[
+v_{\text{mid}} := \frac{v_{\min} + v_{\max}}{2}.
+\]</div>
+<p>A banana is thrown with speed <span class="arithmatex">\(v_{\text{mid}}\)</span>, and the simulation returns the landing position, hence the sign of <span class="arithmatex">\(f(v_{\text{mid}})\)</span>.
+Three outcomes are possible:</p>
+<ul>
+<li><span class="arithmatex">\(f(v_{\text{mid}}) = 0\)</span>: perfect hit (we are done),</li>
+<li><span class="arithmatex">\(f(v_{\text{mid}}) &lt; 0\)</span>: the banana falls short,</li>
+<li><span class="arithmatex">\(f(v_{\text{mid}}) &gt; 0\)</span>: the banana goes too far.</li>
+</ul>
+<h3 id="step-3-keep-the-correct-half">Step 3: keep the correct half</h3>
+<p>Depending on the result, the ape updates the interval:</p>
+<ul>
+<li>
+<p>If <span class="arithmatex">\(f(v_{\text{mid}}) &lt; 0\)</span>, the root lies in <span class="arithmatex">\([v_{\text{mid}}, v_{\max}]\)</span>,
+  so we can update the interval: <span class="arithmatex">\(v_{\min} \leftarrow v_{\text{mid}}\)</span>.</p>
+</li>
+<li>
+<p>If <span class="arithmatex">\(f(v_{\text{mid}}) &gt; 0\)</span>, the root lies in <span class="arithmatex">\([v_{\min}, v_{\text{mid}}]\)</span>,
+  so we can update the interval: <span class="arithmatex">\(v_{\max} \leftarrow v_{\text{mid}}\)</span>.</p>
+</li>
+</ul>
+<p>In both cases the new interval is half the size of the old one, and the root is still guaranteed to be inside.
+The ape has learned something from the banana, and the uncertainty has been cut in half.</p>
+<p>We can repeat the above procedure:</p>
+<ol>
+<li>take the midpoint,</li>
+<li>throw a banana,</li>
+<li>keep the half that contains the target.</li>
+</ol>
+<p>After <span class="arithmatex">\(k\)</span> iterations, the uncertainty on the launch speed satisfies:</p>
+<div class="arithmatex">\[
+|v_0 - v_0^\star| \le \frac{v_{\max} - v_{\min}}{2^k}.
+\]</div>
+<p>This gives a very concrete stopping rule: stop when <span class="arithmatex">\(v_{\max} - v_{\min}\)</span> is small enough, or when the banana lands close enough to the target.</p>
+<p>Here is an example plot of bananas launched to hit a target <span class="arithmatex">\(x^\star=42\)</span> m with the throw angle fixed to <span class="arithmatex">\(\theta = 60^\circ\)</span>.
+The ape spent 9 bananas to hit the target with <span class="arithmatex">\(\pm 10\)</span> cm of accuracy.</p>
+<p><img alt="" src="hit-x-binary.png" /></p>
+<p>The power of bisection comes from two simple facts:</p>
+<ol>
+<li><strong>Continuity</strong>: the range changes continuously with the launch speed.</li>
+<li><strong>Intermediate Value Theorem</strong>: a continuous function that changes sign must cross zero.</li>
+</ol>
+<p>No derivatives are needed, no clever guesses are required. No banana is ever wasted in the sense of losing the target. As long as the ape is patient, success is inevitable.</p>
+<hr />
+<h2 id="regula-falsi-aiming-smarter">Regula falsi: aiming smarter</h2>
+<p>The ape asks itself the question:</p>
+<p>— If I know that one throw fell <strong>just short</strong> and another went <strong>way too far</strong>, why should I always try the midpoint?</p>
+<p>The bisection method taught the ape an important lesson: as long as the target is bracketed, it cannot be lost.
+But it also revealed a frustration: every new throw is made at the midpoint, even when previous bananas already showed <strong>how far</strong> the ape missed the target.
+The regula falsi method (literally false position) keeps the same safety guarantee as bisection, but uses more information from each throw to make (hopefully) smarter choices.</p>
+<p>The problem settings are unchanged, we work with the function</p>
+<div class="arithmatex">\[
+f(v_0) = \text{range}(v_0) - x^\star,
+\]</div>
+<p>and we assume that we have two launch speeds <span class="arithmatex">\(v_{\min}\)</span> and <span class="arithmatex">\(v_{\max}\)</span> such that</p>
+<div class="arithmatex">\[
+f(v_{\min}) &lt; 0, \qquad f(v_{\max}) &gt; 0.
+\]</div>
+<p>The key idea is to redefine how <span class="arithmatex">\(v_{\text{mid}}\)</span> is computed.
+Bisection only looks at signs, while regula falsi uses more information per banana
+by exploiting the actual values of <span class="arithmatex">\(f\)</span>.
+While <span class="arithmatex">\(f\)</span> is unknown in its whole, we do know values <span class="arithmatex">\(f(v_{\min})\)</span> and <span class="arithmatex">\(f(v_{\max})\)</span>,
+and we can approximate <span class="arithmatex">\(f\)</span> inbetween by a straight line.</p>
+<p>If one throw misses the target by a lot and the other only by a little,
+the straight line automatically biases the next guess toward the better side.</p>
+<p>So, instead of throwing at the midpoint, the ape now does the following:</p>
+<ul>
+<li>plot the two known points <span class="arithmatex">\((v_{\min}, f(v_{\min}))\)</span> and  <span class="arithmatex">\((v_{\max}, f(v_{\max}))\)</span>,</li>
+<li>approximate the unknown function <span class="arithmatex">\(f\)</span> by the straight line passing through them,</li>
+<li>choose the next throw where this line crosses zero.</li>
+</ul>
+<p>Geometrically, we intersect the secant line with the horizontal axis.
+The equation of the secant line is linear, and its zero can be computed explicitly:</p>
+<div class="arithmatex">\[
+v_{\text{mid}}:=  v_{\min} - f(v_{\min}) \frac{v_{\max} - v_{\min}}{f(v_{\max}) - f(v_{\min})}
+\]</div>
+<p>This value replaces the midpoint used in bisection, so regula falsi is a natural evolution of bisection.
+It never loses the target, but reuses information from past throws, making it (often) converger faster in practice.</p>
+<p>Here is the same experiment as before: the ape hits a target <span class="arithmatex">\(x^\star=42\)</span> m with the throw angle fixed to <span class="arithmatex">\(\theta = 60^\circ\)</span>.</p>
+<p><img alt="" src="hit-x-linear.png" /></p>
+<p>Now the ape has spent 5 bananas only, almost half of 9 bananas it used with binary search!</p>
+<p>A new thought boggles the mind of the restless ape:</p>
+<p>— If I keep drawing secant lines anyway… do I really need to keep the interval?</p>
+<hr />
+<h2 id="secants-the-ape-is-taking-risks">Secants: the ape is taking risks</h2>
+<hr />
+<h2 id="newton-the-ape-learns-calculus">Newton: the ape learns calculus</h2>
+<hr />
+<h2 id="order-of-convergence">Order of convergence</h2>
+<p><img alt="" src="convergence-x-bisection.png" /></p>
+<p><img alt="" src="convergence-x-regula-falsi.png" /></p>
+<p><img alt="" src="convergence-x-secant.png" /></p>
+<hr />
+<!--
+Let $x_0,x_1,x_2\dots$ be a sequence which converges to $x^\star$ and $e_k:= |x_k - x^\star|$. If there exist $p$ and $r\neq 0$ such that 
+
+$$
+\lim\limits_{k\to\infty} \frac{e_{k+1}}{e_k^p} = r, 
+$$
+
+then $p$ is called the order of convergence and $r$ is the rate of convergence.
+Intuitively, they can be understand by considering the amount of digits accurate per iteration
+
+The number of correct digits in $x_n$ is related to the magnitude of the error, i.e.
+
+$$
+\text{Number of correct digits} \approx - \lg |x_k - x^\star|.
+$$
+
+Let’s analyze how the error changes from $x_k$ to $x_{k+1}$:
+
+$$
+e_{k+1} \approx e_k^p \cdot r
+$$
+
+
+Taking the base-10 logarithm:
+$$
+\lg e_{k+1} \approx p \lg e_k + \lg r
+$$
+This shows that the number of correct digits roughly multiplies by p per iteration.
+Initially the rate of convergence matters the most when $\lg e_k$ is small, while for large $\lg e_k$ the order of convergence will matter more.
+
+
+
+
+
+
+|           | Bisection | Regula falsi                  | Secant                   | Newton                   |
+|---------- | :-------: | :---------------------------: | :----------------------: | :----------------------: |
+| **Order** | $1$       | $1$                           | $\frac{1+\sqrt 5}{2}$    | $2$                      |
+| **Rate**  | $\frac12$ | $-\frac{f''(x)}{2f'(x)}(x-z)$ | $-\frac{f''(x)}{2f'(x)}$ | $-\frac{f''(x)}{2f'(x)}$ |
+
+$z$ denotes the second point used in the regula falsi.
+
+Bisection is very easy to prove, since the interval always halves.
+Midpoint $x_{k+1}$ of interval $(a_k, b_k)$ is an approximation of $x^\star$ with error
+
+$$
+|x_{k+1} - x^\star| \leq \frac12 (b_k - a_k) = 2^{-k-1}(b_0 - a_0).
+$$
+
+Then
+
+$$
+\lim\limits_{k\to\infty} \frac{e_{k+1}}{e_k^p} = \frac{2^{-k-1}(b_0 - a_0)}{\left(2^{-k}(b_0 - a_0)\right)^p} = \frac12 \left(\frac{2^k}{b_0 - a_0}\right)^{p-1}
+$$
+
+For this limit to exist and be finite, the exponent of 2 must vanish, i.e.
+
+$$
+p = 1,\qquad r = \frac12.
+$$
+-->
+
+<h2 id="fast-inverse-square-root">Fast inverse square root</h2>
+<p><img alt="" src="arena.jpg" /></p>
+<div class="language-C highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kt">float</span><span class="w"> </span><span class="nf">Q_rsqrt</span><span class="p">(</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.5F</span><span class="p">;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.5F</span><span class="p">;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="n">y</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">    </span><span class="n">i</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">;</span><span class="w">                       </span><span class="c1">// evil floating point bit level hacking</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">    </span><span class="n">i</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0x5f3759df</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">);</span><span class="w">               </span><span class="c1">// what the fuck?</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="n">y</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="n">y</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">threehalfs</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span><span class="w">   </span><span class="c1">// 1st iteration</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="c1">//  y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<!--
+## Deliverables
+
+
+
+Let the error $e_k$ be 
+
+$$
+e_k := |x_k - x^\star|.
+$$
+
+Define $\delta_k$ as
+
+$$
+\delta_k := \frac{b_k - a_k}{2} - e_k
+$$
+
+Let us assume the root $x^\star$ never coincides with a midpoint $x_k$, i.e. $e_k>0$ for all $k$ (otherwise convergence is finite and the asymptotic question is moot).
+It means that 
+
+$$
+\delta_k < \frac{b_k-a_k}{2} = \frac{b_0 - a_0}{2^{k+1}}.
+$$
+
+
+Thus:
+
+$$
+e_k = \frac{b_0-a_0}{2^{k+1}} - \delta_k,
+\qquad
+ \delta_k < \frac{b_0-a_0}{2^{k+1}}.
+$$
+
+
+
+Now form the ratio:
+
+$$
+\frac{e_{k+1}}{e_k} =
+\frac{
+\frac{b_0-a_0}{2^{k+2}} - \delta_{k+1}
+}{
+\frac{b_0-a_0}{2^{k+1}} - \delta_k
+}
+=
+\frac12
+\cdot
+\frac{
+1 - \frac{2^{k+2}}{b_0-a_0}\delta_{k+1}
+}{
+1 - \frac{2^{k+1}}{b_0-a_0}\delta_k
+}.
+$$
+
+
+Now define:
+
+$$
+\varepsilon_k := \frac{2^{k+1}}{b_0-a_0}\delta_k \in (0,1).
+$$
+
+So:
+
+$$
+\frac{|e_{k+1}|}{|e_k|} = \frac12 \cdot \frac{1-\varepsilon_{k+1}}{1-\varepsilon_k}.
+$$
+
+---
+
+-->
+
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

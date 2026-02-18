@@ -1,0 +1,2886 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ssloy.github.io/tinyfloat/add/">
+      
+      
+        <link rel="prev" href="../print/">
+      
+      
+        <link rel="next" href="../div/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Addition and errors - Playing with code</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-7F81P6F3D0"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-7F81P6F3D0",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-7F81P6F3D0",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#addition-and-numerical-errors" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Playing with code" class="md-header__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Playing with code
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Addition and errors
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Playing with code" class="md-nav__button md-logo" aria-label="Playing with code" data-md-component="logo">
+      
+  <img src="../../haqreu-plate.png" alt="logo">
+
+    </a>
+    Playing with code
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyrenderer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyrenderer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/bresenham/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bresenham’s line drawing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/rasterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Triangle rasterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/barycentric/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barycentric coordinates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/z-buffer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hidden faces removal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera-naive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Naive camera handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/camera/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Better camera
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shading/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/textures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    More data!
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/tangent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tangent space
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/shadow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shadow mapping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/ssao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ambient occlusion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/toon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonus: toon shading
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyrenderer/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinycompiler
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinycompiler
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/ast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Abstract syntax trees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/sly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SLY: lexer and parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/symtable/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Symbol tables
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/display/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Displays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/assembly/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assembly generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/lexer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY lexer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DIY parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinycompiler/afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Afterword
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyoptimizer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyoptimizer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tinyoptimizer/mem2reg/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    mem2reg
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tinyfloat
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    tinyfloat
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../computers-and-numbers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computers and Numbers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Printing floats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addition and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rounding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naive-addition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naïve addition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Naïve addition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equal-exponents-a_e-b_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equal exponents: \(a_e = b_e\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#different-exponents-a_eb_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Different exponents: \(a_e&gt;b_e\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guard-round-and-sticky-bits-correct-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guard, round and sticky bits: correct rounding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Guard, round and sticky bits: correct rounding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homework-assignment-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homework assignment #1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homework-assignment-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homework assignment #2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numerical-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numerical errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Numerical errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catastrophic-cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catastrophic cancellation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../div/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Division
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The banana tossing project
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The banana tossing project
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/euler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Counts Seconds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/trajectory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Buys a Better Watch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/ground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Misses the Ground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns from its mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/target/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Hits a Target
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/max-range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Throws Farther
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/least-effort/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Lazy Ape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/wind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Jungle Is Windy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/inverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Ape Learns the Jungle Laws
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../banana/rk2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Between Two Seconds, Things Happen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    strange things
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    strange things
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/cursed-fire/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cursed fire or #define black magic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../strange/earnshaw/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendocino motor and Earnshaw's theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rounding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naive-addition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naïve addition
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Naïve addition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#equal-exponents-a_e-b_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equal exponents: \(a_e = b_e\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#different-exponents-a_eb_e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Different exponents: \(a_e&gt;b_e\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guard-round-and-sticky-bits-correct-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guard, round and sticky bits: correct rounding
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Guard, round and sticky bits: correct rounding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#homework-assignment-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homework assignment #1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#homework-assignment-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Homework assignment #2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numerical-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numerical errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Numerical errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catastrophic-cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catastrophic cancellation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="addition-and-numerical-errors">Addition and numerical errors</h1>
+<p>Let us continue discussing the most unoptimized 32-bit software floating-point library <a href="https://github.com/ssloy/tinyfloat">TinyFloat</a>.
+The library is written in C++ and deliberately avoids built-in floating-point types, relying solely on 32-bit integers.
+The intention is to make the code as readable as possible — no bit-hacks, no clever tricks.</p>
+<p>Moreover, I want an extensive documentation on what is happening under the hood.
+Turns out, the best way to document the C++ code is to make a full rewrite in Python :)</p>
+<p>In this writing, I use 8-bit floating point, and ignore special values (<code>NaN</code>, <code>Inf</code>).
+I rely on Python’s native float only for testing the implementation.</p>
+<p>From now on, we work with signed floating point numbers, so I add the last bit we need to get a <code>Float8</code> class.
+If you have read previous two chapters, you know that this class has integer <code>e</code> and <code>m</code> members (standing for exponent and mantissa).
+Here I add <code>s</code> member that can take either <code>1</code> or <code>-1</code> value.
+This <span class="arithmatex">\((s,e,m)\)</span> triplet represents the real number that can be written in scientific notation <span class="arithmatex">\(s\cdot  m \cdot 2^{e-4}\)</span>, check line 17 of the following listing:</p>
+<details class="example">
+<summary>float8.py</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Float8</span><span class="p">:</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_uint8</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uint8</span><span class="p">):</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a>        <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">uint8</span><span class="o">&lt;</span><span class="mi">128</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a>        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">//</span> <span class="mi">16</span> <span class="o">-</span> <span class="mi">4</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">16</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>            <span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># if subnormal, increment the exponent, the hidden bit = 0</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>            <span class="n">m</span> <span class="o">+=</span> <span class="mi">16</span> <span class="c1"># if normal, recover the hidden bit = 1</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="nf">from_float</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+</span></span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="hll">        <span class="n">dist</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># distance from |f| to all non-negative Float8</span>
+</span></span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="hll">        <span class="n">i</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span> <span class="p">:</span> <span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>                              <span class="c1"># take the (first) closest</span>
+</span></span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="hll">        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="ow">and</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>                                     <span class="c1"># if tie</span>
+</span></span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="hll">            <span class="n">i</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span>                                                           <span class="c1"># round to even</span>
+</span></span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="hll">        <span class="k">return</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">f</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">128</span><span class="p">))</span>                       <span class="c1"># do not forget to recover the sign</span>
+</span></span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>        <span class="k">return</span> <span class="n">Float8</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>Note that <code>Float8</code> stores the normalized exponent and mantissa: the hidden bit is restored and denormals are converted into normalized form (lines 10-13).</p>
+<p>Thus,</p>
+<ul>
+<li><span class="arithmatex">\(s \in \{-1, 1\}\)</span>,</li>
+<li><span class="arithmatex">\(e \in [-3\dots 3]\)</span>,</li>
+<li><span class="arithmatex">\(m\in[0\dots 31]\)</span>,</li>
+</ul>
+<p>and the triplet encodes the number <span class="arithmatex">\(s\cdot  m \cdot 2^{e-4}\)</span> without any remaining special-case logic.</p>
+<h2 id="rounding">Rounding</h2>
+<p>The IEEE754 standard defines a number of rounding modes, but the default rounding mode is the <em>round-to-nearest-even-on-ties</em> (RNE) mode.
+Here is an illustration of RNE rounding mode with our 8-bit floating point representation:</p>
+<p><img alt="" src="rounding.svg" /></p>
+<p>The real number 4.65 is closest to the <code>Float8</code> value 4.75,
+But 4.875 lies exactly halfway between 4.75 and 5.0; in this case RNE requires rounding to the even of the two representable values.
+Since the bit pattern of 5.0 (<code>0b01100100</code>) is even as an integer, 4.875 rounds to 5.0.
+Similarly, the real number 5.125 rounds to 5.0 and 5.375 rounds to 5.5.</p>
+<p>In the above snippet, <code>from_float()</code> function takes a python <code>float</code> and rounds it up to our <code>Float8</code> using RNE mode.
+The implementation is simple: compute the distance from the real number to all <code>Float8</code> values (line 21), identify the closest candidate(s), and apply the RNE tiebreaker.</p>
+<h2 id="naive-addition">Naïve addition</h2>
+<p>Let us see the general idea behind floating point addition.
+I want to sum two positive numbers <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span>, represented by their integer mantissas <span class="arithmatex">\(a_m, b_m\)</span> and exponents <span class="arithmatex">\(a_e, b_e\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align}
+a &amp;= a_m \cdot 2^{a_e - 4}\\
+b &amp;= b_m \cdot 2^{b_e - 4}
+\end{align}
+\]</div>
+<p>Here is a naïve implementation (lines 30-52):</p>
+<details class="example">
+<summary>Naïve addition implementation</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span>
+<span class="normal"><a href="#__codelineno-1-33">33</a></span>
+<span class="normal"><a href="#__codelineno-1-34">34</a></span>
+<span class="normal"><a href="#__codelineno-1-35">35</a></span>
+<span class="normal"><a href="#__codelineno-1-36">36</a></span>
+<span class="normal"><a href="#__codelineno-1-37">37</a></span>
+<span class="normal"><a href="#__codelineno-1-38">38</a></span>
+<span class="normal"><a href="#__codelineno-1-39">39</a></span>
+<span class="normal"><a href="#__codelineno-1-40">40</a></span>
+<span class="normal"><a href="#__codelineno-1-41">41</a></span>
+<span class="normal"><a href="#__codelineno-1-42">42</a></span>
+<span class="normal"><a href="#__codelineno-1-43">43</a></span>
+<span class="normal"><a href="#__codelineno-1-44">44</a></span>
+<span class="normal"><a href="#__codelineno-1-45">45</a></span>
+<span class="normal"><a href="#__codelineno-1-46">46</a></span>
+<span class="normal"><a href="#__codelineno-1-47">47</a></span>
+<span class="normal"><a href="#__codelineno-1-48">48</a></span>
+<span class="normal"><a href="#__codelineno-1-49">49</a></span>
+<span class="normal"><a href="#__codelineno-1-50">50</a></span>
+<span class="normal"><a href="#__codelineno-1-51">51</a></span>
+<span class="normal"><a href="#__codelineno-1-52">52</a></span>
+<span class="normal"><a href="#__codelineno-1-53">53</a></span>
+<span class="normal"><a href="#__codelineno-1-54">54</a></span>
+<span class="normal"><a href="#__codelineno-1-55">55</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Float8</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_uint8</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uint8</span><span class="p">):</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a>        <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">uint8</span><span class="o">&lt;</span><span class="mi">128</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a>        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">//</span> <span class="mi">16</span> <span class="o">-</span> <span class="mi">4</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a>        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">16</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a>        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a>            <span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># if subnormal, increment the exponent, the hidden bit = 0</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a>            <span class="n">m</span> <span class="o">+=</span> <span class="mi">16</span> <span class="c1"># if normal, recover the hidden bit = 1</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_float</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a>        <span class="n">dist</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># distance from |f| to all non-negative Float8</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a>        <span class="n">i</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span> <span class="p">:</span> <span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>                              <span class="c1"># take the (first) closest</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a>        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="ow">and</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>                                     <span class="c1"># if tie</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span>                                                           <span class="c1"># round to even</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25"></a>        <span class="k">return</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">f</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">128</span><span class="p">))</span>                       <span class="c1"># do not forget to recover the sign</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26"></a>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28"></a>        <span class="k">return</span> <span class="n">Float8</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29"></a>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30"></a><span class="hll">    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span></span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31"></a><span class="hll">        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span></span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32"></a><span class="hll">        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">e</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+</span></span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33"></a><span class="hll">            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</span></span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34"></a><span class="hll">
+</span></span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35"></a><span class="hll">        <span class="k">while</span> <span class="n">a</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>                         <span class="c1"># align exponents</span>
+</span></span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36"></a><span class="hll">            <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">//=</span> <span class="mi">2</span>
+</span></span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37"></a><span class="hll">            <span class="n">b</span><span class="o">.</span><span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38"></a><span class="hll">
+</span></span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39"></a><span class="hll">        <span class="nb">sum</span> <span class="o">=</span> <span class="n">Float8</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="k">else</span> <span class="n">b</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="c1"># sign</span>
+</span></span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40"></a><span class="hll">                     <span class="n">a</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>                        <span class="c1"># exponent</span>
+</span></span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41"></a><span class="hll">                     <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="n">b</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>     <span class="c1"># mantissa</span>
+</span></span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42"></a><span class="hll">
+</span></span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43"></a><span class="hll">        <span class="k">while</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">&lt;</span> <span class="mi">16</span> <span class="ow">and</span> <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">3</span><span class="p">:</span>         <span class="c1"># normalize the result</span>
+</span></span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">*=</span> <span class="mi">2</span>
+</span></span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46"></a><span class="hll">
+</span></span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47"></a><span class="hll">        <span class="k">while</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">32</span> <span class="ow">and</span> <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>         <span class="c1"># can&#39;t be more than one iteration</span>
+</span></span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//=</span> <span class="mi">2</span>
+</span></span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50"></a><span class="hll">
+</span></span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51"></a><span class="hll">        <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>                   <span class="c1"># handle overflows (we have no infinities here)</span>
+</span></span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52"></a><span class="hll">        <span class="k">return</span> <span class="nb">sum</span>
+</span></span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53"></a>
+</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55"></a>        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">Float8</span><span class="p">(</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>By "naïve" I mean that for a moment I ignore the correct rounding of the result.
+Summing two numbers in scientific notation is not that hard, let us split it into two cases:</p>
+<h3 id="equal-exponents-a_e-b_e">Equal exponents: <span class="arithmatex">\(a_e = b_e\)</span></h3>
+<p>If the exponents are equal, then we can add the mantissas directly to compute the sum:</p>
+<div class="arithmatex">\[
+a + b = a_m \cdot 2^{a_e - 4} + b_m \cdot 2^{b_e - 4} = (a_m + b_m) \cdot 2^{a_e - 4}.
+\]</div>
+<p>Let us consider an example of <span class="arithmatex">\(a=4.25\)</span> and <span class="arithmatex">\(b=5.25\)</span>.
+In this case, <span class="arithmatex">\(a_e = b_e = 2\)</span>, <span class="arithmatex">\(a_m = 17\)</span> and <span class="arithmatex">\(b_m = 21\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align}
+a &amp;= 4.25 = 17 \cdot 2^{2-4}\\
+b &amp;= 5.25 = 21 \cdot 2^{2-4}
+\end{align}
+\]</div>
+<p>Then the sum can be represented by the exponent <span class="arithmatex">\(2\)</span> and the mantissa <span class="arithmatex">\(17+21 = 38\)</span>:</p>
+<div class="arithmatex">\[
+a+b = (17+21) \cdot 2^{2-4} = 9.5.
+\]</div>
+<p>While it is really simple, we need to pay a bit of attention.
+Indeed the sum <span class="arithmatex">\(a+b\)</span> can be represented by the exponent <span class="arithmatex">\(a_e\)</span> and the mantissa <span class="arithmatex">\(a_m+b_m\)</span>, but there is a catch.
+To be stored back into <code>Float8</code>, the resulting mantissa must fit into the <span class="arithmatex">\([0\dots 31]\)</span> range, and 38 exceeds 31.</p>
+<p>That is not a problem: we can divide the mantissa by 2 and increment the exponent.
+This process is called normalization, check the lines 43-49 of the previous listing.</p>
+<div class="arithmatex">\[
+9.5 = 38\cdot 2^{2-4} = 19 \cdot 2^{3-4}.
+\]</div>
+<p>Here the sum is represented by the mantissa <span class="arithmatex">\(19\)</span> and exponent <span class="arithmatex">\(3\)</span>.
+Let us test our implementation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">float8</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">r</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">4.25</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">5.25</span><span class="p">)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">t</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">4.25</span> <span class="o">+</span> <span class="mf">5.25</span><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The sum is </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s1">*2**(</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">e</span><span class="si">}</span><span class="s1">-4) = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="si">}</span><span class="s1">, expected </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Note that here I assess the correctness of the result by computing the sum with native <code>float</code> and casting it to <code>Float8</code>.
+In this case, we get the correct result:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>The sum is 19*2**(3-4) = 9.5, expected 9.5
+</span></code></pre></div>
+<details class="tip">
+<summary>Spoiler alert</summary>
+<p>Do not forget that exponent must also fit into <span class="arithmatex">\([-3\dots 3]\)</span> range.
+Whenever it exceeds the maximum value, IEEE754 standard tells that the result is the special value <code>Inf</code>.
+<a href="https://github.com/ssloy/tinyfloat">TinyFloat</a> handles infinities correclty, but in this python implementation
+I round to the maximum representable float, i.e. <span class="arithmatex">\(15.5\)</span> (line 51 in the listing).</p>
+</details>
+<p>There is one more catch to handle, let us try to add <span class="arithmatex">\(4.5\)</span> and <span class="arithmatex">\(5.25\)</span>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">float8</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">r</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">4.5</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">5.25</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">t</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">4.5</span> <span class="o">+</span> <span class="mf">5.25</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The sum is </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s1">*2**(</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">e</span><span class="si">}</span><span class="s1">-4) = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="si">}</span><span class="s1">, expected </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>As you can see, our naïve addition differs from the ground truth:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>The sum is 19*2**(3-4) = 9.5, expected 10.0
+</span></code></pre></div>
+<p>Let us inspect closely what is happening.
+First of all, note that the true result <span class="arithmatex">\(9.75\)</span> is not exactly representable in our <code>Float8</code>, therefore we need to round the sum.
+Prior to the resulting normalization, the mantissa of the sum was <span class="arithmatex">\(18+21 = 39\)</span>, and the exponent was <span class="arithmatex">\(2\)</span>:</p>
+<div class="arithmatex">\[
+\begin{align}
+a = 4.5 &amp; = 18 \cdot 2^{2-4}\\
+b = 5.25 &amp; = 21 \cdot 2^{2-4}\\
+a + b &amp; = 39 \cdot 2^{2-4}
+\end{align}
+\]</div>
+<p>The normalization halves the mantissa and increments the exponent:</p>
+<div class="arithmatex">\[
+a + b  = 39 \cdot 2^{2-4} =  \frac{39}{2} \cdot 2^{3-4}
+\]</div>
+<p>Since the mantissa must be integer, our naïve implementation truncates <span class="arithmatex">\(\frac{39}2 = 19.5\)</span> to <span class="arithmatex">\(19\)</span>, effectively loosing one bit of precision.
+Under RNE rules, <span class="arithmatex">\(19.5\)</span> ought to be rounded to <span class="arithmatex">\(20\)</span>.
+I'll postpone the rounding discussion for a moment, but remember that normalization can lead to the loss of one bit of information.</p>
+<h3 id="different-exponents-a_eb_e">Different exponents: <span class="arithmatex">\(a_e&gt;b_e\)</span></h3>
+<p>If the exponents <span class="arithmatex">\(a_e\)</span> and <span class="arithmatex">\(b_e\)</span> differ, we can suppose that <span class="arithmatex">\(a_e&gt;b_e\)</span>, otherwise we simply swap the numbers, check lines 32-33 in the listing.
+That being said, we can align the exponents:</p>
+<div class="arithmatex">\[
+b = b_m \cdot 2^{b_e - 4} = \frac{b_m}{2^{a_e - b_e}} \cdot 2^{b_e - 4 + (a_e - b_e)} = \frac{b_m}{2^{a_e - b_e}} \cdot 2^{a_e - 4}.
+\]</div>
+<p>Once the alignment is made, we can compute the sum just as before by simply adding the (integer) mantissas!</p>
+<div class="arithmatex">\[
+a + b = \left(a_m + \frac{b_m}{2^{a_e - b_e}}\right) \cdot 2^{a_e - 4}.
+\]</div>
+<p>This alignment is made in lines 35-37 of the above listing.
+Note that this procedure is very similar to the normalization (lines 47-49), therefore it has exactly the same rounding problem.
+If <span class="arithmatex">\(\frac{b_m}{2^{a_e - b_e}}\)</span> is integer, then alignment does not introduce any data loss.
+If, however, it is not integer, we need to do some additional work to correctly round the result.</p>
+<p>Here's a quick question for you: why do we shift <span class="arithmatex">\(b_m\)</span> right instead of shifting <span class="arithmatex">\(a_m\)</span> left?
+Theoretically, both would result in aligned exponents.</p>
+<details class="question">
+<summary>Spoiler Alert!</summary>
+<p>Left-shifting a large mantissa can easily cause mantissa overflow before addition.
+Right-shifting the mantissa never increases magnitude; it only reduces precision safely.
+Therefore, by right-shifting <span class="arithmatex">\(b_m\)</span> we lose tiny, insignificant bits (that we will recover shortly), whereas left-shifting
+would cause the loss of <em>important</em> high bits.</p>
+</details>
+<h2 id="guard-round-and-sticky-bits-correct-rounding">Guard, round and sticky bits: correct rounding</h2>
+<p>In our naïve implementation we have two moments that can potentially lead to incorrect final rounding in a sum:</p>
+<ul>
+<li>halving the mantissa during alignment of exponents</li>
+<li>and halving the mantissa during the normalization.</li>
+</ul>
+<p>Floating point addition uses extra bits (to the “right” of the mantissa) during the computation.
+As the mantissa shifts off the end, it shifts into these bits.
+It turns out that three bits suffice for the correct rounding, but we will get to it later.</p>
+<p>Let us compute by hand <span class="arithmatex">\(7 + 0.875\)</span>, while paying close attention to this problem:</p>
+<div class="arithmatex">\[
+\begin{alignat}{2}
+a &amp; = 7     &amp; = 28 \cdot 2^{2-4} \\
+b &amp; =0.875 &amp; = 14 \cdot 2^{0-4}
+\end{alignat}
+\]</div>
+<p>The exponents differ, <span class="arithmatex">\(a_e &gt; b_e\)</span>, so we need to align them:</p>
+<div class="arithmatex">\[
+b = 14 \cdot 2^{0-4} = 3.5 \cdot 2^{2-4}.
+\]</div>
+<p>In the naïve implementation we truncated 3.5 down to 3, thus introducing an error.
+This time, we keep the fractional part of the mantissa.
+Having the exponents aligned, we can simply add the mantissas:</p>
+<div class="arithmatex">\[
+a + b = (28 + 3.5) \cdot 2^{2-4} = 31.5 \cdot 2^{2-4}
+\]</div>
+<p>Note that we do not enter a vicious cycle here: the addition 28 + 3.5 does not need floating point math, it is made with integers (i.e. in fixed-point representation, since three extra bits suffice for the rounding).
+Now we need to perform the normalization, since <span class="arithmatex">\(31.5\)</span> exceeds <span class="arithmatex">\(31\)</span>:</p>
+<div class="arithmatex">\[
+a + b = 15.75 \cdot 2^{3-4}.
+\]</div>
+<p>Now we need to correctly round the mantissa following the <em>round-to-nearest-even-on-ties</em> rule.
+The decision is simple to make:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>if the fractional part &gt; 0.5 OR
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>   the fractional part = 0.5 AND the integer part is odd:
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>        round the mantissa up
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>otherwise:
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        truncate the mantissa down
+</span></code></pre></div>
+<p>Since <span class="arithmatex">\(0.75 &gt; 0.5\)</span>, we can safely conclude that</p>
+<div class="arithmatex">\[
+a + b = 15.75 \cdot 2^{3-4} \approx 16 \cdot 2^{3-4}.
+\]</div>
+<p>Congratulations, the nearest <code>Float8</code> to the true sum <span class="arithmatex">\(7.875\)</span> is <span class="arithmatex">\(8\)</span>!</p>
+<p>Here is the correct implementation of the addition, I have highlighted the modifications:</p>
+<details class="example">
+<summary>Correct addition</summary>
+<div class="language-py highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span>
+<span class="normal"><a href="#__codelineno-7-23">23</a></span>
+<span class="normal"><a href="#__codelineno-7-24">24</a></span>
+<span class="normal"><a href="#__codelineno-7-25">25</a></span>
+<span class="normal"><a href="#__codelineno-7-26">26</a></span>
+<span class="normal"><a href="#__codelineno-7-27">27</a></span>
+<span class="normal"><a href="#__codelineno-7-28">28</a></span>
+<span class="normal"><a href="#__codelineno-7-29">29</a></span>
+<span class="normal"><a href="#__codelineno-7-30">30</a></span>
+<span class="normal"><a href="#__codelineno-7-31">31</a></span>
+<span class="normal"><a href="#__codelineno-7-32">32</a></span>
+<span class="normal"><a href="#__codelineno-7-33">33</a></span>
+<span class="normal"><a href="#__codelineno-7-34">34</a></span>
+<span class="normal"><a href="#__codelineno-7-35">35</a></span>
+<span class="normal"><a href="#__codelineno-7-36">36</a></span>
+<span class="normal"><a href="#__codelineno-7-37">37</a></span>
+<span class="normal"><a href="#__codelineno-7-38">38</a></span>
+<span class="normal"><a href="#__codelineno-7-39">39</a></span>
+<span class="normal"><a href="#__codelineno-7-40">40</a></span>
+<span class="normal"><a href="#__codelineno-7-41">41</a></span>
+<span class="normal"><a href="#__codelineno-7-42">42</a></span>
+<span class="normal"><a href="#__codelineno-7-43">43</a></span>
+<span class="normal"><a href="#__codelineno-7-44">44</a></span>
+<span class="normal"><a href="#__codelineno-7-45">45</a></span>
+<span class="normal"><a href="#__codelineno-7-46">46</a></span>
+<span class="normal"><a href="#__codelineno-7-47">47</a></span>
+<span class="normal"><a href="#__codelineno-7-48">48</a></span>
+<span class="normal"><a href="#__codelineno-7-49">49</a></span>
+<span class="normal"><a href="#__codelineno-7-50">50</a></span>
+<span class="normal"><a href="#__codelineno-7-51">51</a></span>
+<span class="normal"><a href="#__codelineno-7-52">52</a></span>
+<span class="normal"><a href="#__codelineno-7-53">53</a></span>
+<span class="normal"><a href="#__codelineno-7-54">54</a></span>
+<span class="normal"><a href="#__codelineno-7-55">55</a></span>
+<span class="normal"><a href="#__codelineno-7-56">56</a></span>
+<span class="normal"><a href="#__codelineno-7-57">57</a></span>
+<span class="normal"><a href="#__codelineno-7-58">58</a></span>
+<span class="normal"><a href="#__codelineno-7-59">59</a></span>
+<span class="normal"><a href="#__codelineno-7-60">60</a></span>
+<span class="normal"><a href="#__codelineno-7-61">61</a></span>
+<span class="normal"><a href="#__codelineno-7-62">62</a></span>
+<span class="normal"><a href="#__codelineno-7-63">63</a></span>
+<span class="normal"><a href="#__codelineno-7-64">64</a></span>
+<span class="normal"><a href="#__codelineno-7-65">65</a></span>
+<span class="normal"><a href="#__codelineno-7-66">66</a></span>
+<span class="normal"><a href="#__codelineno-7-67">67</a></span>
+<span class="normal"><a href="#__codelineno-7-68">68</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Float8</span><span class="p">:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_uint8</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">uint8</span><span class="p">):</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a>        <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">uint8</span><span class="o">&lt;</span><span class="mi">128</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a>        <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">//</span> <span class="mi">16</span> <span class="o">-</span> <span class="mi">4</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a>        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint8</span> <span class="o">%</span> <span class="mi">128</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">16</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a>        <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="o">-</span><span class="mi">4</span><span class="p">:</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a>            <span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># if subnormal, increment the exponent, the hidden bit = 0</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13"></a>            <span class="n">m</span> <span class="o">+=</span> <span class="mi">16</span> <span class="c1"># if normal, recover the hidden bit = 1</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14"></a>        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15"></a>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18"></a>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_float</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21"></a>        <span class="n">dist</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># distance from |f| to all non-negative Float8</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22"></a>        <span class="n">i</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span> <span class="p">:</span> <span class="n">dist</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>                              <span class="c1"># take the (first) closest</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23"></a>        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="ow">and</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>                                     <span class="c1"># if tie</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24"></a>            <span class="n">i</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span>                                                           <span class="c1"># round to even</span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25"></a>        <span class="k">return</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_uint8</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">f</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">128</span><span class="p">))</span>                       <span class="c1"># do not forget to recover the sign</span>
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26"></a>
+</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28"></a>        <span class="k">return</span> <span class="n">Float8</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29"></a>
+</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span id="__span-7-31"><a id="__codelineno-7-31" name="__codelineno-7-31"></a>        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-7-32"><a id="__codelineno-7-32" name="__codelineno-7-32"></a>        <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">e</span> <span class="o">&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>
+</span><span id="__span-7-33"><a id="__codelineno-7-33" name="__codelineno-7-33"></a>            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</span><span id="__span-7-34"><a id="__codelineno-7-34" name="__codelineno-7-34"></a>
+</span><span id="__span-7-35"><a id="__codelineno-7-35" name="__codelineno-7-35"></a><span class="hll">        <span class="n">a</span><span class="o">.</span><span class="n">m</span> <span class="o">*=</span> <span class="mi">8</span>                                 <span class="c1"># reserve place for GRS bits</span>
+</span></span><span id="__span-7-36"><a id="__codelineno-7-36" name="__codelineno-7-36"></a><span class="hll">        <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">*=</span> <span class="mi">8</span>
+</span></span><span id="__span-7-37"><a id="__codelineno-7-37" name="__codelineno-7-37"></a>        <span class="k">while</span> <span class="n">a</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;</span> <span class="n">b</span><span class="o">.</span><span class="n">e</span><span class="p">:</span>                         <span class="c1"># align exponents</span>
+</span><span id="__span-7-38"><a id="__codelineno-7-38" name="__codelineno-7-38"></a><span class="hll">            <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>         <span class="c1"># LSB is sticky</span>
+</span></span><span id="__span-7-39"><a id="__codelineno-7-39" name="__codelineno-7-39"></a>            <span class="n">b</span><span class="o">.</span><span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-7-40"><a id="__codelineno-7-40" name="__codelineno-7-40"></a>
+</span><span id="__span-7-41"><a id="__codelineno-7-41" name="__codelineno-7-41"></a>        <span class="nb">sum</span> <span class="o">=</span> <span class="n">Float8</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="k">else</span> <span class="n">b</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="c1"># sign</span>
+</span><span id="__span-7-42"><a id="__codelineno-7-42" name="__codelineno-7-42"></a>                     <span class="n">a</span><span class="o">.</span><span class="n">e</span><span class="p">,</span>                        <span class="c1"># exponent</span>
+</span><span id="__span-7-43"><a id="__codelineno-7-43" name="__codelineno-7-43"></a>                     <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">s</span><span class="o">*</span><span class="n">b</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>     <span class="c1"># mantissa</span>
+</span><span id="__span-7-44"><a id="__codelineno-7-44" name="__codelineno-7-44"></a>
+</span><span id="__span-7-45"><a id="__codelineno-7-45" name="__codelineno-7-45"></a>        <span class="k">while</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="o">*</span><span class="mi">8</span> <span class="ow">and</span> <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">3</span><span class="p">:</span>       <span class="c1"># normalize the result</span>
+</span><span id="__span-7-46"><a id="__codelineno-7-46" name="__codelineno-7-46"></a>            <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">*=</span> <span class="mi">2</span>
+</span><span id="__span-7-47"><a id="__codelineno-7-47" name="__codelineno-7-47"></a>            <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span id="__span-7-48"><a id="__codelineno-7-48" name="__codelineno-7-48"></a>
+</span><span id="__span-7-49"><a id="__codelineno-7-49" name="__codelineno-7-49"></a>        <span class="k">while</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="mi">32</span><span class="o">*</span><span class="mi">8</span> <span class="ow">and</span> <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>       <span class="c1"># can&#39;t be more than one iteration</span>
+</span><span id="__span-7-50"><a id="__codelineno-7-50" name="__codelineno-7-50"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># do not forget the sticky bit</span>
+</span></span><span id="__span-7-51"><a id="__codelineno-7-51" name="__codelineno-7-51"></a>            <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-7-52"><a id="__codelineno-7-52" name="__codelineno-7-52"></a>
+</span><span id="__span-7-53"><a id="__codelineno-7-53" name="__codelineno-7-53"></a><span class="hll">        <span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>                     <span class="c1"># guard bit</span>
+</span></span><span id="__span-7-54"><a id="__codelineno-7-54" name="__codelineno-7-54"></a><span class="hll">        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>                     <span class="c1"># round bit</span>
+</span></span><span id="__span-7-55"><a id="__codelineno-7-55" name="__codelineno-7-55"></a><span class="hll">        <span class="n">s</span> <span class="o">=</span>  <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span>                           <span class="c1"># sticky bit</span>
+</span></span><span id="__span-7-56"><a id="__codelineno-7-56" name="__codelineno-7-56"></a><span class="hll">        <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//=</span> <span class="mi">8</span>
+</span></span><span id="__span-7-57"><a id="__codelineno-7-57" name="__codelineno-7-57"></a>
+</span><span id="__span-7-58"><a id="__codelineno-7-58" name="__codelineno-7-58"></a><span class="hll">        <span class="k">if</span> <span class="n">g</span> <span class="ow">and</span> <span class="p">(</span><span class="n">r</span> <span class="ow">or</span> <span class="n">s</span> <span class="ow">or</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span><span class="p">):</span>          <span class="c1"># round-to-nearest, even-on-ties</span>
+</span></span><span id="__span-7-59"><a id="__codelineno-7-59" name="__codelineno-7-59"></a><span class="hll">            <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span id="__span-7-60"><a id="__codelineno-7-60" name="__codelineno-7-60"></a><span class="hll">            <span class="k">if</span> <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">==</span> <span class="mi">32</span> <span class="ow">and</span> <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>        <span class="c1"># renormalize if necessary</span>
+</span></span><span id="__span-7-61"><a id="__codelineno-7-61" name="__codelineno-7-61"></a><span class="hll">                <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">//=</span> <span class="mi">2</span>
+</span></span><span id="__span-7-62"><a id="__codelineno-7-62" name="__codelineno-7-62"></a><span class="hll">                <span class="nb">sum</span><span class="o">.</span><span class="n">e</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span id="__span-7-63"><a id="__codelineno-7-63" name="__codelineno-7-63"></a>
+</span><span id="__span-7-64"><a id="__codelineno-7-64" name="__codelineno-7-64"></a>        <span class="nb">sum</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">sum</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>                   <span class="c1"># handle overflows (we have no infinities here)</span>
+</span><span id="__span-7-65"><a id="__codelineno-7-65" name="__codelineno-7-65"></a>        <span class="k">return</span> <span class="nb">sum</span>
+</span><span id="__span-7-66"><a id="__codelineno-7-66" name="__codelineno-7-66"></a>
+</span><span id="__span-7-67"><a id="__codelineno-7-67" name="__codelineno-7-67"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+</span><span id="__span-7-68"><a id="__codelineno-7-68" name="__codelineno-7-68"></a>        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">Float8</span><span class="p">(</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">e</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</details>
+<p>I reserved three extra bits of precision in lines 35-36.
+In lines 53-56 I recover the integer and the fractional part of the mantissa.
+Finally, the RNE rule is applied in lines 58-62.</p>
+<p>Let us try the code on the above example:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">float8</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">r</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="o">+</span> \
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">0.875</span><span class="p">)</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">t</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">7</span> <span class="o">+</span> <span class="mf">0.875</span><span class="p">)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The sum is </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s1">*2**(</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">e</span><span class="si">}</span><span class="s1">-4) = </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="si">}</span><span class="s1">, expected </span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The result is indeed 8.0, just as expected:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>The sum is 16*2**(3-4) = 8.0, expected 8.0
+</span></code></pre></div>
+<p>The extra three bits I have allocated are called GRS bits (guard, round and sticky).
+Three bits are sufficient to guarantee the correct RNE rounding for all sizes of floats, including 32-bit.</p>
+<h3 id="homework-assignment-1">Homework assignment #1</h3>
+<p>Find an example where we would need all three bits to decide the rounding.
+Note that we did not use the LSB (the sticky one) in the above example.</p>
+<details class="question">
+<summary>Spoiler alert</summary>
+<p>You'd need for the normalization phase to shift the mantissa <em>left</em> and not right.</p>
+</details>
+<h3 id="homework-assignment-2">Homework assignment #2</h3>
+<p>Show that three bits are sufficient for the rounding on one condition: the sticky bit is indeed <strong>sticky</strong>.</p>
+<p>As the mantissa shifts off the end, it shifts into GRS bits.
+This works basically like a normal shift right, with the exception that the moment that <strong>any</strong> 1 bit get shifted into the sticky bit, it stays 1 from that point on (that’s what makes it sticky).</p>
+<p>Check line 38 (also line 50) of the listing:
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>            <span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">m</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>         <span class="c1"># LSB is sticky</span>
+</span></code></pre></div>
+The mantissa is shifted right, but once the least significant bit is set, it remains set forever.</p>
+<details class="question">
+<summary>Spoiler alert</summary>
+<p>Alignment of exponents may require more than 3 shifts, so we cannot store all the bits going off the mantissa into GRS bits.
+Nevertheless, the sticky behaviour is sufficient for the final rounding tiebreaker.</p>
+</details>
+<h2 id="numerical-errors">Numerical errors</h2>
+<p>As we have just witnessed, the result of arithmetic operations in floating point experiences rounding error when it cannot be exactly represented.
+While modern hardware and libraries produce correctly rounded results for arithmetic operations,
+this rounding error can get amplified with a series of operations because the intermediate result must be rounded.
+When working with finite precision, numerical errors should be carefully addressed.</p>
+<h3 id="catastrophic-cancellation">Catastrophic cancellation</h3>
+<p>Imagine you are measuring how much gasoline you use on two identical road trips.</p>
+<ul>
+<li>On the first trip, the car uses <span class="arithmatex">\(30.2\)</span> liters (your gas pump only shows one decimal place, <span class="arithmatex">\(\pm 0.1\ L\)</span>).</li>
+<li>On the second trip, after a minor tune-up, you use <span class="arithmatex">\(30.0\)</span> liters (again, <span class="arithmatex">\(\pm 0.1\ L\)</span> precision).</li>
+</ul>
+<p>You want to figure out how much less gasoline you used after the tune-up:</p>
+<div class="arithmatex">\[
+\text{Fuel saved} = 30.2\ L - 30.0\ L = 0.2\ L
+\]</div>
+<p>But with the pump’s limited precision, each measurement could be off by <span class="arithmatex">\(\pm 0.1\ L\)</span>, so the actual amounts used could have been anywhere from:</p>
+<ul>
+<li>First trip: <span class="arithmatex">\(30.1 - 30.3\ L\)</span></li>
+<li>Second trip: <span class="arithmatex">\(29.9 - 30.1\ L\)</span></li>
+</ul>
+<p>So the difference (the savings) could be anywhere from <span class="arithmatex">\(0.0\ L\)</span> (<span class="arithmatex">\(30.1 - 30.1\)</span>) up to <span class="arithmatex">\(0.4\ L\)</span> (<span class="arithmatex">\(30.3 – 29.9\)</span>)!
+Your relative error is huge compared to the “saving” you measured.
+Even though your original measurements looked precise to <span class="arithmatex">\(0.1\ L\)</span>, subtracting nearly equal numbers (to get the savings) made your result mostly just noise.</p>
+<p>This is catastrophic cancellation: when you subtract nearly equal values, whatever error or uncertainty was in each gets blown up in your small result, regardless of using computers or physical tools.</p>
+<p>The problem is NOT because of "floating point", but because you lost accuracy by subtracting two almost equal measurements.
+Catastrophic cancellation can happen in <strong>any system with limited precision</strong> (physical measurements, financial calculations with limited decimal places, etc.).</p>
+<p>Now, let's see how a similar effect happens in floating point computations, and how it can be even worse when the numbers are truncated or rounded first.
+The difference of two squares <span class="arithmatex">\(a^2 − b^2\)</span> seems innocuous,
+but when the two terms are close, catastrophic cancellation occurs.
+Usually it happens in a subtraction on previously truncated operands, for instance, the product of other operands (here, squares).</p>
+<p>Let us consider <span class="arithmatex">\(a = 2.875\)</span> and <span class="arithmatex">\(b = 2.75\)</span>.
+It is easy to compute the true difference of squares <span class="arithmatex">\(a^2 - b^2 = 0.703125\)</span>.</p>
+<p>Note that both <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are <strong>exactly</strong> representable in <code>Float8</code>.
+If, however, we compute <span class="arithmatex">\(a^2-b^2\)</span> in our <code>Float8</code> representation, we will get obtain <span class="arithmatex">\(1.0\)</span> as the result.
+The nearest <code>Float8</code> to <span class="arithmatex">\(a^2\)</span> is <span class="arithmatex">\(8.5\)</span>, and <span class="arithmatex">\(b^2\)</span> is rounded to <span class="arithmatex">\(7.5\)</span>.</p>
+<div class="arithmatex">\[
+\begin{alignat}{2}
+2.875^2 &amp;= 8.265625 &amp; \approx 8.5 \\
+2.75^2  &amp;= 7.5625   &amp; \approx 7.5
+\end{alignat}
+\]</div>
+<p>Subtracting the two, we get <span class="arithmatex">\(1.0\)</span>. The relative error of our result is <span class="arithmatex">\(42\%\)</span>!</p>
+<div class="arithmatex">\[
+\frac{|1 - 0.703125|}{|0.703125|} \approx 0.42.
+\]</div>
+<p>There is no general, systematic method to completely avoid catastrophic cancellation or to reliably predict exactly how many digits of accuracy have been lost in a given computation.
+However, we can mitigate its effects by carefully designing numerically stable algorithms and reformulating calculations to minimize the subtraction of nearly equal quantities.
+For our difference of squares, the best solution is to use a factorized formulation of the computation <span class="arithmatex">\(a^2 - b^2 = (a+b)(a-b)\)</span>.</p>
+<p>For our example, the difference <span class="arithmatex">\(2.875 - 2.75\)</span> can be computed exactly in our <code>Float8</code>, and the sum <span class="arithmatex">\(2.875 + 2.75\)</span> is rounded to <span class="arithmatex">\(5.5\)</span>:</p>
+<div class="arithmatex">\[
+\begin{alignat}{2}
+2.875 + 2.75 &amp;= 5.625 &amp; \approx 5.5 \\
+2.875 - 2.75  &amp;= 0.125. &amp;
+\end{alignat}
+\]</div>
+<p>Then the product <span class="arithmatex">\(5.5 \cdot 0.125 = 0.6875\)</span>, which is again exactly computable in our <code>Float8</code> representation, has only <span class="arithmatex">\(2\%\)</span> of relative error:</p>
+<div class="arithmatex">\[
+\frac{|0.6875 - 0.703125|}{|0.703125|} \approx 0.02.
+\]</div>
+<p><span class="arithmatex">\(2\%\)</span> of error is much better than <span class="arithmatex">\(42\%\)</span> we had before!</p>
+<h3 id="summation">Summation</h3>
+<p>Well, okay, subtraction is tricky, but if we add positive numbers nothing can go wrong.
+Say, if I sum <span class="arithmatex">\(128\)</span> times <span class="arithmatex">\(\frac{1}{128}\)</span>, I'll get <span class="arithmatex">\(1\)</span>, right? Am I right?</p>
+<p>Note that <span class="arithmatex">\(1/128\)</span> can be represented exactly in <code>Float8</code>, so when I write <code>Float8.from_float(1/128)</code>, there is no loss of information.
+Let us test the summation. I start with the accumulator variable <code>total</code> initialized to <span class="arithmatex">\(0\)</span>, and add <span class="arithmatex">\(128\)</span> times <span class="arithmatex">\(0.0078125\)</span>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">float8</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">total</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">):</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">total</span> <span class="o">+=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">128</span><span class="p">)</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">total</span><span class="p">))</span>
+</span></code></pre></div>
+<p>AAaaand here is the result!</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>0.25
+</span></code></pre></div>
+<p>It is important to understand why it is happening, so let us add <span class="arithmatex">\(0.25\)</span> and <span class="arithmatex">\(0.0078125\)</span> by hand.
+First of all, let us find their mantissas and exponents:</p>
+<div class="arithmatex">\[
+\begin{align}
+0.25 &amp;= 16 \cdot 2^{-2-4}\\
+0.0078125  &amp;= 1\cdot 2^{-3-4}
+\end{align}
+\]</div>
+<p>We need to align the mantissas:</p>
+<div class="arithmatex">\[
+0.0078125 = 0.5 \cdot 2^{-2-4}
+\]</div>
+<p>Finally, we sum the mantissas and round them using the RNE rule:</p>
+<div class="arithmatex">\[
+0.25 + 0.0078125 = (16 + 0.5) \cdot 2^{-2-4} \approx 16 \cdot 2^{-2-4}.
+\]</div>
+<p>In other words, in <code>Float8</code> representation, <code>0.25 + 0.0078125 = 0.25</code>.</p>
+<p>When you add two numbers with very different magnitudes, the smaller number may be ignored or “lost” due to limited precision, resulting in a loss of accuracy.
+This is because the significant digits of the smaller number may not fit within the precision allowed when combined with the much larger number.</p>
+<p>This is a particular problem in the straightforward (sequential) way of summing a list.
+Pairwise summation is a numerically stable technique that helps reduce this error.
+Instead of adding numbers in a sequence, you recursively sum pairs of numbers, then pairs of those sums, and so on, like a binary tree.
+By always adding numbers of similar size first, pairwise summation keeps as many significant digits as possible, making the final result more accurate than simple sequential addition.</p>
+<p>Let us illustrate the idea with working code.
+Here I define two function returning the sum of an array. The first one is the naive, sequential implementation, and the other one implements the binary tree idea:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">naive_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">s</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>        <span class="n">s</span> <span class="o">+=</span> <span class="n">v</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="k">return</span> <span class="n">s</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">pairwise_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="k">match</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>            <span class="k">return</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>            <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="n">mid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    <span class="k">return</span> <span class="n">pairwise_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">[:</span><span class="n">mid</span><span class="p">])</span> <span class="o">+</span> \
+</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>           <span class="n">pairwise_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">:])</span>
+</span></code></pre></div>
+<p>And now let us invoke both of them on our test data:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">128</span><span class="p">)</span> <span class="p">]</span> <span class="o">*</span> <span class="mi">128</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;naive sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>    <span class="nb">float</span><span class="p">(</span>   <span class="n">naive_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)))</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pairwise sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">pairwise_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)))</span>
+</span></code></pre></div>
+<p>Pairwise summation greatly improves the result:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>naive sum:       0.25
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>pairwise sum:    1.0
+</span></code></pre></div>
+<p>While pairwise summation reduces rounding errors when adding large sequences of numbers, there are even more refined methods, such as Kahan summation, that go a step further.
+Kahan summation keeps track of small errors that are typically lost in standard addition.
+By maintaining a compensation variable for lost low-order bits, it ensures that even subtle contributions from tiny numbers aren’t “forgotten.”
+This makes Kahan’s algorithm especially valuable in situations requiring high precision over long sequences of additions.</p>
+<p>Moreover, pairwise summation  typically requires knowing all the values in advance, making it ideal for <strong>offline</strong> summation when the complete list is available.
+However, in many practical scenarios, we need to sum values as they arrive, one by one, this is known as <strong>online</strong> summation.
+For such cases, Kahan summation is especially effective.</p>
+<p>Here is an implementation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">kahan_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="n">s</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>        <span class="n">t</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>        <span class="n">s</span> <span class="o">=</span> <span class="n">t</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="k">return</span> <span class="n">s</span>
+</span></code></pre></div>
+<p>Variable <code>s</code> is the accumulator, while <code>c</code> is the compensation variable.
+The useful obervation to make is that we can approximate the inaccuracy of <code>s</code> is it changes from iteration to iteration.
+To do so, consider the expression</p>
+<div class="arithmatex">\[
+((a+b)-a)-b.
+\]</div>
+<p>Algebraically, this expression equals zero. Numerically, however, this may not be the case.
+In particular, the sum <span class="arithmatex">\(a+b\)</span> may be rounded to floating-point precision. Subtracting <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> one at a time then yields an approximation of the error of approximating <span class="arithmatex">\(a+b\)</span>.
+Removing <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> from <span class="arithmatex">\(a+b\)</span> intuitively transitions <em>from</em> large orders of magnitude <em>to</em> smaller ones rather than vice versa and hence is less likely oto induce rounding error
+than evaluating the sum <span class="arithmatex">\(a+b\)</span>; this observation explains why the error estimate is not itself as prone to rounding issues as the original operation.</p>
+<p>Let us confront all the implementations on more real world-like data.
+Here I want to sum <span class="arithmatex">\(128\)</span> random numbers from the range <span class="arithmatex">\((-0.25, 0.25)\)</span>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span> <span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">.25</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="p">]</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;naive sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>    <span class="nb">float</span><span class="p">(</span>   <span class="n">naive_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)))</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pairwise sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">pairwise_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)))</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Kahan sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>    <span class="nb">float</span><span class="p">(</span>   <span class="n">kahan_sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)))</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True sum:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span>     <span class="nb">float</span><span class="p">(</span><span class="n">Float8</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">]))))</span>
+</span></code></pre></div>
+<p>And here are the results:</p>
+<p><div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">naive</span> <span class="nb">sum</span><span class="p">:</span>       <span class="mf">0.1875</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">pairwise</span> <span class="nb">sum</span><span class="p">:</span>    <span class="o">-</span><span class="mf">0.03125</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">Kahan</span> <span class="nb">sum</span><span class="p">:</span>       <span class="mf">0.015625</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="kc">True</span> <span class="nb">sum</span><span class="p">:</span>        <span class="mf">0.015625</span>
+</span></code></pre></div>
+As expected, naïve sum is way off the true result, pairwise summation gives a reasonable approximation, and Kahan summation is the best.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Floating-point addition is deceptively subtle.
+Even though the mathematical operation is simple, implementing it correctly requires careful attention to the details.</p>
+<p>Limited precision is not a flaw, it is a fundamental constraint of representing infinitely many real numbers with finitely many bits.
+What does matter is understanding where errors arise and how to mitigate them:</p>
+<ul>
+<li>rewrite expressions to improve numerical stability,</li>
+<li>avoid subtracting nearly equal numbers,</li>
+<li>use pairwise or Kahan summation when combining long lists of values.</li>
+</ul>
+<p>With these tools, even a tiny 8-bit floating-point format can behave predictably and transparently, helping reveal the structure of real floating-point hardware and the numerical algorithms it enables.</p>
+<hr/>
+<h3>Comments</h3>
+<script src="https://giscus.app/client.js"
+        data-repo="ssloy/ssloy.github.io"
+        data-repo-id="R_kgDOLIjENg"
+        data-category="General"
+        data-category-id="DIC_kwDOLIjENs4CnFkC"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
