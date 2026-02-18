@@ -27,7 +27,7 @@ def current(x,y):
             vortex_dy =  omega * dx_c * sign + outflow*dy_c/R
             dx += y*(1-y) * vortex_factor * vortex_dx
             dy += y*(1-y) * vortex_factor * vortex_dy
-        return dx, dy
+        return dx/4, dy/4
     r = np.sqrt(x**2 + y**2)
     theta = np.arctan2(y, x)
     [dthetadx,dthetady],[drdx,drdy] = [[-y/r**2, x/r**2],[x/r, y/r]]
@@ -87,7 +87,7 @@ DX, DY = np.empty_like(X), np.empty_like(Y)
 for i in range(len(tau)):
     for j in range(len(t)):
         DX[i, j], DY[i, j] = current(X[i, j], Y[i, j])
-ax.quiver(X, Y, DX, DY, scale=16, color='teal')
+ax.quiver(X, Y, DX, DY, scale=4, color='teal')
 
 
 
@@ -96,23 +96,23 @@ def boat(x, y):
     Y = []
     dt = .01
     cnt = 0
-    while  cnt < 10000:
+    t = 0
+    while x>0 and cnt < 100000:
         X.append(x)
         Y.append(y)
         dx, dy = current(x,y)
         x += dx*dt
         y += dy*dt
+        t += dt
         cnt += 1
-    plt.plot(X,Y)
+#    plt.plot(X,Y)
+    print(t)
     return x,y
 
-X = np.linspace(.75, 1.25, 10)
+X = np.linspace(.75, 1.25, 100)
 Y = []
-for x in X:
-    Y.append(boat(x,0)[1])
-
-Y2 = [boat(x, 0)[1] for x in X]
-plt.plot(X,Y)
+#for x in X:
+#    Y.append(boat(x,0)[1])
 
 plt.gca().set_aspect('equal', 'box')
 plt.gca().set_xlabel("$x$", fontsize=32)
@@ -131,4 +131,8 @@ ax.set_ylim(-.1,1.35)
 plt.gca().set_aspect('equal', 'box')
 #plt.savefig('river.png')
 plt.show()
+Y2 = [boat(x, 0)[1] for x in X]
+plt.plot(X,Y2)
+plt.show()
+
 

@@ -27,9 +27,10 @@ telle que le petit bateau lâché en $(A_x, A_y)$ soit transporté par le couran
 
 ## Questions
 
-1. Modéliser mathématiquement la trajectoire du bateau à l’aide d’une équation différentielle dépendant de la fonction `current(x,y)`.
-2. Formuler précisément le problème de recherche de $(A_x, A_y)$ comme un problème de recherche de racine.
-3. Proposer une méthode numérique ainsi que son implémentation permettant de déterminer la position recherchée sur le segment $[P_1,P_2]$.
+1. Modéliser mathématiquement la trajectoire du bateau à l’aide de deux équations différentielles couplées dépendant de la fonction `current(x,y)`.
+2. Formuler le problème de recherche de $(A_x, A_y)$ comme un problème de recherche de racine. Préciser la fonction et l'intervalle dans lequel on cherche la racine.
+3. Proposer une méthode numérique ainsi que son implémentation permettant de déterminer la position recherchée sur le pont $[P_1,P_2]$.
+4. *(Question bonus)* : Serait-il facile de déterminer la trajectoire la plus rapide entre les deux ponts ?
 
 ## Livrables
 
@@ -38,7 +39,7 @@ telle que le petit bateau lâché en $(A_x, A_y)$ soit transporté par le couran
 
 Le programme devra prendre en entrée un point $(B_x, B_y)$
 et afficher à l’écran $(A_x, A_y)$ ainsi que le temps de trajet du petit bateau entre Arthur et Basile.
-$(B_x, B_y)$ peut être une constante codée en dur dans le fichier.
+La position $(B_x, B_y)$ de Basil peut être une constante codée en dur dans le fichier.
 
 On veillera à expliciter clairement les hypothèses de modélisation ainsi que les choix numériques effectués.
 Le raisonnement est plus important que les résultats : il est essentiel de rédiger soigneusement pour obtenir au moins une partie des points.
