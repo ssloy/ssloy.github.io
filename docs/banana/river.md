@@ -11,7 +11,8 @@ $$
 
 Sur chacun des deux ponts se tient un garçon, Arthur et Basile. Ils s’amusent à déposer un petit bateau à la surface de l’eau et observent sa trajectoire sous l’effet du courant du ruisseau.
 
-On suppose connue une fonction $\texttt{current}(x,y)$ qui, à tout point $(x,y)$ du plan, associe le vecteur vitesse du courant en ce point (celui-ci étant nul en dehors du ruisseau).
+On suppose [connue](river/stream.py) une fonction $\texttt{current}(x,y)$ qui, à tout point $(x,y)$ du plan, associe le vecteur vitesse du courant en ce point (celui-ci étant nul en dehors du ruisseau).
+La vitesse est donnée en toises par seconde.
 
 ## Problème posé
 
@@ -23,6 +24,7 @@ telle que le petit bateau lâché en $(x_A, y_A)$ soit transporté par le couran
 1. Modéliser mathématiquement la trajectoire du bateau à l’aide d’une équation différentielle dépendant de la fonction $\texttt{current}(x,y)$.
 2. Formuler précisément le problème de recherche de $(x_A, y_A)$ comme un problème de recherche de racine.
 3. Proposer une méthode numérique aisi que son implémentation permettant de déterminer la position recherchée sur le segment $[AB]$.
+Le programme doit prendre en entrée un point $(x_B,y_B)$ et afficher à l’écran $(x_A,y_A)$ ainsi que le temps de trajet du petit bateau entre Arthur et Basile.
 
 On veillera à expliciter clairement les hypothèses de modélisation ainsi que les choix numériques effectués.
 

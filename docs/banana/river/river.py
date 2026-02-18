@@ -42,12 +42,6 @@ def current(x,y):
     dtaudy = drdy/w - (r-1)*dwdy/w**2
     return list(np.linalg.inv(np.array([[dtdx, dtdy],[dtaudx, dtaudy]])) @ np.array(f(t,tau)))
 
-
-
-
-
-
-
 if True:
     t = np.linspace(0, 1, 1000)
     centerline = np.column_stack([np.cos(t*np.pi/2), np.sin(t*np.pi/2)])
@@ -77,25 +71,24 @@ if True:
     river_patch = Polygon(river_poly, closed=True, color='skyblue',alpha=.1)
     ax.add_patch(river_patch)
 
-
-
-t = np.linspace(0, 4.9, 50)
-tau = np.linspace(0, 1, 20)
-X = np.empty((len(tau), len(t)))
-Y = np.empty((len(tau), len(t)))
-for i in range(len(tau)):
-    for j in range(len(t)):
-        theta = np.pi/10*t[j]
-        w = .5 + .05*np.sin(8*theta)
-        r = (tau[i]-.5)*w + 1
-        X[i, j] = r * np.cos(theta)
-        Y[i, j] = r * np.sin(theta)
+    t = np.linspace(0, 4.9, 50)
+    tau = np.linspace(0, 1, 20)
+    X = np.empty((len(tau), len(t)))
+    Y = np.empty((len(tau), len(t)))
+    for i in range(len(tau)):
+        for j in range(len(t)):
+            theta = np.pi/10*t[j]
+            w = .5 + .05*np.sin(8*theta)
+            r = (tau[i]-.5)*w + 1
+            X[i, j] = r * np.cos(theta)
+            Y[i, j] = r * np.sin(theta)
 
 DX, DY = np.empty_like(X), np.empty_like(Y)
 for i in range(len(tau)):
     for j in range(len(t)):
         DX[i, j], DY[i, j] = current(X[i, j], Y[i, j])
 ax.quiver(X, Y, DX, DY, scale=16, color='teal')
+
 '''
 
 
@@ -106,13 +99,13 @@ def boat(x, y):
     cnt = 0
     while x>0 and cnt < 10000:
         X.append(x)
-        Y.append(y)
-        dx, dy = current(x,y)
-        x += dx*dt
-        y += dy*dt
-        cnt += 1
-    plt.plot(X,Y)
-    return x,y
+    Y.append(y)
+    dx, dy = current(x,y)
+    x += dx*dt
+    y += dy*dt
+    cnt += 1
+plt.plot(X,Y)
+return x,y
 
 X = np.linspace(.75, 1.25, 100)
 Y = []
