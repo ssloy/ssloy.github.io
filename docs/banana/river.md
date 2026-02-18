@@ -7,7 +7,7 @@ $$
 P_1 = \left(\tfrac{3}{4},0\right) \qquad P_2 = \left(\tfrac{5}{4},0\right)
 $$
 
-and
+et
 
 $$
 P_3 = \left(0,\tfrac{3}{4}\right) \qquad P_4 = \left(0,\tfrac{5}{4}\right).
@@ -30,8 +30,18 @@ telle que le petit bateau lâché en $(A_x, A_y)$ soit transporté par le couran
 1. Modéliser mathématiquement la trajectoire du bateau à l’aide d’une équation différentielle dépendant de la fonction `current(x,y)`.
 2. Formuler précisément le problème de recherche de $(A_x, A_y)$ comme un problème de recherche de racine.
 3. Proposer une méthode numérique ainsi que son implémentation permettant de déterminer la position recherchée sur le segment $[P_1,P_2]$.
-Le programme doit prendre en entrée un point $(B_x, B_y)$ et afficher à l’écran $(A_x, A_y)$ ainsi que le temps de trajet du petit bateau entre Arthur et Basile.
+
+## Livrables
+
+1. Un fichier Python,
+2. Une feuille manuscrite accompagnant le code.
+
+Le programme devra prendre en entrée un point $(B_x, B_y)$
+et afficher à l’écran $(A_x, A_y)$ ainsi que le temps de trajet du petit bateau entre Arthur et Basile.
+$(B_x, B_y)$ peut être une constante codée en dur dans le fichier.
 
 On veillera à expliciter clairement les hypothèses de modélisation ainsi que les choix numériques effectués.
 Le raisonnement est plus important que les résultats : il est essentiel de rédiger soigneusement pour obtenir au moins une partie des points.
+
+Attention : le problème est relativement simple, mais il comporte quelques subtilités. Si vous hésitez, expliquez pourquoi afin de laisser au correcteur l'opportunité d'accorder des points.
 

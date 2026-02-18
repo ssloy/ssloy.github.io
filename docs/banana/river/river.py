@@ -4,7 +4,7 @@ from matplotlib.patches import Polygon
 
 def current(x,y):
     def f(x, y):
-        if x<-.01 or x>5.01 or y<-0.01 or y>1.01:
+        if x<-.01 or x>5.51 or y<-0.01 or y>1.01:
             return 0,0
         vortices = [[1.4030927323372038, 0.7779469895497861,  0.31732111664181495, 12.753451286971085,  1, 1.5219248898251512],
                     [2.41673573072835,   0.4036921786589822,  0.123484182230017,   24.39283282620738,   1, 0.8655341358101067],
@@ -43,7 +43,7 @@ def current(x,y):
     return list(np.linalg.inv(np.array([[dtdx, dtdy],[dtaudx, dtaudy]])) @ np.array(f(t,tau)))
 
 if True:
-    t = np.linspace(0, 1, 1000)
+    t = np.linspace(0, 1.5, 1000)
     centerline = np.column_stack([np.cos(t*np.pi/2), np.sin(t*np.pi/2)])
     widths = .5 + .05 * np.sin(4*np.pi*t)
 
@@ -89,7 +89,6 @@ for i in range(len(tau)):
         DX[i, j], DY[i, j] = current(X[i, j], Y[i, j])
 ax.quiver(X, Y, DX, DY, scale=16, color='teal')
 
-'''
 
 
 def boat(x, y):
@@ -97,24 +96,23 @@ def boat(x, y):
     Y = []
     dt = .01
     cnt = 0
-    while x>0 and cnt < 10000:
+    while  cnt < 10000:
         X.append(x)
-    Y.append(y)
-    dx, dy = current(x,y)
-    x += dx*dt
-    y += dy*dt
-    cnt += 1
-plt.plot(X,Y)
-return x,y
+        Y.append(y)
+        dx, dy = current(x,y)
+        x += dx*dt
+        y += dy*dt
+        cnt += 1
+    plt.plot(X,Y)
+    return x,y
 
-X = np.linspace(.75, 1.25, 100)
+X = np.linspace(.75, 1.25, 10)
 Y = []
 for x in X:
     Y.append(boat(x,0)[1])
 
 Y2 = [boat(x, 0)[1] for x in X]
 plt.plot(X,Y)
-'''
 
 plt.gca().set_aspect('equal', 'box')
 plt.gca().set_xlabel("$x$", fontsize=32)
@@ -131,6 +129,6 @@ plt.plot([.75, 1.25], [0,0],'--', linewidth=2, color='k')
 ax.set_xlim(-.1,1.35)
 ax.set_ylim(-.1,1.35)
 plt.gca().set_aspect('equal', 'box')
-plt.savefig('river.png')
+#plt.savefig('river.png')
 plt.show()
 
