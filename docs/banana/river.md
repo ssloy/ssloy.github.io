@@ -17,7 +17,7 @@ $$
 
 Sur chacun des deux ponts se tient un garçon, Arthur et Basile. Ils s’amusent à déposer un bateau en papier à la surface de l’eau et observent sa trajectoire sous l’effet du courant du ruisseau.
 
-On suppose [connue](river/stream.py) une fonction `current(x,y)` qui, à tout point $(x,y)$ du plan, associe le vecteur vitesse du courant en ce point (celui-ci étant nul en dehors du ruisseau).
+On suppose [connue](river/exam.zip) une fonction `current(x,y)` qui, à tout point $(x,y)$ du plan, associe le vecteur vitesse du courant en ce point (celui-ci étant nul en dehors du ruisseau).
 La vitesse est donnée en toises par seconde.
 
 ## Problème posé
