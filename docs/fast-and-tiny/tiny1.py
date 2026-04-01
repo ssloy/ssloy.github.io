@@ -15,8 +15,9 @@ image = np.zeros((height, width, 3))
 for i in range(height):
     for j in range(width):
         image[i,j] = np.array([j/width, i/height, 0])
+    print("%d/%d" % (i + 1, height))
 
-plt.imsave('result.png', image)
+plt.imsave('result0.png', image)
 
 center,radius = np.array([6, 0, 7]), 2
 eye,ray = np.zeros(3), np.array([.5, 0, 0.866])

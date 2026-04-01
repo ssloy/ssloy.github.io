@@ -25,6 +25,7 @@ for i in range(height):
     for j in range(width):
         ray = normalized(np.array([j-width/2, i-height/2, depth]))        # emit the ray along Z axis
         image[i, j] += trace(np.zeros(3), ray, 0)
+    print("%d/%d" % (i + 1, height))
 
-plt.imsave('result.png', image)
+plt.imsave('result2.png', image)
 
