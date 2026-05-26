@@ -92,7 +92,6 @@ for _ in range(nsamples):
     traj.append((t, gt(t)))
 traj = sorted(traj, key= lambda x: x[0])
 
-'''
 xs, ys = zip(*(p for _, p in traj))
 plt.scatter(xs, ys)
 
@@ -134,7 +133,6 @@ for _ in range(100):
 
 print(p)
 plt.show()
-'''
 
 '''
 maxnorm = 1e20

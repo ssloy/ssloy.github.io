@@ -17,7 +17,6 @@ class Launcher:
             for _ in range(Launcher.ntargets):
                 Launcher.targets.append((random.uniform(*Launcher.target_xrange), \
                                                random.uniform(*Launcher.target_yrange)))
-
         Launcher.history.append((vx, vy))
         time_of_flight = -2*vy/Launcher.g
         z = Launcher.measurement_noise

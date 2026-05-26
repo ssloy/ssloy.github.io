@@ -53,7 +53,7 @@ def trace(eye, ray, depth):
 width, height, depth = 640, 480, 500
 azimuth, ambient_color = 30*np.pi/180, np.array([.5]*3)
 image = np.zeros((height, width, 3))
-maxdepth = 3
+maxdepth = 4
 
 for i in range(height):
     for j in range(width):

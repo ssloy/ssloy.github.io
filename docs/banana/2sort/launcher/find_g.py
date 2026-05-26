@@ -15,7 +15,7 @@ def simulate(g, rk2=False):
     t, x, y, vx, vy = 0, 0, 0, vx0, vy0
     ts, xs, ys = [t], [x], [y]
 #    t_max = max(t_meas)
-    dt = .25
+    dt = .025
     while y>=0:
         x  += dt * vx
         if rk2:
@@ -46,7 +46,7 @@ def simulate(g, rk2=False):
     return [ts, xs, ys]
 
 def cost(g):
-    t_sim, x_sim, y_sim = simulate(g)
+    t_sim, x_sim, y_sim = simulate(g, False)
     x_sim = np.interp(t_meas, t_sim, x_sim) # interpolate simulated positions
     y_sim = np.interp(t_meas, t_sim, y_sim) # at the measurement times
     return np.sum((x_sim - x_meas)**2 + (y_sim - y_meas)**2)

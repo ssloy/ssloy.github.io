@@ -51,7 +51,7 @@ $$
 where (assume unit $\vec n$)
 
 $$
-\vec d_\| = (\vec d \cdot \vec n)\ \vec n \quad\text{and}\quad \vec d_\perp = d - (\vec d \cdot \vec n)\ \vec n
+\vec d_\| = (\vec d \cdot \vec n)\ \vec n \quad\text{and}\quad \vec d_\perp = \vec d - (\vec d \cdot \vec n)\ \vec n
 $$
 
 then $\vec r = \vec d_\perp - \vec d_\|$, or, equivalently,
