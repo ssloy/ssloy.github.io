@@ -1,0 +1,24 @@
+digraph "CFG for 'mem2reg_made_simple' function" {
+	label="CFG for 'mem2reg_made_simple' function";
+
+	Node0x560a5c889950 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{entry:\l  br label %bb1\l}"];
+	Node0x560a5c889950 -> Node0x560a5c889ae0;
+	Node0x560a5c889ae0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{bb1:                                              \l  br i1 true, label %bb2, label %bb4\l|{<s0>T|<s1>F}}"];
+	Node0x560a5c889ae0:s0 -> Node0x560a5c88a1d0;
+	Node0x560a5c889ae0:s1 -> Node0x560a5c88a240;
+	Node0x560a5c88a1d0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{bb2:                                              \l  %a_bb2 = phi i32 [ 1, %bb1 ], [ %t1, %bb3 ]\l  %t0 = add i32 %a_bb2, 1\l  br label %bb3\l}"];
+	Node0x560a5c88a1d0 -> Node0x560a5c88a440;
+	Node0x560a5c88a440 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{bb3:                                              \l  %t1 = add i32 %t0, %t0\l  br i1 true, label %bb8, label %bb2\l|{<s0>T|<s1>F}}"];
+	Node0x560a5c88a440:s0 -> Node0x560a5c88a670;
+	Node0x560a5c88a440:s1 -> Node0x560a5c88a1d0;
+	Node0x560a5c88a790 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#abc8fd70",label="{bb5:                                              \l  br label %bb7\l}"];
+	Node0x560a5c88a790 -> Node0x560a5c88a800;
+	Node0x560a5c88a240 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#cedaeb70",label="{bb4:                                              \l  br i1 true, label %bb5, label %bb6\l|{<s0>T|<s1>F}}"];
+	Node0x560a5c88a240:s0 -> Node0x560a5c88a790;
+	Node0x560a5c88a240:s1 -> Node0x560a5c88a8e0;
+	Node0x560a5c88a8e0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#abc8fd70",label="{bb6:                                              \l  br label %bb7\l}"];
+	Node0x560a5c88a8e0 -> Node0x560a5c88a800;
+	Node0x560a5c88a800 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#cedaeb70",label="{bb7:                                              \l  %a_bb7 = phi i32 [ 2, %bb5 ], [ 3, %bb6 ]\l  br label %bb8\l}"];
+	Node0x560a5c88a800 -> Node0x560a5c88a670;
+	Node0x560a5c88a670 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{bb8:                                              \l  %a_bb8 = phi i32 [ %t1, %bb3 ], [ %a_bb7, %bb7 ]\l  ret i32 %a_bb8\l}"];
+}
