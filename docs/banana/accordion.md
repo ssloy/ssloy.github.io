@@ -100,7 +100,18 @@ Décrire qualitativement s'il s'agit d'un trafic fluide ou bien un trafic instab
 
 ## Partie II — Mesure du bruit du trafic et vitesse moyenne
 
-On définit le *bruit du trafic* par :
+On oéfinit la vitesse moyenne :
+
+$$
+\bar v
+=
+\frac{1}{NT}
+\int_0^T
+\sum_{i=1}^N
+v_i(t)\,dt.
+$$
+
+Et on définit également le *bruit du trafic* par :
 
 $$
 Q
@@ -112,17 +123,6 @@ Q
 $$
 
 Cette quantité mesure l’importance des accélérations et freinages répétés, et donc également  l’inconfort des conducteurs et l’instabilité globale du trafic.
-
-On définit également la vitesse moyenne :
-
-$$
-\bar v
-=
-\frac{1}{NT}
-\int_0^T
-\sum_{i=1}^N
-v_i(t)\,dt.
-$$
 
 Faire varier $v_{\max} \in [50,130]\ \text{km/h}$ et tracer :
 
