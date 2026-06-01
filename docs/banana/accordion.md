@@ -18,7 +18,7 @@ On considère une route circulaire de longueur $L = 1024\ \text{m}$ sur laquelle
 
 On note :
 
-- \(x_i(t)\) la position de la voiture \(i\) ;
+- \(x_i(t)\) la position curviligne de la voiture \(i\) sur le circuit ;
 - \(v_i(t)\) sa vitesse ;
 - \(a_i(t)\) son accélération.
 
@@ -33,7 +33,7 @@ $$
 \right.
 $$
 
-L’accélération est une fonction connue qui dépend de la vitesse actuelle, de la vitesse maximale autorisée \(v_{\max}\) et
+Le comportement des conducteurs est modélisé par une fonction donnée qui dépend de la vitesse actuelle, de la vitesse maximale autorisée \(v_{\max}\) et
 de la distance \(s_i(t)\) séparant la voiture \(i\) de la voiture située devant elle.
 
 Cette distance est définie par :
@@ -81,15 +81,15 @@ sauf une voiture dont la vitesse initiale est fixée à \(0.375\,v_{\max}\).
 Utiliser un schéma d’Euler explicite avec :
 
 $$
-dt = 0.01.
+\Delta t = 0.01.
 $$
 
 Le schéma numérique est donc :
 
 $$
 \begin{align*}
-x_i &\leftarrow x_i + dt\,v_i,\\
-v_i &\leftarrow v_i + dt\,a_i.
+x_i &\leftarrow x_i + \Delta t\,v_i,\\
+v_i &\leftarrow v_i + \Delta t\,a_i.
 \end{align*}
 $$
 
@@ -142,7 +142,7 @@ Commenter les graphes obtenus :
 On souhaite maintenant choisir une vitesse maximale « optimale ».  On introduit le score :
 
 $$
-J(v_{\max}) = \bar v - Q,
+J(v_{\max}) = \bar v(v_{\max}) - Q(v_{\max}),
 $$
 
 qui favorise un trafic rapide, mais pénalise les fortes accélérations et freinages.
@@ -171,7 +171,7 @@ Comparer les résultats obtenus avec le cas \(N = 32\).
 
 Expliquer pourquoi les bouchons semblent se propager vers l’arrière alors que les voitures roulent vers l’avant.
 
-*Astuce :* penser à une onde de densité plutôt qu’au mouvement individuel des véhicules.
+<!--*Astuce :* penser à une onde de densité plutôt qu’au mouvement individuel des véhicules.-->
 
 
 
