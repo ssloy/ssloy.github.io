@@ -1,0 +1,24 @@
+digraph "CFG for 'mem2reg_made_simple' function" {
+	label="CFG for 'mem2reg_made_simple' function";
+
+	Node0x56330a8159d0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{entry:\l  %a = alloca i32, align 4\l  br label %bb1\l}"];
+	Node0x56330a8159d0 -> Node0x56330a816200;
+	Node0x56330a816200 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{bb1:                                              \l  store i32 1, ptr %a, align 4\l  br i1 true, label %bb2, label %bb4\l|{<s0>T|<s1>F}}"];
+	Node0x56330a816200:s0 -> Node0x56330a816310;
+	Node0x56330a816200:s1 -> Node0x56330a816380;
+	Node0x56330a816310 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{bb2:                                              \l  %a0 = load i32, ptr %a, align 4\l  %t0 = add i32 %a0, 1\l  store i32 %t0, ptr %a, align 4\l  br label %bb3\l}"];
+	Node0x56330a816310 -> Node0x56330a8165b0;
+	Node0x56330a8165b0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{bb3:                                              \l  %a1 = load i32, ptr %a, align 4\l  %t1 = add i32 %a1, %a1\l  store i32 %t1, ptr %a, align 4\l  br i1 true, label %bb8, label %bb2\l|{<s0>T|<s1>F}}"];
+	Node0x56330a8165b0:s0 -> Node0x56330a816740;
+	Node0x56330a8165b0:s1 -> Node0x56330a816310;
+	Node0x56330a816860 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#abc8fd70",label="{bb5:                                              \l  %a2 = load i32, ptr %a, align 4\l  store i32 2, ptr %a, align 4\l  br label %bb7\l}"];
+	Node0x56330a816860 -> Node0x56330a816b90;
+	Node0x56330a816380 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#cedaeb70",label="{bb4:                                              \l  br i1 true, label %bb5, label %bb6\l|{<s0>T|<s1>F}}"];
+	Node0x56330a816380:s0 -> Node0x56330a816860;
+	Node0x56330a816380:s1 -> Node0x56330a816c70;
+	Node0x56330a816c70 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#abc8fd70",label="{bb6:                                              \l  %a3 = load i32, ptr %a, align 4\l  store i32 3, ptr %a, align 4\l  br label %bb7\l}"];
+	Node0x56330a816c70 -> Node0x56330a816b90;
+	Node0x56330a816b90 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#cedaeb70",label="{bb7:                                              \l  %a4 = load i32, ptr %a, align 4\l  br label %bb8\l}"];
+	Node0x56330a816b90 -> Node0x56330a816740;
+	Node0x56330a816740 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#ead5c970",label="{bb8:                                              \l  %a5 = load i32, ptr %a, align 4\l  ret i32 %a5\l}"];
+}
